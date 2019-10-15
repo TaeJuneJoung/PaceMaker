@@ -1,0 +1,11 @@
+.container .translate {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.container .ivory {
+  color: rgb(248, 246, 207);
+}
+
+#__layout .backivory {
+  background-color: rgb(248, 246, 207);
+}
