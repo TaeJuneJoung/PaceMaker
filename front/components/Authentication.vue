@@ -12,8 +12,8 @@
         <v-form ref="verifyform" class="mt-4">
           <v-flex class="ivory text-left">인증번호 {{getMinute}} : {{getSecond}}</v-flex>
           <v-text-field
-            v-model="verifyNum"
-            :rules="verifyNumRules"
+            v-model="authNum"
+            :rules="authNumRules"
             :disabled="disableNum"
             label="인증번호"
             solo
@@ -23,14 +23,18 @@
         <v-btn block class="backivory" @click="numValidate">확인</v-btn>
       </template>
     </v-card-text>
-    <v-card-actions class="text-xs-center"></v-card-actions>
+    <v-card-actions class="text-xs-center">
+			<v-btn color="error" nuxt to="/">홈으로</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 export default {
+	props: {
+		title: String
+	},
   data: () => ({
-		title: '',
     sendNum: false,
     disableNum: false,
     timer: null,
@@ -40,8 +44,8 @@ export default {
       (v) => !!v || 'E-mail을 입력해 주세요.',
       (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요'
     ],
-    verifyNum: '',
-    verifyNumRules: [
+    authNum: '',
+    authNumRules: [
       (v) => !!v || '인증번호를 입력해 주세요',
       (v) => (v && v.length == 8) || '인증번호는 8자리입니다.'
     ],

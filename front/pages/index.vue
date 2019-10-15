@@ -4,7 +4,7 @@
       <v-col sm="5" xs="10">
         <v-card raised class="pa-2 text-center translate">
           <v-flex class="ivory ma-2 headline">Member login</v-flex>
-          <v-icon x-large class="display-4 ivory">mdi-account-supervisor</v-icon>
+          <v-icon x-large class="d-none d-sm-flex display-4 ivory">mdi-account-supervisor</v-icon>
           <v-card-text>
             <v-form ref="form">
               <v-flex class="ivory text-left">Email</v-flex>

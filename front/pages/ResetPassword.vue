@@ -2,13 +2,45 @@
   <v-container justify-center align-center fill-height="true">
     <v-row justify="center" align="center">
       <v-col sm="5" xs="10">
-        <auth></auth>
+        <auth :title="title" v-if="authCompleted == false"></auth>
+        <template v-if="authCompleted">
+          <v-card class="pa-2 text-center translate">
+            <v-flex class="ivory ma-2 headline">Reset Password</v-flex>
+            <v-card-text>
+              <v-form ref="form">
+                <v-flex class="ivory text-left">비밀번호</v-flex>
+                <v-text-field
+                  v-model="password"
+                  type="password"
+                  :rules="passRules"
+                  label="Password"
+                  solo
+                  required
+                ></v-text-field>
+                <v-flex class="ivory text-left">비밀번호 확인</v-flex>
+                <v-text-field
+                  v-model="repassword"
+                  type="password"
+                  :rules="repassRules"
+                  label="Password"
+                  solo
+                  required
+                ></v-text-field>
+              </v-form>
+              <v-flex class="ivory">{{message}}</v-flex>
+              <v-btn block class="backivory" @click="validate">확인</v-btn>
+            </v-card-text>
+            <v-card-actions class="text-xs-center">
+              <v-btn color="error" nuxt to="/">홈으로</v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-import auth from '../components/Authentication.vue'
+import auth from '~/components/Authentication.vue'
 
 export default {
   layout: 'login',
@@ -16,75 +48,27 @@ export default {
     auth
   },
   data:() => ({
-    title: '',
-    sendNum: false,
-    disableNum: false,
-    email: '',
-    timer: null,
-    totalTime: 10,
-    emailRules: [
-      (v) => !!v || 'E-mail을 입력해 주세요.',
-      (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요'
+    title: 'Email Authentification',
+    message: '',
+    authCompleted: true,
+    password: '',
+    passRules: [
+      (v) => !!v || 'Password를 입력해 주세요.',
+      (v) => (v && v.length >= 8) || '비밀번호는 최소 8자리입니다.'
     ],
-    verifyNum: '',
-    verifyNumRules: [
-      (v) => !!v || '인증번호를 입력해 주세요',
-      (v) => (v && v.length == 8) || '인증번호는 8자리입니다.'
-    ],
-    message: ''
+    repassword: '',
+    repassRules: [
+
+    ]
   }),
   methods: {
-    emailValidate() {
-      if(this.$refs.emailform.validate()) {
-        // 이메일 유호함
-        // 이메일이 등록된 회원인지 확인후 이메일로 인증번호 전송
-        if(!this.sendNum){
-          this.sendNum = true;
-          this.startTimer();
-        } else {
-          this.resetTimer();
-          this.startTimer();
-        }
+    validate() {
+      if(this.$refs.form.validate()) {
+        // 비밀번호 유효성 검사 완료
+        // 비밀번호 재설정 진행
       }
-    },
-    numValidate() {
-      if(tis.$refs.verifyform.validate()) {
-        // 인증번호 유효함
-        // 인증번호 맞는지 확인후 비밀번호 재설정 진행
-      }
-    },
-    startTimer() {
-      this.timer = setInterval(() => this.countdown(), 1000);
-    },
-    resetTimer() {
-      this.totalTime = 180;
-      clearInterval(this.timer);
-      this.timer = null;
-    },
-    padTime(time) {
-      return (time < 10 ? '0' : '') + time;
-    },
-    countdown() {
-      if(this.totalTime >= 1){
-        this.totalTime--;
-      } else {
-        this.totalTime = 0;
-        this.message = '요청시간 초과';
-        this.disableNum = true;
-      }
-    }
-  },
-  computed: {
-    getMinute() {
-      const minutes = Math.floor(this.totalTime / 60);
-      return this.padTime(minutes);
-    },
-    getSecond() {
-      const seconds = this.totalTime % 60;
-      return this.padTime(seconds);
     }
   }
-
 }
 </script>
 
