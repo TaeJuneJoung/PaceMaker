@@ -1,13 +1,14 @@
 package com.ssafy.Entity.Days;
 
 import com.ssafy.Entity.Sprints.Sprint;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "DAYS")
-public class Day {
+public @Data class Day {
     @Id @GeneratedValue
     private Long dayId;
 

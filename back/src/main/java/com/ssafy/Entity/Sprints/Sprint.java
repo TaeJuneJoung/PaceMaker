@@ -2,6 +2,7 @@ package com.ssafy.Entity.Sprints;
 
 import com.ssafy.Entity.Days.Day;
 import com.ssafy.Entity.Rooms.Room;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -9,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "SPRINTS")
-public class Sprint {
+public @Data class Sprint {
 
     @Id @GeneratedValue
     private Long sprintID;
