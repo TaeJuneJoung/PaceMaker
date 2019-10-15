@@ -15,6 +15,7 @@ import java.util.Collection;
 )
 
 @Entity
+@Table(name = "ROOMS")
 public @Data class Room {
 
     @Id @GeneratedValue
