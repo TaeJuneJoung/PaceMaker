@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
 	props: {
 		title: String
@@ -52,6 +54,10 @@ export default {
     message: ''
   }),
   methods: {
+    ...mapActions([
+      'authInit',
+      'authComplete'
+    ]),
 		emailValidate() {
       if(this.$refs.emailform.validate()) {
         // 이메일 유호함
@@ -66,9 +72,12 @@ export default {
       }
     },
     numValidate() {
-      if(tis.$refs.verifyform.validate()) {
+      if(this.$refs.verifyform.validate()) {
         // 인증번호 유효함
         // 인증번호 맞는지 확인후 비밀번호 재설정 진행
+        this.authComplete();
+        console.log(this.$store.state.authCompleted);
+        clearInterval(this.timer);
       }
     },
     startTimer() {
