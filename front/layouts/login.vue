@@ -17,7 +17,10 @@ export default {
 }
 </script>
 <style scoped>
-.backimg {
-  height: 100vh;
+@media (min-width: 1000px) {
+  .backimg{
+    height: 100vh;
+  }
 }
+
 </style>

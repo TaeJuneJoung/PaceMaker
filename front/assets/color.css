@@ -1,0 +1,18 @@
+.container .translate {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.container .ivory {
+  color: rgb(248, 246, 207);
+}
+
+#__layout .backivory {
+  background-color: rgb(248, 246, 207);
+}
+
+.text-warning {
+  color: #ff5252
+}
+.text-success {
+  color: #4caf50
+}
