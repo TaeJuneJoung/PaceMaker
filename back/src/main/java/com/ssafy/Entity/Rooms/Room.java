@@ -10,11 +10,12 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @TypeDef(
-        name = "jsonb",
-        typeClass = JsonBinaryType.class
+    name = "jsonb",
+    typeClass = JsonBinaryType.class
 )
 
 @Entity
+@Table(name = "ROOMS")
 public @Data class Room {
 
     @Id @GeneratedValue
