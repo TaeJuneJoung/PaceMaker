@@ -11,8 +11,9 @@ import java.util.Date;
 @Table(name = "SPRINTS")
 public class Sprint {
 
-    @Id @GeneratedValue
-    private Long sprintID;
+    @Id @GeneratedValue 
+    @Column(name="SPRINT_ID")
+    private Long id;
 
     @OneToMany(mappedBy = "sprint")
     private Collection<Day> days;
