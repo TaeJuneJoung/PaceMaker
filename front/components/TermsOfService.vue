@@ -33,10 +33,11 @@ export default {
 
 <style scoped>
 #__layout .back-gray {
-  background-color: #F5F5F5
+  background-color: #F5F5F5;
 }
 
-a:active {
-  
+a {
+  text-decoration: none;
+  color: #73C2FB;
 }
 </style>

@@ -5,9 +5,23 @@
         <v-card class="pa-2 text-center translate">
           <v-flex class="ivory ma-2 headline">Join</v-flex>
           <v-card-text>
-            <v-form ref="form" v-model="valid">
+            <v-form ref="joinform" v-model="valid">
               <v-flex class="ivory text-left">Email</v-flex>
-              <v-text-field v-model="email" :counter="30" solo label="E-mail" required></v-text-field>
+              <v-text-field
+                v-model="email"
+                :counter="30"
+                :rules="[rules.email]"
+                solo
+                label="E-mail"
+                required
+                :readonly="emailReadOnly"
+                @blur="emailCheck"
+              >
+                <template v-if="isOnlyEmail" v-slot:append>
+                  <v-flex class="mr-1" @click="emailAuth">인증하기</v-flex>|
+                  <v-flex class="ml-1" @click="emailAuthCancle">취소</v-flex>
+                </template>
+              </v-text-field>
               <v-flex class="ivory text-left">Nickname</v-flex>
               <v-text-field
                 v-model="nickname"
@@ -16,7 +30,12 @@
                 solo
                 label="Nickname"
                 required
-              ></v-text-field>
+                @blur="nicknameCheck"
+              >
+                <template v-if="isOnlyNickname" v-slot:append>
+                  <v-flex class="ml-1" @click="nicknameCancle">취소</v-flex>
+                </template>
+              </v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
               <v-text-field
                 v-model="password"
@@ -63,7 +82,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn class="ma-4" color="success">회원가입</v-btn>
+            <v-btn class="ma-4" color="success" @click="joinValidate">회원가입</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -90,7 +109,12 @@ export default {
       rePasswordShow: false,
       checkboxEmail: false,
       checkboxAgree: false,
+      isOnlyEmail: false,
+      emailReadOnly: false,
+      isOnlyNickname: false,
+      nicknameReadOnly: false,
       rules: {
+        email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.',
         password: (v) =>
           /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(v || '') ||
           '비밀번호를 작성하여주세요. 비밀번호는 영문, 숫자, 특수문자를 포함하여야 합니다.',
@@ -101,8 +125,40 @@ export default {
         required: (v) => !!v || '약관에 동의해주세요.'
       }
     }
+  },
+  methods: {
+    joinValidate() {
+      if (this.$refs.joinform.validate()) {
+        // 계정 생성
+      }
+    },
+    emailCheck() {
+      // 데이터베이스 내용과 비교
+      // axios를 통해서 이메일을 있다면 true, 없다면 false
+      // if ('이메일요소') {
+      //   this.isOnlyEmail = true
+      //   this.emailReadOnly = true
+      // } else {
+      //   this.isOnlyEmail = false
+      //   this.emailReadOnly = false
+      // }
+    },
+    emailAuth() {
+      // 작성된 email에 email을 보내주게 axios 작성
+    },
+    emailAuthCancle() {
+      this.email = ''
+      this.isOnlyEmail = false
+      this.emailReadOnly = false
+    },
+    nicknameCheck() {
+      // emailCheck와 로직 동일
+    },
+    nicknameCancle() {
+      this.nickname = ''
+      this.isOnlyNickname = false
+      this.nicknameReadOnly = false
+    }
   }
 }
 </script>
-
-<style src="assets/color.css"></style>

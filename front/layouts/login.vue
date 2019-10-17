@@ -16,6 +16,8 @@ export default {
   }
 }
 </script>
+
+<style src="~/assets/color.css"></style>
 <style scoped>
 @media (min-width: 1000px) {
   .backimg{

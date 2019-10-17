@@ -11,5 +11,3 @@ export default {
   })
 }
 </script>
-
-<style src="assets/color.css"></style>

@@ -8,9 +8,9 @@
           <v-card-text>
             <v-form ref="form">
               <v-flex class="ivory text-left">Email</v-flex>
-              <v-text-field v-model="email" :rules="emailRules" label="E-mail" solo required></v-text-field>
+              <v-text-field v-model="email" :rules="[rules.email]" label="E-mail" solo required></v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
-              <v-text-field v-model="password" type="password" :rules="passRules" label="Password" solo required></v-text-field>
+              <v-text-field v-model="password" type="password" :rules="[rules.password]" label="Password" solo required></v-text-field>
             </v-form>
             <v-flex class="ivory">{{message}}</v-flex>
           </v-card-text>
@@ -30,15 +30,11 @@ export default {
   layout: 'login',
   data: () => ({
     email: '',
-    emailRules: [
-      (v) => !!v || 'E-mail을 입력해 주세요.',
-      (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요'
-    ],
     password: '',
-    passRules: [
-      (v) => !!v || 'Password를 입력해 주세요.',
-      (v) => (v && v.length >= 8) || '비밀번호는 최소 8자리입니다.'
-    ],
+    rules: {
+      email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요',
+      password: (v) => !!v || 'Password를 입력해 주세요.'
+    },
     message: ''
   }),
 
@@ -52,5 +48,3 @@ export default {
   }
 }
 </script>
-
-<style src="assets/color.css"></style>

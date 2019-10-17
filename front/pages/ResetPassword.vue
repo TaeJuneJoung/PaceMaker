@@ -2,7 +2,7 @@
   <v-container justify-center align-center fill-height="true">
     <v-row justify="center" align="center">
       <v-col sm="5" xs="10">
-        <auth :title="title" v-if="isAuthCompleted == false"></auth>
+        <authentication :title="title" v-if="isAuthCompleted == false"></authentication>
         <template v-if="showResetCard">
           <v-card class="pa-2 text-center translate">
             <v-flex class="ivory ma-2 headline">Reset Password</v-flex>
@@ -58,14 +58,13 @@
   </v-container>
 </template>
 <script>
-import auth from '~/components/Authentication.vue'
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
+import Authentication from '~/components/Authentication.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'login',
   components: {
-    auth
+    Authentication
   },
   data() {
     return {
@@ -127,5 +126,3 @@ export default {
   }
 }
 </script>
-
-<style src="assets/color.css"></style>
