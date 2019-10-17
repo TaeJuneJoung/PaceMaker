@@ -1,14 +1,19 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col sm="4" xs10>
-        <v-card outlined class="translate" height="1900">
-          <v-btn class="ivory" text nuxt to="/">마이 페이지</v-btn>
-          <v-btn class="ivory" text>로그아웃</v-btn>
+      <v-col sm="12" class="py-0">
+        <v-card outlined class="pa-1">
+          <span>명예의 전당</span>
         </v-card>
       </v-col>
-      <v-col sm="8" xs10>
-        <v-card outlined></v-card>
+    </v-row>
+    <v-row>
+      <v-col sm="4" cols="12">
+        <v-card outlined height="550">
+        </v-card>
+      </v-col>
+      <v-col sm="8" cols="12">
+        <v-card outlined height="550" class="pa-1"></v-card>
       </v-col>
     </v-row>
   </v-container>    
