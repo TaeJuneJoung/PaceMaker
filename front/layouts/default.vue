@@ -5,7 +5,7 @@
         <v-btn text nuxt to="/">마이 페이지</v-btn>
         <v-btn text>로그아웃</v-btn>
         <v-flex class="ma-2">
-          <v-avatar color="indigo">
+          <v-avatar color="grey">
             <v-icon v-if="getUserIcon" dark>{{getUserIcon}}</v-icon>
           </v-avatar>
           <span class="ml-2">{{getUserName}}</span>
@@ -65,9 +65,6 @@ export default {
       getUserName: 'user/getUserName',
       getUserIcon: 'user/getUserIcon'
     }),
-    getStoreIcon() {
-      return this.$store.state.user.userIcon;
-    }
   },
   methods: {
 
