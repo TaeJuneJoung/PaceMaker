@@ -7,7 +7,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @TypeDef(
     name = "jsonb",
@@ -15,19 +16,28 @@ import java.util.Collection;
 )
 
 @Entity
+@Table(name = "ROOMS")
 public @Data class Room {
 
-    @Id @GeneratedValue
-    private Long roomId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ROOM_ID")
+    private Long id;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private String summary;
 
     @OneToMany(mappedBy = "room")
-    private Collection<Sprint> sprints;
+    private List<Sprint> sprints = new ArrayList<Sprint>();
 
     private Boolean roomFlag;
     private Boolean completeFlag;
     private Integer userCount;
+
+    public void addSprint(Sprint sprint){
+        this.sprints.add(sprint);
+        if(sprint.getRoom() != this){
+            sprint.setRoom(this);
+        }
+    }
 }
