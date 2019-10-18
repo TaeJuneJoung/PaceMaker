@@ -19,5 +19,4 @@ public @Data class Day {
     private String daySubject;
     private Boolean dayCompleteFlag;
     private Date dayDate;
-
 }
