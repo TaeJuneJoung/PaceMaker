@@ -3,7 +3,8 @@ export const state = () => ({
   nickName: 'testuser',
   userIcon: 'mdi-account-circle',
   userPoint: 0,
-  userRoomList: []
+  userRoomList: [],
+  userAlarm: false
 })
 
 export const getters = {
@@ -21,6 +22,9 @@ export const getters = {
   },
   getUserRoomList: state => {
     return state.userRoomList
+  },
+  getUserAlarm: state => {
+    return state.userAlarm
   }
 }
 export const mutations = {
@@ -41,6 +45,9 @@ export const mutations = {
   },
   setUserRoomList (state, list) {
     state.userRoomList = list
+  },
+  setUserAlarm (state, alarm) {
+    state.userAlarm = alarm
   }
 }
 
@@ -62,5 +69,8 @@ export const actions = {
   },
   setUserRoomList (context, list) {
     context.commit('setUserRoomList' , list)
+  },
+  setUserAlarm (context, alarm) {
+    context.commit('setUserAlarm', alarm)
   }
 }

@@ -69,6 +69,7 @@
 export default {
   layout: 'default',
   components: {
+      Member()
   },
   data() {
     return {
@@ -99,6 +100,12 @@ export default {
     }
   },
   methods: {
+    Member(){
+			this.nickname = this.$store.state.nickName
+			this.password = this.$store.state.password
+			this.rePassword = this.$store.state.rePassword
+
+    },
     joinValidate() {
       if (this.$refs.joinform.validate()) {
         // 계정 생성
