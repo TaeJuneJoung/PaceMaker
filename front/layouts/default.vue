@@ -2,7 +2,7 @@
   <v-app dark>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <v-container>
-        <v-btn text nuxt to="/">마이 페이지</v-btn>
+        <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
         <v-btn text>로그아웃</v-btn>
         <v-flex class="ma-2">
           <v-avatar color="grey">

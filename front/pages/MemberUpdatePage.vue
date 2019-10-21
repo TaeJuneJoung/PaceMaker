@@ -3,25 +3,9 @@
     <v-row justify="center" align="center">
       <v-col sm="6" xs="10">
         <v-card class="pa-2 text-center translate">
-          <v-flex class="ivory ma-2 headline">Join</v-flex>
+          <v-flex class="ivory ma-2 headline">Member Update</v-flex>
           <v-card-text>
             <v-form ref="joinform" v-model="valid">
-              <v-flex class="ivory text-left">Email</v-flex>
-              <v-text-field
-                v-model="email"
-                :counter="30"
-                :rules="[rules.email]"
-                solo
-                label="E-mail"
-                required
-                :readonly="emailReadOnly"
-                @blur="emailCheck"
-              >
-                <template v-if="isOnlyEmail" v-slot:append>
-                  <v-flex class="mr-1" @click="emailAuth">인증하기</v-flex>|
-                  <v-flex class="ml-1" @click="emailAuthCancle">취소</v-flex>
-                </template>
-              </v-text-field>
               <v-flex class="ivory text-left">Nickname</v-flex>
               <v-text-field
                 v-model="nickname"
@@ -66,23 +50,13 @@
               </v-flex>
               <v-checkbox v-model="checkboxEmail" color="success">
                 <template v-slot:label>
-                  <v-flex class="ivory">PaceMaker에 대한 소식을 이메일로 받는데 동의합니다.</v-flex>
-                </template>
-              </v-checkbox>
-              <v-checkbox
-                v-model="checkboxAgree"
-                color="success"
-                required
-                :rules="[rules.required]"
-              >
-                <template v-slot:label>
-                  <terms-of-service></terms-of-service>
+                  <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
               </v-checkbox>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn class="ma-4" color="success" @click="joinValidate">회원가입</v-btn>
+            <v-btn class="ma-4" color="success" @click="joinValidate">회원 수정</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -91,12 +65,10 @@
 </template>
 
 <script>
-import TermsOfService from '~/components/TermsOfService.vue'
 
 export default {
-  layout: 'login',
+  layout: 'default',
   components: {
-    TermsOfService
   },
   data() {
     return {
@@ -108,7 +80,6 @@ export default {
       passwordShow: false,
       rePasswordShow: false,
       checkboxEmail: false,
-      checkboxAlram: false,
       checkboxAgree: false,
       isOnlyEmail: false,
       emailReadOnly: false,
@@ -133,26 +104,6 @@ export default {
         // 계정 생성
       }
     },
-    emailCheck() {
-      // 데이터베이스 내용과 비교
-      // axios를 통해서 이메일을 있다면 true, 없다면 false
-      // if ('이메일요소') {
-      //   this.isOnlyEmail = true
-      //   this.emailReadOnly = true
-      // } else {
-      //   this.isOnlyEmail = false
-      //   this.emailReadOnly = false
-      // }
-    },
-    emailAuth() {
-      // 작성된 email에 email을 보내주게 axios 작성
-    },
-    emailAuthCancle() {
-      this.email = ''
-      this.isOnlyEmail = false
-      this.emailReadOnly = false
-    },
-    
     nicknameCheck() {
       // emailCheck와 로직 동일
     },

@@ -3,11 +3,19 @@
     <v-col></v-col>
   </v-container>
 </template>
+
 <script>
+
 export default {
   layout: 'login',
-  data: () => ({
+   components: {
+     
+  },
+  data() {
 
-  })
+  },
+  methods: {
+    
+  }
 }
 </script>
