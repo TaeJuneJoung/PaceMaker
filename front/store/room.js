@@ -4,12 +4,47 @@ export const state = () => ({
   roomFlag: false,
   summary: '',
   completeFlag: '',
-  roomList: []
+  roomList: [
+		{
+			roomId: '1',
+			userCount: '2',
+			roomFlag: true,
+			summary: '테스트 룸',
+			completedFlag: false
+		},
+		{
+			roomId: '2',
+			userCount: '3',
+			roomFlag: true,
+			summary: '테스트 룸2',
+			completedFlag: false
+		},
+		{
+			roomId: '3',
+			userCount: '2',
+			roomFlag: true,
+			summary: '테스트 룸3',
+			completedFlag: false
+		},
+		{
+			roomId: '4',
+			userCount: '3',
+			roomFlag: true,
+			summary: '테스트 룸4',
+			completedFlag: false
+		}
+	]
 })
 
 export const getters = {
   getRoomList: state => {
     return state.roomList
+  },
+  getRoomById: (state) => {
+    return (id) => {
+      let size = state.roomList.length;
+      return (0 <= id && id < size) ? state.roomList[id] : "null";
+    }
   },
   getRoomId: state => {
     return state.roomId

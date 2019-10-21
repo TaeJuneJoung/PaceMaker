@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-data-iterator :items="rooms" :items-per-page.sync="itemsPerPage" hide-default-footer>
+    <v-data-iterator :items="getRoomList" :items-per-page.sync="itemsPerPage" hide-default-footer>
       <template v-slot:header>
         <v-toolbar src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg" dark flat>
           <v-row justify="end" align="center">
@@ -20,8 +20,10 @@
         </v-toolbar>
       </template>
       <v-row>
-        <v-col v-for="room in rooms" :key="room.roomId" cols="12" sm="6">
-          <room :room="room"></room>
+        <v-col v-for="room in getRoomList" :key="room.roomId" cols="12" sm="6">
+          <nuxt-link :to="`/Room/${room.roomId}`">
+            <room :room="room"></room>
+          </nuxt-link>
         </v-col>
       </v-row>
       <template v-slot:footer>
@@ -51,39 +53,12 @@ export default {
       '내용'
     ],
     key: '',
-    rooms: [
-      {
-        roomId: '1',
-        userCount: '2',
-        roomFlag: true,
-        summary: '테스트 룸',
-        completedFlag: false
-      },
-      {
-        roomId: '2',
-        userCount: '3',
-        roomFlag: true,
-        summary: '테스트 룸2',
-        completedFlag: false
-      },
-      {
-        roomId: '3',
-        userCount: '2',
-        roomFlag: true,
-        summary: '테스트 룸3',
-        completedFlag: false
-      },
-      {
-        roomId: '4',
-        userCount: '3',
-        roomFlag: true,
-        summary: '테스트 룸4',
-        completedFlag: false
-      }
-    ],
+    rooms: [],
   }),
   computed: {
-
+    ...mapGetters({
+			getRoomList: 'room/getRoomList'
+		})
   },
   methods: {
 
