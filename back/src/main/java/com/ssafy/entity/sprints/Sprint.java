@@ -1,7 +1,7 @@
-package com.ssafy.Entity.Sprints;
+package com.ssafy.entity.sprints;
 
-import com.ssafy.Entity.Days.Day;
-import com.ssafy.Entity.Rooms.Room;
+import com.ssafy.entity.days.Day;
+import com.ssafy.entity.rooms.Room;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +13,7 @@ import java.util.List;
 public @Data class Sprint {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SPRINT_ID")
+    @Column(name = "SPRINT_ID", nullable = false)
     private Long id;
 
     @OneToMany(mappedBy = "sprint")

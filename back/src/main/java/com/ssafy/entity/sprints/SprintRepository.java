@@ -1,4 +1,4 @@
-package com.ssafy.Entity.Sprints;
+package com.ssafy.entity.sprints;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

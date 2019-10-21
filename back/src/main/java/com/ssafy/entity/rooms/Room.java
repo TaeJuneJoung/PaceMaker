@@ -1,7 +1,8 @@
-package com.ssafy.Entity.Rooms;
+package com.ssafy.entity.rooms;
 
-import com.ssafy.Entity.Sprints.Sprint;
+import com.ssafy.entity.sprints.Sprint;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import jdk.internal.jline.internal.Nullable;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -20,7 +21,7 @@ import java.util.List;
 public @Data class Room {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ROOM_ID")
+    @Column(name = "ROOM_ID", nullable = false)
     private Long id;
 
     @Type(type = "jsonb")

@@ -1,6 +1,6 @@
-package com.ssafy.Entity.Days;
+package com.ssafy.entity.days;
 
-import com.ssafy.Entity.Sprints.Sprint;
+import com.ssafy.entity.sprints.Sprint;
 import lombok.Data;
 
 import javax.persistence.*;

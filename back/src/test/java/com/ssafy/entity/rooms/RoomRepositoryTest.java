@@ -1,7 +1,7 @@
-package com.ssafy.Entity.Rooms;
+package com.ssafy.entity.rooms;
 
-import com.ssafy.Entity.Sprints.Sprint;
-import com.ssafy.Entity.Sprints.SprintRepository;
+import com.ssafy.entity.sprints.Sprint;
+import com.ssafy.entity.sprints.SprintRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

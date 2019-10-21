@@ -1,4 +1,4 @@
-package com.ssafy.Entity.Users;
+package com.ssafy.entity.users;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.Optional;
 

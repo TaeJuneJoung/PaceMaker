@@ -1,4 +1,4 @@
-package com.ssafy.Entity.Users;
+package com.ssafy.entity.users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
