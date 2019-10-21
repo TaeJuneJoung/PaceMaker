@@ -48,7 +48,7 @@
                 <small class="text-success" v-if="password === rePassword">비밀번호가 일치합니다.</small>
                 <small class="text-warning" v-else>비밀번호가 일치하지 않습니다.</small>
               </v-flex>
-              <v-checkbox v-model="checkboxEmail" color="success">
+              <v-checkbox v-model="checkboxAlarm" color="success">
                 <template v-slot:label>
                   <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
@@ -56,7 +56,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn class="ma-4" color="success" @click="joinValidate">회원 수정</v-btn>
+            <v-btn class="ma-4" color="success" @click="updateValidate">회원 수정</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -69,8 +69,12 @@
 export default {
   layout: 'default',
   components: {
-      Member()
-  },
+     
+	},
+	created() {
+		this.nickname = this.$store.state.nickName,
+		this.checkboxAlarm = this.$store.state.userAlarm
+	},
   data() {
     return {
       valid: true,
@@ -80,7 +84,7 @@ export default {
       rePassword: '',
       passwordShow: false,
       rePasswordShow: false,
-      checkboxEmail: false,
+      checkboxAlarm: false,
       checkboxAgree: false,
       isOnlyEmail: false,
       emailReadOnly: false,
@@ -100,13 +104,8 @@ export default {
     }
   },
   methods: {
-    Member(){
-			this.nickname = this.$store.state.nickName
-			this.password = this.$store.state.password
-			this.rePassword = this.$store.state.rePassword
-
-    },
-    joinValidate() {
+    
+    updateValidate() {
       if (this.$refs.joinform.validate()) {
         // 계정 생성
       }
