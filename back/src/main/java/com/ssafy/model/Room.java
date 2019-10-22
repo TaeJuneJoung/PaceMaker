@@ -1,8 +1,6 @@
-package com.ssafy.entity.rooms;
+package com.ssafy.model;
 
-import com.ssafy.entity.sprints.Sprint;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import jdk.internal.jline.internal.Nullable;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -12,32 +10,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TypeDef(
-    name = "jsonb",
-    typeClass = JsonBinaryType.class
+        name = "jsonb",
+        typeClass = JsonBinaryType.class
 )
 
 @Entity
 @Table(name = "ROOMS")
-public @Data class Room {
+public @Data
+class Room {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ROOM_ID", nullable = false)
     private Long id;
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
+    @Column(name = "SUMMARY", columnDefinition = "jsonb")
     private String summary;
+
+    @Column(name = "ROOM_FLAG", nullable = false)
+    private Boolean roomFlag;
+
+    @Column(name = "COMPLETE_FLAG", nullable = false)
+    private Boolean completeFlag;
+
+    @Column(name = "USER_COUNT", nullable = false)
+    private Integer userCount;
 
     @OneToMany(mappedBy = "room")
     private List<Sprint> sprints = new ArrayList<Sprint>();
 
-    private Boolean roomFlag;
-    private Boolean completeFlag;
-    private Integer userCount;
-
-    public void addSprint(Sprint sprint){
+    public void addSprint(Sprint sprint) {
         this.sprints.add(sprint);
-        if(sprint.getRoom() != this){
+        if (sprint.getRoom() != this) {
             sprint.setRoom(this);
         }
     }

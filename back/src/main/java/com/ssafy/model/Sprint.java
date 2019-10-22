@@ -1,7 +1,7 @@
-package com.ssafy.entity.sprints;
+package com.ssafy.model;
 
-import com.ssafy.entity.days.Day;
-import com.ssafy.entity.rooms.Room;
+import com.ssafy.model.Day;
+import com.ssafy.model.Room;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,11 +10,25 @@ import java.util.List;
 
 @Entity
 @Table(name = "SPRINTS")
-public @Data class Sprint {
+public @Data
+class Sprint {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SPRINT_ID", nullable = false)
     private Long id;
+
+    @Column(name = "SPRINT_START_DATE", nullable = false)
+    private Date startDate;
+
+    @Column(name = "SPRINT_END_DATE", nullable = false)
+    private Date endDate;
+
+    @Column(name = "SPRINT_GOAL", nullable = false)
+    private String goal;
+
+    @Column(name = "SPRINT_COMPLETE_FLAG", nullable = false)
+    private Boolean completeFlag;
 
     @OneToMany(mappedBy = "sprint")
     private List<Day> days;
@@ -24,16 +38,10 @@ public @Data class Sprint {
     @JoinColumn(name = "ROOM_ID")
     private Room room;
 
-    private Date sprintStartDate;
-    private Date sprintEndDate;
-
-    private String sprintGoal;
-    private Boolean sprintCompleteFlag;
-
     public void setRoom(Room room) {
         this.room = room;
 
-        if(!room.getSprints().contains(this)){
+        if (!room.getSprints().contains(this)) {
             room.getSprints().add(this);
         }
     }

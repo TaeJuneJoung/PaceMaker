@@ -1,7 +1,9 @@
-package com.ssafy.entity.rooms;
+package com.ssafy.model;
 
-import com.ssafy.entity.sprints.Sprint;
-import com.ssafy.entity.sprints.SprintRepository;
+import com.ssafy.model.Sprint;
+import com.ssafy.model.Room;
+import com.ssafy.repository.RoomRepository;
+import com.ssafy.repository.SprintRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,26 +33,26 @@ public class RoomRepositoryTest {
 
 
         Sprint sprint = new Sprint();
-        sprint.setSprintStartDate(new Date());
-        sprint.setSprintEndDate(new Date());
-        sprint.setSprintGoal("나의 목표는 B형");
-        sprint.setSprintCompleteFlag(false);
+        sprint.setStartDate(new Date());
+        sprint.setEndDate(new Date());
+        sprint.setGoal("나의 목표는 B형");
+        sprint.setCompleteFlag(false);
         sprint.setRoom(rooms);
         Sprint newSprint = sprintRepository.save(sprint);
 
 
-        newSprint.setSprintStartDate(new Date());
-        newSprint.setSprintEndDate(new Date());
-        newSprint.setSprintGoal("나의 목표는 A형");
-        newSprint.setSprintCompleteFlag(false);
+        newSprint.setStartDate(new Date());
+        newSprint.setEndDate(new Date());
+        newSprint.setGoal("나의 목표는 A형");
+        newSprint.setCompleteFlag(false);
         newSprint.setRoom(rooms);
         sprintRepository.save(sprint);
 
         sprint = new Sprint();
-        sprint.setSprintStartDate(new Date());
-        sprint.setSprintEndDate(new Date());
-        sprint.setSprintGoal("나의 목표는 B형");
-        sprint.setSprintCompleteFlag(false);
+        sprint.setStartDate(new Date());
+        sprint.setEndDate(new Date());
+        sprint.setGoal("나의 목표는 B형");
+        sprint.setCompleteFlag(false);
         sprint.setRoom(rooms);
         sprintRepository.save(sprint);
 

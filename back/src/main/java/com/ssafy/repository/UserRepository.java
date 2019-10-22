@@ -1,9 +1,11 @@
-package com.ssafy.entity.users;
+package com.ssafy.repository;
 
+import com.ssafy.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUserNickname(String userNickname);
+    User findByEmail(String email);
+    Optional<User> findByNickname(String nickname);
 }
