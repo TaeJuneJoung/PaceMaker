@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-data-iterator :items="getRoomList" :items-per-page.sync="itemsPerPage" hide-default-footer>
       <template v-slot:header>
-        <v-toolbar src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg" dark flat>
+        <v-toolbar dark flat>
           <v-row justify="end" align="center">
             <v-col cols="8" sm="3">
               <v-text-field
@@ -20,14 +20,12 @@
         </v-toolbar>
       </template>
       <v-row>
-        <v-col v-for="room in getRoomList" :key="room.roomId" cols="12" sm="6">
-          <nuxt-link :to="`/Room/${room.roomId}`">
+        <v-col v-for="room in getRoomList" :key="room.roomId" cols="12" lg="4" sm="6">
             <room :room="room"></room>
-          </nuxt-link>
         </v-col>
       </v-row>
       <template v-slot:footer>
-        <v-toolbar class="mt-2" color="indigo" dark flat>
+        <v-toolbar class="mt-2" color="gray" dark flat>
           <v-toolbar-title class="subheading">This is a footer</v-toolbar-title>
         </v-toolbar>
       </template>
@@ -36,12 +34,12 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import room from '~/components/Room.vue'
+import Room from '~/components/Room.vue'
 
 export default {
   layout: 'default',
   components: {
-    room
+    Room
   },
   data: () => ({
     search: '',
@@ -57,8 +55,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-			getRoomList: 'room/getRoomList'
-		})
+         getRoomList: 'room/getRoomList'
+      })
   },
   methods: {
 
