@@ -5,12 +5,36 @@ import java.io.UnsupportedEncodingException;
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+
 public class MailCtroller {
+
+    /***
+     *
+     */
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername("ssafydocker@gmail.com");
+        mailSender.setPassword("ssafy@1234");
+
+
+
+
+        return mailSender;
+    }
+
+
     private JavaMailSender sender;
     private MimeMessage message;
     private MimeMessageHelper messageHelper;
