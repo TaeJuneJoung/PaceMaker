@@ -32,6 +32,34 @@ export const state = () => ({
 			roomFlag: true,
 			summary: '테스트 룸4',
 			completedFlag: false
+    },
+    {
+			roomId: '5',
+			userCount: '2',
+			roomFlag: true,
+			summary: '테스트 룸5',
+			completedFlag: false
+		},
+		{
+			roomId: '6',
+			userCount: '3',
+			roomFlag: true,
+			summary: '테스트 룸6',
+			completedFlag: false
+		},
+		{
+			roomId: '7',
+			userCount: '3',
+			roomFlag: true,
+			summary: '테스트 룸7',
+			completedFlag: false
+		},
+		{
+			roomId: '8',
+			userCount: '8',
+			roomFlag: true,
+			summary: '테스트 룸8',
+			completedFlag: false
 		}
 	]
 })
