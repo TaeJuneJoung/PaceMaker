@@ -25,8 +25,8 @@ public class UserRepositoryTest {
     public void UserSaveAndFindTest() throws NoSuchAlgorithmException {
 
         User yunki = new User();
-        yunki.setEmail("byg2344@naver.com");
-        yunki.setNickname("닉네임7");
+        yunki.setEmail("byg23424@naver.com");
+        yunki.setNickname("닉네임72");
         yunki.setPassword(sha256("1234"));
         yunki.setActivateFlag(true);
         yunki.setAuthenticationFlag(false);
@@ -34,15 +34,15 @@ public class UserRepositoryTest {
         yunki.setPoint(1000);
         yunki.setAlarmFlag(false);
 
-//        User newUser = userRepository.save(yunki);
+        User newUser = userRepository.save(yunki);
 
-        assertThat(yunki).isNotNull();
+        assertThat(newUser).isNotNull();
 
-        User foundUser = userRepository.findByEmail(yunki.getEmail());
+        User foundUser = userRepository.findByEmail(newUser.getEmail());
 
         if (foundUser != null) {
             assertThat(foundUser.getNickname())
-                    .isEqualTo(yunki.getNickname());
+                    .isEqualTo(newUser.getNickname());
         } else {
             System.out.println("널!");
         }

@@ -17,8 +17,11 @@ public class UserCtroller {
     @Autowired
     UserRepository userRepository;
 
+
+
     @PostMapping("/users")
     public User createEmployee(@Valid @RequestBody User user) throws NoSuchAlgorithmException {
+
         user.setPassword(sha256(user.getPassword()));
 
 
