@@ -1,5 +1,5 @@
 <template>
-  <v-container justify-center align-center fill-height="true">
+  <v-container class="bgimg" justify-center align-center fill-height="true">
     <v-row justify="center" align="center">
       <v-col sm="6" xs="10">
         <v-card class="pa-2 text-center translate">
@@ -53,6 +53,12 @@
                   <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
               </v-checkbox>
+                 <!-- <v-switch
+                    v-model="switch1" color="success"
+                    :label="`알림허용에 동의합니다`"
+                  >
+                  <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
+                  </v-switch> -->
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
@@ -72,8 +78,8 @@ export default {
      
 	},
 	created() {
-		this.nickname = this.$store.state.nickName,
-		this.checkboxAlarm = this.$store.state.userAlarm
+		this.nickname = this.$store.state.user.nickName,
+		this.checkboxAlarm = this.$store.state.user.userAlarm
 	},
   data() {
     return {
@@ -121,3 +127,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.bgimg{
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../static/bgimg2.jpg");
+  background-size: cover;
+}
+</style>
+
