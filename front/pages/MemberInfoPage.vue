@@ -1,18 +1,21 @@
 <template>
-  <v-container class="bgimg" fluid>
+  <v-container class="bgimg" justify-center align-center fill-height="true">
     <v-row>
       <v-col sm="4" cols="12">
         <v-card class="pa-2 translate" outlined height="550">
-          <v-list-item class="grow">
+          <v-list-item class="grow justify-center">
             <v-list-item-avatar color="grey darken-3" tile size="150">
             <v-img
-              class="elevation-6"
+              class="elevation-6" 
               src="http://image.itdonga.com/files/2018/09/07/004.png"
             ></v-img>
             </v-list-item-avatar>
-            <v-list-item>
+          </v-list-item>
+          <v-list-item class="justify-center">
               {{nickname}}
-            </v-list-item>
+          </v-list-item>
+          <v-list-item class="justify-center">
+              Point: {{userpoint}}
           </v-list-item>
         </v-card>
       </v-col>
@@ -37,11 +40,13 @@ export default {
   },
   data() {
     return{
-      nickname: ''
+      nickname: '',
+      userpoint: 0
     }
   },
   created(){
     this.nickname = this.$store.state.user.nickName
+    this.userpoint = this.$store.state.user.userPoint
   },
   methods: {
     
