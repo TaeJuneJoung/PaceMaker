@@ -1,71 +1,57 @@
 package com.ssafy.controller;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import javax.activation.DataSource;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import org.springframework.core.io.Resource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
+import com.ssafy.utility.HashEncoder;
+import com.ssafy.utility.AuthMailSender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+
+@RestController
+@RequestMapping("/api/v1")
 public class MailCtroller {
-    private JavaMailSender sender;
-    private MimeMessage message;
-    private MimeMessageHelper messageHelper;
 
-    public void setJSender(JavaMailSender jSender){
-        this.sender = jSender;
-    }
+    private final AuthMailSender mailSender;
 
-    public MailCtroller() throws MessagingException{
-        message = sender.createMimeMessage();
-        messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+    private final HashEncoder hashEncoder;
+
+    @Autowired
+    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder) {
+        this.mailSender = mailSender;
+        this.hashEncoder = hashEncoder;
     }
 
-    //MailCtroller의 생성자
-    public MailCtroller(JavaMailSender jSender) throws
-            MessagingException {
-        this.sender = jSender;
-        message = jSender.createMimeMessage();
-        messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-    }
+    @GetMapping("/auth/{userEmail:.+}")
+    public void sendMail(@PathVariable @Valid String userEmail) {
 
-    public void setFrom(String email,String name) throws
-            UnsupportedEncodingException, MessagingException {
-        messageHelper.setFrom(email, name);
-    }
-
-    public void setTo(String email) throws MessagingException {
-        messageHelper.setTo(email);
-    }
-
-    public void setSubject(String subject) throws MessagingException {
-        messageHelper.setSubject(subject);
-    }
-
-    public void setText(String text) throws MessagingException {
-        messageHelper.setText(text, true);
-    }
-
-    public void addInline(String contentId, Resource resource) throws
-            MessagingException {
-        messageHelper.addInline(contentId, resource);
-    }
-    public void addInline(String contentId, File file) throws
-            MessagingException {
-        messageHelper.addInline(contentId, file);
-    }
-    public void addInline(String contentId, DataSource source) throws
-            MessagingException {
-        messageHelper.addInline(contentId, source);
-    }
-
-    public void send() {
         try {
-            sender.send(message);
-        }catch(Exception e) {
+            // 1. 해싱 - 현재시각과 이메일을 사용하여 SHA1 다이제스트를 만든다. (sha1 - 8초, sha256 - 12초 )
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss", Locale.KOREA);
+            String dateToString = dateFormat.format(new Timestamp(System.currentTimeMillis()));
+            String hash = hashEncoder.sha1(dateToString + userEmail);
+
+            // 2. To. 설정(회원의 이메일 주소)
+            mailSender.setTo(userEmail);
+
+            // 3. 메일 제목과 본문
+            mailSender.setSubject("[PaceMaker] 회원가입 인증 메일");
+            mailSender.setText(new StringBuffer().append("<h1>회원가입 인증메일입니다.</h1>")
+                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost/member/auth?email=" + userEmail)
+                    .append("&hash="+hash+"' target='_blank'>메일 인증 링크</a>")
+                    .toString()
+            );
+
+            // 4. 전송
+            mailSender.send();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

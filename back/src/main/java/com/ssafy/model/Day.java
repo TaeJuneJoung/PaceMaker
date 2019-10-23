@@ -3,6 +3,7 @@ package com.ssafy.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,8 +22,8 @@ class Day {
     @Column(name = "DAY_COMPLETE_FLAG ", nullable = false)
     private Boolean completeFlag;
 
-    @Column(name = "DAY_DATE ", nullable = false)
-    private Date date;
+    @Column(name = "DAY_DATE ", columnDefinition = "DATE", nullable = false)
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "SPRINT_ID")
