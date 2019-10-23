@@ -1,5 +1,6 @@
 package com.ssafy.model;
 
+import com.ssafy.exception.ResourceNotFoundException;
 import com.ssafy.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +23,22 @@ public class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Test
+    public void UserDelete() throws ResourceNotFoundException {
+        Long userId = 3L;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+
+        userRepository.delete(user);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+
+        response.forEach((key,value) -> {
+            System.out.println(key+"::"+value);
+        });
+    }
+
 
     @Test
     public void UserSaveAndFindTest() throws NoSuchAlgorithmException {
