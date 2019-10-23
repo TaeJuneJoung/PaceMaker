@@ -1,5 +1,5 @@
 .container .translate {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .container .ivory {
@@ -15,4 +15,12 @@
 }
 .text-success {
   color: #4caf50
+}
+
+.v-text-field .v-counter {
+  color: ivory;
+}
+
+.theme--light .v-icon {
+  color: ivory;
 }

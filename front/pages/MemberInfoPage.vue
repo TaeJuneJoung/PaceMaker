@@ -1,5 +1,5 @@
 <template>
-  <v-container class="bgimg" justify-center align-center fill-height="true">
+  <v-container justify-center align-center fill-height="true">
     <v-row>
       <v-col sm="4" cols="12">
         <v-card class="pa-2 translate" outlined height="550">
@@ -54,8 +54,8 @@ export default {
 }
 </script>
 <style scoped>
-.bgimg{
+/* .bgimg{
   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../static/bgimg3.jpg");
   background-size: cover;
-}
+} */
 </style>

@@ -2,7 +2,7 @@
   <v-container justify-center align-center fill-height="true">
     <v-row justify="center" align="center">
       <v-col sm="5" xs="10">
-        <v-card raised class="pa-2 text-center translate">
+        <v-card raised class="pa-2 text-center translate member-text-bold">
           <v-flex class="ivory ma-2 headline">Member login</v-flex>
           <v-icon x-large class="d-none d-sm-flex display-4 ivory">mdi-account-supervisor</v-icon>
           <v-card-text>
@@ -48,3 +48,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .v-messages__wrapper{
+    font-weight: bold;
+  }
+</style>
