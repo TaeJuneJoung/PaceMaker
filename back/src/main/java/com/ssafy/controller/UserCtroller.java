@@ -21,24 +21,37 @@ public class UserCtroller {
     @Autowired
     UserRepository userRepository;
 
+    @GetMapping("/users")
+    public List<User> getAllUsers(){
 
+        return userRepository.findAll();
+    }
 
     @PostMapping("/users")
     public User createEmployee(@Valid @RequestBody User user) throws NoSuchAlgorithmException {
-
         user.setPassword(sha256(user.getPassword()));
-
 
         return userRepository.save(user);
     }
 
-
-    @PutMapping("/users")
-    public ResponseEntity<User> updatePass(@Valid @RequestBody User roomDetails) throws ResourceNotFoundException {
-        Long userId = roomDetails.getId();
+    @PutMapping("/users") // 사진, 닉네임
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
+        Long userId = userDetails.getId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
-        user.setPassword(roomDetails.getPassword());
+        user.setNickname(userDetails.getNickname());
+        user.setImg(userDetails.getImg());
+        user.setAlarmFlag(userDetails.getAlarmFlag());
+        final User updatedUser = userRepository.save(user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("/users/pass")
+    public ResponseEntity<User> updatePass(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
+        Long userId = userDetails.getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+        user.setPassword(userDetails.getPassword());
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
     }

@@ -44,5 +44,8 @@ class User {
     private Integer point;
 
     @Column(name = "USER_ALARM_FLAG", nullable = false)
-    private  Boolean alarmFlag;
+    private Boolean alarmFlag;
+
+    @Column(name = "USER_IMG")
+    private String img;
 }

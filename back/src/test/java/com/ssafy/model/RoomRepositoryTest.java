@@ -29,6 +29,10 @@ public class RoomRepositoryTest {
         room.setCompleteFlag(false);
         room.setSummary("{}");
         room.setUserCount(10);
+        room.setCreateDate(new Date());
+        room.setTitle("제목");
+        room.setDescript("젠장");
+
         Room rooms = roomRepository.save(room);
 
 

@@ -7,6 +7,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @TypeDef(
@@ -23,6 +24,15 @@ class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ROOM_ID", nullable = false)
     private Long id;
+
+    @Column(name = "ROOM_TITLE", nullable = false)
+    private String title;
+
+    @Column(name = "ROOM_DESCRIPT")
+    private String descript;
+
+    @Column(name = "ROOM_CREATED_DATE", nullable = false)
+    private Date createDate;
 
     @Type(type = "jsonb")
     @Column(name = "SUMMARY", columnDefinition = "jsonb")
