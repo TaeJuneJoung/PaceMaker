@@ -37,7 +37,7 @@ class User {
     @Column(name = "USER_REGISTER_DATE", nullable = false)
     private Date registerDate;
 
-    @Column(name = "USER_DEATIVATE_DATE", nullable = true)
+    @Column(name = "USER_DEATIVATE_DATE", columnDefinition = "DATE", nullable = true)
     private Date deAtivateDate;
 
     @Column(name = "USER_POINT", nullable = false)

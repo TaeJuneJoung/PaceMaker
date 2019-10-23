@@ -21,7 +21,7 @@ class Sprint {
     @Column(name = "SPRINT_START_DATE", nullable = false)
     private Date startDate;
 
-    @Column(name = "SPRINT_END_DATE", nullable = false)
+    @Column(name = "SPRINT_END_DATE", columnDefinition = "DATE", nullable = false)
     private Date endDate;
 
     @Column(name = "SPRINT_GOAL", nullable = false)

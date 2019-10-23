@@ -35,7 +35,7 @@ class Room {
     private Boolean completeFlag;
 
     @Column(name = "USER_COUNT", nullable = false)
-    private Integer userCount;
+    private Short userCount;
 
     @OneToMany(mappedBy = "room")
     private List<Sprint> sprints = new ArrayList<Sprint>();

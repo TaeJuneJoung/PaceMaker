@@ -28,7 +28,7 @@ public class RoomRepositoryTest {
         room.setRoomFlag(true);
         room.setCompleteFlag(false);
         room.setSummary("{}");
-        room.setUserCount(10);
+        room.setUserCount((short)10);
         Room rooms = roomRepository.save(room);
 
 
