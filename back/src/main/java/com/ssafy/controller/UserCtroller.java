@@ -26,7 +26,14 @@ public class UserCtroller {
 
     @GetMapping("/users")
     public List<User> getAllUsers(){
-        return userRepository.findAll();
+        return userRepository.findAllInfo();
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+        return user;
     }
 
     @PostMapping("/users")

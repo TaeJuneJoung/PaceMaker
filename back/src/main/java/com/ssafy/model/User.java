@@ -1,5 +1,6 @@
 package com.ssafy.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,11 +17,11 @@ class User {
     @Column(name = "USER_ID", nullable = false)
     private Long id;
 
-    @Column(name = "USER_EMAIL", nullable = false, unique=true)
+    @Column(name = "USER_EMAIL", nullable = false, unique = true)
     @NotEmpty(message = "이메일을 입력해주세요.")
     private String email;
 
-    @Column(name = "USER_NICKNAME", nullable = false, unique=true)
+    @Column(name = "USER_NICKNAME", nullable = false, unique = true)
     @NotEmpty(message = "닉네임을 입력해주세요.")
     private String nickname;
 
