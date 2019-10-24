@@ -3,9 +3,7 @@
     <v-img src="./pacemaker1.png" class="backimg">
       <nuxt />
     </v-img>
-    <v-footer app>
-      <span>&copy; 2019</span>
-    </v-footer>
+  
   </v-app>
 </template>
 

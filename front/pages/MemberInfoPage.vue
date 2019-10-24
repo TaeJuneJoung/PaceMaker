@@ -2,7 +2,7 @@
   <v-container justify-center align-center fill-height="true">
     <v-row>
       <v-col sm="4" cols="12">
-        <v-card class="pa-2 translate" outlined height="550">
+        <v-card class="pa-2" outlined height="550">
           <v-list-item class="grow justify-center">
             <v-list-item-avatar color="grey darken-3" tile size="150">
             <v-img
@@ -20,11 +20,33 @@
         </v-card>
       </v-col>
       <v-col sm="8" cols="12">
-        <v-card class="pa-2 translate" outlined height="550">
+        <v-card class="pa-2" outlined height="550">
           <v-row justify="end">
            <v-btn color=primary nuxt to="/MemberUpdatePage">회원 수정</v-btn>
            <v-btn class="mx-4" color=primary nuxt to="/*">회원 탈퇴</v-btn>
           </v-row>
+          <v-simple-table >
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">방 분류</th>
+                  <th class="text-left">방 이름</th>
+                  <th class="text-left">인원수</th>
+                  <th class="text-left">방 주인</th>
+                  <th class="text-left">완료 여부</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in roomList" :key="item.summary">
+                  <td>{{ item.roomFlag }}</td>
+                  <td>{{ item.summary }}</td>
+                  <td>{{ item.userCount }}</td>
+                  <td>{{ item.방주인 }}</td>
+                  <td>{{ item.completedFlag }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-card>
       </v-col>
     </v-row>
@@ -41,7 +63,8 @@ export default {
   data() {
     return{
       nickname: '',
-      userpoint: 0
+      userpoint: 0,
+      roomList: [],
     }
   },
   created(){
@@ -49,7 +72,10 @@ export default {
     this.userpoint = this.$store.state.user.userPoint
   },
   methods: {
-    
+    sprint(){
+      this.roomList = this.$store.state.room.roomList
+
+    }
   }
 }
 </script>

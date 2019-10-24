@@ -59,6 +59,13 @@
                   >
                   <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                   </v-switch> -->
+              <v-file-input
+                :rules="[rules.profile]"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an avatar"
+                prepend-icon="mdi-camera"
+                label="Avatar"
+              ></v-file-input>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
@@ -105,7 +112,8 @@ export default {
           (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
         maxLength: (len) => (v) =>
           (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`,
-        required: (v) => !!v || '약관에 동의해주세요.'
+        required: (v) => !!v || '약관에 동의해주세요.',
+        profile: (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!'
       }
     }
   },

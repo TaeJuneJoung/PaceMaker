@@ -61,8 +61,8 @@
                 @click:append="rePasswordShow = !rePasswordShow"
               ></v-text-field>
               <v-flex v-if="password.length >= 8 && rePassword.length >= 8">
-                <small class="text-success" v-if="password === rePassword">비밀번호가 일치합니다.</small>
-                <small class="text-warning" v-else>비밀번호가 일치하지 않습니다.</small>
+                <small class="success--text" v-if="password === rePassword">비밀번호가 일치합니다.</small>
+                <small class="warning--text" v-else>비밀번호가 일치하지 않습니다.</small>
               </v-flex>
               <v-checkbox v-model="checkboxEmail" color="success">
                 <template v-slot:label>
