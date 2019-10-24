@@ -1,6 +1,5 @@
 package com.ssafy.model;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,11 +16,11 @@ class User {
     @Column(name = "USER_ID", nullable = false)
     private Long id;
 
-    @Column(name = "USER_EMAIL", nullable = false, unique = true)
+    @Column(name = "USER_EMAIL", nullable = false, unique=true)
     @NotEmpty(message = "이메일을 입력해주세요.")
     private String email;
 
-    @Column(name = "USER_NICKNAME", nullable = false, unique = true)
+    @Column(name = "USER_NICKNAME", nullable = false, unique=true)
     @NotEmpty(message = "닉네임을 입력해주세요.")
     private String nickname;
 
@@ -32,7 +31,7 @@ class User {
     @Column(name = "USER_AUTHENTICATION_FLAG", nullable = false)
     private Boolean authenticationFlag;
 
-    @Column(name = "USER_ACTIVATE_FLAG", nullable = false)
+    @Column(name = "USER_ACTIVATE_FLAG"s)
     private Boolean activateFlag;
 
     @Column(name = "USER_REGISTER_DATE", nullable = false)
@@ -41,10 +40,10 @@ class User {
     @Column(name = "USER_DEATIVATE_DATE", columnDefinition = "DATE", nullable = true)
     private Date deAtivateDate;
 
-    @Column(name = "USER_POINT", nullable = false)
+    @Column(name = "USER_POINT")
     private Integer point;
 
-    @Column(name = "USER_ALARM_FLAG", nullable = false)
+    @Column(name = "USER_ALARM_FLAG")
     private Boolean alarmFlag;
 
     @Column(name = "USER_IMG")
