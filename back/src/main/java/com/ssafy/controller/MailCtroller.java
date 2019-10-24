@@ -1,14 +1,13 @@
 package com.ssafy.controller;
 
 import com.ssafy.model.AuthMail;
+import com.ssafy.model.User;
 import com.ssafy.repository.AuthMailRepository;
+import com.ssafy.repository.UserRepository;
 import com.ssafy.utility.HashEncoder;
 import com.ssafy.utility.AuthMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.Timestamp;
@@ -27,11 +26,14 @@ public class MailCtroller {
 
     private final AuthMailRepository authMailRep;
 
+    private  final UserRepository userRepository;
+
     @Autowired
-    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep) {
+    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep,UserRepository userRepository) {
         this.mailSender = mailSender;
         this.hashEncoder = hashEncoder;
         this.authMailRep = authMailRep;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/send/{userEmail:.+}")
@@ -59,7 +61,7 @@ public class MailCtroller {
             // 4. 메일 제목과 본문
             mailSender.setSubject("[PaceMaker] 회원가입 인증 메일");
             mailSender.setText(new StringBuffer().append("<h1>회원가입 인증메일입니다.</h1>")
-                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost:8080/api/v1/auth?email" + userEmail)
+                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost:8080/api/v1/auth/?email=" + userEmail)
                     .append("&hash=" + hash + "' target='_blank'>메일 인증 링크</a>")
                     .toString()
             );
@@ -72,14 +74,15 @@ public class MailCtroller {
         }
     }
 
-    @GetMapping("/auth/{email:.+, hash}")
-    public String authMail(@PathVariable @Valid String userEmail, String userHash) {
+    @GetMapping("/auth/")
+    public String authMail(@RequestParam("email") String userEmail, @RequestParam("hash") String userHash) {
         AuthMail auth = authMailRep.findByEmail(userEmail);
-        System.out.println(auth);
-        String url = "localhost:8080/login";
+        String url = "http://localhost:3000/";
         if (auth.getAuth().equals(userHash)) {
-
-            return "redirect:" + url;
+            User user = userRepository.findByEmail(userEmail);
+            user.setAuthenticationFlag(true);
+            userRepository.save(user);
+            return "<script>location.href = '"+url+"'</script>";
         }
         return "<script>alert('인증에 실패하였습니다.');</script>";
     }

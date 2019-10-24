@@ -19,11 +19,15 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class UserCtroller {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final HashEncoder hashEncoder;
 
     @Autowired
-    HashEncoder hashEncoder;
+    public UserCtroller(HashEncoder hashEncoder, UserRepository userRepository) {
+        this.hashEncoder = hashEncoder;
+        this.userRepository = userRepository;
+    }
 
     /**
      *
