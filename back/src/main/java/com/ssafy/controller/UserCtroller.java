@@ -39,6 +39,12 @@ public class UserCtroller {
         return userRepository.findAll();
     }
 
+    /**
+     * email로 User 찾기
+     * @param userEmail
+     * @return User
+     * @throws ResourceNotFoundException
+     */
     @GetMapping("/users/{email:.+}")
     public User getEmailUser(@PathVariable(value = "email") String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail);
@@ -58,6 +64,12 @@ public class UserCtroller {
         return user;
     }
 
+    /**
+     * Login
+     * @param userDetails
+     * @return True => User, False => null
+     * @throws NoSuchAlgorithmException
+     */
     @PostMapping("/users/login")
     public User loginCheck(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
         User user = userRepository.findByEmail(userDetails.getEmail());
@@ -66,6 +78,12 @@ public class UserCtroller {
         return null;
     }
 
+    /**
+     * User 생성
+     * @param userDetails
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody User userDetails) throws NoSuchAlgorithmException {
         userDetails.setPassword(hashEncoder.sha256(userDetails.getPassword()));
@@ -76,6 +94,12 @@ public class UserCtroller {
         return userRepository.save(userDetails);
     }
 
+    /**
+     * 사진, 닉네임, 알람 설정 수정
+     * @param userDetails
+     * @return
+     * @throws ResourceNotFoundException
+     */
     @PutMapping("/users") // 사진, 닉네임, 알람설정
     public ResponseEntity<User> updateUser(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
         Long userId = userDetails.getId();
@@ -88,6 +112,12 @@ public class UserCtroller {
         return ResponseEntity.ok(updatedUser);
     }
 
+    /**
+     * 비밀번호만 변경
+     * @param userDetails
+     * @return
+     * @throws ResourceNotFoundException
+     */
     @PutMapping("/users/pass")
     public ResponseEntity<User> updatePass(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
         Long userId = userDetails.getId();
@@ -98,6 +128,12 @@ public class UserCtroller {
         return ResponseEntity.ok(updatedUser);
     }
 
+    /**
+     * User 삭제
+     * @param userId
+     * @return
+     * @throws ResourceNotFoundException
+     */
     @DeleteMapping("/users/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId)
             throws ResourceNotFoundException {
