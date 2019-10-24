@@ -1,5 +1,7 @@
 package com.ssafy.controller;
 
+import com.ssafy.model.AuthMail;
+import com.ssafy.repository.AuthMailRepository;
 import com.ssafy.utility.HashEncoder;
 import com.ssafy.utility.AuthMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -22,13 +25,16 @@ public class MailCtroller {
 
     private final HashEncoder hashEncoder;
 
+    private final AuthMailRepository authMailRep;
+
     @Autowired
-    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder) {
+    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep) {
         this.mailSender = mailSender;
         this.hashEncoder = hashEncoder;
+        this.authMailRep = authMailRep;
     }
 
-    @GetMapping("/auth/{userEmail:.+}")
+    @GetMapping("/send/{userEmail:.+}")
     public void sendMail(@PathVariable @Valid String userEmail) {
 
         try {
@@ -40,19 +46,41 @@ public class MailCtroller {
             // 2. To. 설정(회원의 이메일 주소)
             mailSender.setTo(userEmail);
 
-            // 3. 메일 제목과 본문
+            // 3. 인증 값을 DB에 저장 OR 갱신
+            AuthMail auth = authMailRep.findByEmail(userEmail);
+            if (auth == null) {
+                auth = new AuthMail();
+                auth.setEmail(userEmail);
+            }
+            auth.setAuth(hash);
+            auth.setTime(new Date());
+            authMailRep.save(auth);
+
+            // 4. 메일 제목과 본문
             mailSender.setSubject("[PaceMaker] 회원가입 인증 메일");
             mailSender.setText(new StringBuffer().append("<h1>회원가입 인증메일입니다.</h1>")
-                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost/member/auth?email=" + userEmail)
-                    .append("&hash="+hash+"' target='_blank'>메일 인증 링크</a>")
+                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost:8080/api/v1/auth?email" + userEmail)
+                    .append("&hash=" + hash + "' target='_blank'>메일 인증 링크</a>")
                     .toString()
             );
 
-            // 4. 전송
+            // 5. 전송
             mailSender.send();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @GetMapping("/auth/{email:.+, hash}")
+    public String authMail(@PathVariable @Valid String userEmail, String userHash) {
+        AuthMail auth = authMailRep.findByEmail(userEmail);
+        System.out.println(auth);
+        String url = "localhost:8080/login";
+        if (auth.getAuth().equals(userHash)) {
+
+            return "redirect:" + url;
+        }
+        return "<script>alert('인증에 실패하였습니다.');</script>";
     }
 }

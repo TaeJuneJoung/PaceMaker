@@ -34,6 +34,12 @@ public class UserCtroller {
         return userRepository.findAll();
     }
 
+    @GetMapping("/users/{email:.+}")
+    public User getEmailUser(@PathVariable(value = "email") String userEmail) throws ResourceNotFoundException {
+        User user = userRepository.findByEmail(userEmail);
+        return user;
+    }
+
     /**
      *
      * @param userId
@@ -50,7 +56,7 @@ public class UserCtroller {
     @PostMapping("/users/login")
     public User loginCheck(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
         User user = userRepository.findByEmail(userDetails.getEmail());
-        if(user.getEmail().equals(user.getEmail()) && hashEncoder.sha256(userDetails.getPass()).equals(user.getPassword()))
+        if(user.getEmail().equals(user.getEmail()) && hashEncoder.sha256(userDetails.getPassword()).equals(user.getPassword()))
             return user;
         return null;
     }
@@ -61,7 +67,7 @@ public class UserCtroller {
         return userRepository.save(userDetails);
     }
 
-    @PutMapping("/users") // 사진, 닉네임
+    @PutMapping("/users") // 사진, 닉네임, 알람설정
     public ResponseEntity<User> updateUser(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
         Long userId = userDetails.getId();
         User user = userRepository.findById(userId)
