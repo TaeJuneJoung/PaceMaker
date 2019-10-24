@@ -45,7 +45,7 @@ public class UserCtroller {
      * @return User
      * @throws ResourceNotFoundException
      */
-    @GetMapping("/user/{userEmail:.+}")
+    @GetMapping("/users/{userEmail:.+}")
     public User getEmailUser(@PathVariable @Valid String userEmail) throws ResourceNotFoundException {
         System.out.println(userEmail);
         User user = userRepository.findByEmail(userEmail);
