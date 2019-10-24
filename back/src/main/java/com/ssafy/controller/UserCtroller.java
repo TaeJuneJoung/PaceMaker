@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,10 @@ public class UserCtroller {
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody User userDetails) throws NoSuchAlgorithmException {
         userDetails.setPassword(hashEncoder.sha256(userDetails.getPassword()));
+        userDetails.setAuthenticationFlag(false);
+        userDetails.setPoint(0);
+        userDetails.setActivateFlag(true);
+        userDetails.setRegisterDate(new Date());
         return userRepository.save(userDetails);
     }
 
