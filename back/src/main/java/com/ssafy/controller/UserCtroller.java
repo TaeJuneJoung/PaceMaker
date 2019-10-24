@@ -24,15 +24,31 @@ public class UserCtroller {
     @Autowired
     HashEncoder hashEncoder;
 
+    /**
+     *
+     * @return 모든 User info
+     */
     @GetMapping("/users")
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
+    /**
+     *
+     * @param userId
+     * @return userId와 일치하는 User
+     * @throws ResourceNotFoundException
+     */
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+        return user;
+    }
+
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody User user) throws NoSuchAlgorithmException {
         user.setPassword(hashEncoder.sha256(user.getPassword()));
-
         return userRepository.save(user);
     }
 

@@ -31,7 +31,7 @@ class User {
     @Column(name = "USER_AUTHENTICATION_FLAG", nullable = false)
     private Boolean authenticationFlag;
 
-    @Column(name = "USER_ACTIVATE_FLAG", nullable = false)
+    @Column(name = "USER_ACTIVATE_FLAG"s)
     private Boolean activateFlag;
 
     @Column(name = "USER_REGISTER_DATE", nullable = false)
@@ -40,10 +40,10 @@ class User {
     @Column(name = "USER_DEATIVATE_DATE", columnDefinition = "DATE", nullable = true)
     private Date deAtivateDate;
 
-    @Column(name = "USER_POINT", nullable = false)
+    @Column(name = "USER_POINT")
     private Integer point;
 
-    @Column(name = "USER_ALARM_FLAG", nullable = false)
+    @Column(name = "USER_ALARM_FLAG")
     private Boolean alarmFlag;
 
     @Column(name = "USER_IMG")
