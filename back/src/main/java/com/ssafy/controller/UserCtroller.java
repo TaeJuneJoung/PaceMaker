@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import com.ssafy.exception.ResourceNotFoundException;
 import com.ssafy.model.User;
+import com.ssafy.model.UserEmailandPass;
 import com.ssafy.repository.UserRepository;
 import com.ssafy.utility.HashEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,18 @@ public class UserCtroller {
         return user;
     }
 
+    @PostMapping("/users/login")
+    public User loginCheck(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
+        User user = userRepository.findByEmail(userDetails.getEmail());
+        if(user.getEmail().equals(user.getEmail()) && hashEncoder.sha256(userDetails.getPass()).equals(user.getPassword()))
+            return user;
+        return null;
+    }
+
     @PostMapping("/users")
-    public User createUser(@Valid @RequestBody User user) throws NoSuchAlgorithmException {
-        user.setPassword(hashEncoder.sha256(user.getPassword()));
-        return userRepository.save(user);
+    public User createUser(@Valid @RequestBody User userDetails) throws NoSuchAlgorithmException {
+        userDetails.setPassword(hashEncoder.sha256(userDetails.getPassword()));
+        return userRepository.save(userDetails);
     }
 
     @PutMapping("/users") // 사진, 닉네임
