@@ -9,8 +9,5 @@ public class PacemakerApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(PacemakerApplication.class);
         app.run(args);
-
-
     }
-
 }

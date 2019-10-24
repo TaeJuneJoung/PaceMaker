@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,7 @@ public class UserCtroller {
     }
 
     @PostMapping("/users")
-    public User createEmployee(@Valid @RequestBody User user) throws NoSuchAlgorithmException {
+    public User createUser(@Valid @RequestBody User user) throws NoSuchAlgorithmException {
         user.setPassword(hashEncoder.sha256(user.getPassword()));
 
         return userRepository.save(user);
