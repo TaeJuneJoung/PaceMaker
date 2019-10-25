@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 @RestController
 @RequestMapping("/api/v1")
 public class MailCtroller {
@@ -26,10 +25,11 @@ public class MailCtroller {
 
     private final AuthMailRepository authMailRep;
 
-    private  final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep,UserRepository userRepository) {
+    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep,
+            UserRepository userRepository) {
         this.mailSender = mailSender;
         this.hashEncoder = hashEncoder;
         this.authMailRep = authMailRep;
@@ -60,11 +60,10 @@ public class MailCtroller {
 
             // 4. 메일 제목과 본문
             mailSender.setSubject("[PaceMaker] 회원가입 인증 메일");
-            mailSender.setText(new StringBuffer().append("<h1>회원가입 인증메일입니다.</h1>")
-                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost:8080/api/v1/auth/?email=" + userEmail)
-                    .append("&hash=" + hash + "' target='_blank'>메일 인증 링크</a>")
-                    .toString()
-            );
+            mailSender.setText(
+                    new StringBuffer().append("<h1>회원가입 인증메일입니다.</h1>").append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>")
+                            .append("<a href='http://localhost:8080/api/v1/auth/?email=" + userEmail)
+                            .append("&hash=" + hash + "' target='_blank'>메일 인증 링크</a>").toString());
 
             // 5. 전송
             mailSender.send();
@@ -82,7 +81,7 @@ public class MailCtroller {
             User user = userRepository.findByEmail(userEmail);
             user.setAuthenticationFlag(true);
             userRepository.save(user);
-            return "<script>location.href = '"+url+"'</script>";
+            return "<script>location.href = '" + url + "'</script>";
         }
         return "<script>alert('인증에 실패하였습니다.');</script>";
     }
