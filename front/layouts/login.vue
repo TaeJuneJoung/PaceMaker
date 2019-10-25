@@ -3,7 +3,6 @@
     <v-img src="./pacemaker1.png" class="backimg">
       <nuxt />
     </v-img>
-  
   </v-app>
 </template>
 

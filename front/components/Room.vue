@@ -1,22 +1,94 @@
 <template>
-  <v-card hover>
-    <v-card-title class="headline">{{ room.roomId }}</v-card-title>
-    <v-divider></v-divider>
-    <v-card-text class="text--primary">
-      <v-flex>{{room.summary}}</v-flex>
-      <v-flex v-if="room.roomFlag" class="subheader">인원 : {{room.userCount}}명</v-flex>
-      <v-flex>{{room.completeFlag}}</v-flex>
-      <v-card-actions></v-card-actions>
-    </v-card-text>
-  </v-card>
+  <v-hover v-slot:default="{ hover }">
+    <v-card class="mx-auto card-black" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+      <v-img :src="room.roomImg">
+        <v-expand-transition>
+          <v-flex
+            v-if="hover"
+            class="d-flex transition-fast-in-fast-out black v-card--reveal white--text"
+            style="height: 100%;"
+          >
+            <v-btn outlined bold color="white" :to="`/Room/${room.roomId}`" nuxt>참여하기</v-btn>
+          </v-flex>
+        </v-expand-transition>
+      </v-img>
+
+      <v-container>
+        <v-flex>
+          <nuxt-link :to="`/Room/${room.roomId}`">
+            <v-icon class="room-card-icon">mdi-door-open</v-icon>
+            {{ room.summary }}
+          </nuxt-link>
+        </v-flex>
+        <v-flex class="text-gray">Date:</v-flex>
+        <v-flex class="text-gray">Action:</v-flex>
+        <v-flex class="text-gray mb-3">Member:</v-flex>
+
+        <v-btn icon color="white">
+          <v-icon>mdi-chevron-down</v-icon>
+        </v-btn>
+        
+          <!-- <v-flex class="float-right">
+              <v-btn outlined color="white">참여하기</v-btn>
+          </v-flex> -->
+      </v-container>
+
+
+        <!-- Member부분에 사용하자 -->
+
+      <!-- <v-expand-transition>
+        <div v-show="show">
+          <v-divider></v-divider>
+
+          <v-card-text>I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.</v-card-text>
+        </div>
+      </v-expand-transition>-->
+    </v-card>
+  </v-hover>
 </template>
+
 <script>
 export default {
   props: {
     room: {}
   },
+  data() {
+    return {
+    }
+  },
   created() {
-
-  }
+   },
+   methods: {
+   }
 }
 </script>
+
+<style scoped>
+.card-black {
+  background-color: black;
+  color: white;
+}
+.text-gray {
+  color: #666666;
+}
+.room-card-icon {
+  color: white;
+  font-size: 16px;
+  padding: 0px 2px 4px 0px;
+}
+a {
+   text-decoration: none;
+   color: white;
+}
+.v-application a:hover {
+   color: #AAA;
+}
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .7;
+  position: absolute;
+  width: 100%;
+}
+</style>

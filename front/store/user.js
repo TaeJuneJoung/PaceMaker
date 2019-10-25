@@ -1,6 +1,10 @@
+import {getUserList, getUser, putUser} from '../api/index.js'
+
 export const state = () => ({
+  userList: {},
+	user: [],
   userEmail: '',
-  nickName: 'testuser',
+  nickName: '',
   userIcon: 'mdi-account-circle',
   userPoint: 0,
   userRoomList: [],
@@ -8,6 +12,12 @@ export const state = () => ({
 })
 
 export const getters = {
+  getUserList: state => {
+		return state.userList
+	  },
+	getUser: state => {
+		return state.user
+	},
   getUserEmail: state => {
     return state.userEmail
   },
@@ -28,6 +38,12 @@ export const getters = {
   }
 }
 export const mutations = {
+  setUserList (state, userList) {
+		state.userList = userList
+	  },
+	setUser (state, user) {
+		state.user = user
+	},
   setUserEmail (state, email) {
     state.userEmail = email
   },
@@ -52,6 +68,24 @@ export const mutations = {
 }
 
 export const actions = {
+  fetchUserList(context) {
+    getUserList()
+      .then(({data}) => {
+        context.commit('setUserList', data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  },
+  fetchUser(context, userId) {
+    getUser(userId)
+      .then(({data}) => {
+        context.commit('setUser', data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  },
   setUserEmail (context, email) {
     context.commit('setUserEmail' , email)
   },

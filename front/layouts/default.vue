@@ -2,13 +2,17 @@
   <v-app dark>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <v-container>
+        <v-flex class=headline ma-3>
+          <v-icon icon>mdi-run</v-icon>
+          {{ title }}
+        </v-flex>
         <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
         <v-btn text>로그아웃</v-btn>
         <v-flex class="ma-2">
           <v-avatar color="grey">
             <v-icon v-if="getUserIcon" dark>{{getUserIcon}}</v-icon>
           </v-avatar>
-          <span class="ml-2">{{getUserName}}</span>
+          <span class="ml-2">{{this.$store.nickName}}</span>
         </v-flex>
       </v-container>
       <v-list>
@@ -22,14 +26,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar clipped-left fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up" />
-      <v-toolbar-title v-text="title" />
-    </v-app-bar>
-    <v-content>
-      <v-container fluid>
-        <nuxt />
-      </v-container>
+    <v-content class="mx-6">
+      <nuxt />
     </v-content>
   </v-app>
 </template>
@@ -68,4 +66,5 @@ export default {
   }
 }
 </script>
+
 <style src="../assets/color.css"></style>

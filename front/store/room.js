@@ -10,28 +10,64 @@ export const state = () => ({
 			userCount: '2',
 			roomFlag: true,
 			summary: '테스트 룸',
-			completedFlag: false
+      completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=33'
 		},
 		{
 			roomId: '2',
 			userCount: '3',
 			roomFlag: true,
 			summary: '테스트 룸2',
-			completedFlag: false
+      completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=23'
 		},
 		{
-			roomId: '3',
+      roomId: '3',
 			userCount: '2',
 			roomFlag: true,
 			summary: '테스트 룸3',
-			completedFlag: false
+			completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=27'
 		},
 		{
-			roomId: '4',
+      roomId: '4',
 			userCount: '3',
 			roomFlag: true,
 			summary: '테스트 룸4',
-			completedFlag: false
+			completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=45'
+    },
+    {
+      roomId: '5',
+			userCount: '2',
+			roomFlag: true,
+			summary: '테스트 룸5',
+			completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=55'
+		},
+		{
+      roomId: '6',
+			userCount: '3',
+			roomFlag: true,
+			summary: '테스트 룸6',
+			completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=10'
+		},
+		{
+      roomId: '7',
+			userCount: '3',
+			roomFlag: true,
+			summary: '테스트 룸7',
+			completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=15'
+		},
+		{
+      roomId: '8',
+			userCount: '8',
+			roomFlag: true,
+			summary: '테스트 룸8',
+			completedFlag: false,
+      roomImg: 'https://picsum.photos/500/300?image=20'
 		}
 	]
 })

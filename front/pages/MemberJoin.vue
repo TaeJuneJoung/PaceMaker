@@ -5,7 +5,7 @@
         <v-card class="pa-2 text-center translate">
           <v-flex class="ivory ma-2 headline">Join</v-flex>
           <v-card-text>
-            <v-form ref="joinform" v-model="valid">
+            <v-form ref="joinform" v-model="valid" method="POST">
               <v-flex class="ivory text-left">Email</v-flex>
               <v-text-field
                 v-model="email"
@@ -15,10 +15,9 @@
                 label="E-mail"
                 required
                 :readonly="emailReadOnly"
-                @blur="emailCheck"
               >
-                <template v-if="isOnlyEmail" v-slot:append>
-                  <v-flex class="mr-1" @click="emailAuth">인증하기</v-flex>|
+                <template v-slot:append>
+                  <v-flex class="mr-1" @click="emailCheck(email)">{{ isAgreeEmail ? '성공' : '중복확인' }}</v-flex>|
                   <v-flex class="ml-1" @click="emailAuthCancle">취소</v-flex>
                 </template>
               </v-text-field>
@@ -92,6 +91,7 @@
 
 <script>
 import TermsOfService from '~/components/TermsOfService.vue'
+import { findUserEmail, createUser } from '../api/index.js'
 
 export default {
   layout: 'login',
@@ -105,6 +105,7 @@ export default {
       nickname: '',
       password: '',
       rePassword: '',
+      isAgreeEmail: false,
       passwordShow: false,
       rePasswordShow: false,
       checkboxEmail: false,
@@ -130,10 +131,27 @@ export default {
   methods: {
     joinValidate() {
       if (this.$refs.joinform.validate()) {
-        // 계정 생성
+        let data = {'email': this.email, 'nickname': this.nickname, 'password': this.password, 'authenticationFlag': this.checkboxAgree, 'alarmFlag': this.checkboxEmail}
+        createUser(data)
       }
     },
-    emailCheck() {
+    emailCheck(userEmail) {
+      userEmail = userEmail.replace('@', '%40')
+      findUserEmail(userEmail)
+        .then(({data}) => {
+          if (data) {
+            console.log('성공')
+            this.isAgreeEmail = true
+          } else {
+            this.isAgreeEmail = false
+          }
+        })
+        .catch(error => {
+          console.log('실패')
+          console.error(error)
+        })
+
+
       // 데이터베이스 내용과 비교
       // axios를 통해서 이메일을 있다면 true, 없다면 false
       // if ('이메일요소') {

@@ -1,12 +1,16 @@
+import {getUserList, getUser, createUser, putUser, deleteUser} from '../api/index.js'
+
 export const state = () => ({
-	authCompleted: false
+	authCompleted: false,
+
 })
 
 export const getters = {
 	isAuthCompleted: state => {
 		return state.authCompleted
-	}
+	},
 }
+
 export const mutations = {
 	authInit (state) {
 		state.authCompleted = false
@@ -21,7 +25,7 @@ export const actions = {
 	},
 	authComplete (context) {
 		context.commit('authComplete')
-	}	
+	},
 }
 
 // deprecated Classic mode

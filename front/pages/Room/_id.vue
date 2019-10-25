@@ -8,6 +8,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+	layout: 'default',
 	data() {
 		return {
 		}
@@ -20,6 +21,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
