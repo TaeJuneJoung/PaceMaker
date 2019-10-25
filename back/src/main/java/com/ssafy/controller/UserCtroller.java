@@ -35,12 +35,13 @@ public class UserCtroller {
      * @return 모든 User info
      */
     @GetMapping("/users")
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     /**
      * email로 User 찾기
+     * 
      * @param userEmail
      * @return User
      * @throws ResourceNotFoundException
@@ -66,6 +67,7 @@ public class UserCtroller {
 
     /**
      * Login
+     * 
      * @param userDetails
      * @return True => User, False => null
      * @throws NoSuchAlgorithmException
@@ -73,13 +75,15 @@ public class UserCtroller {
     @PostMapping("/users/login")
     public User loginCheck(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
         User user = userRepository.findByEmail(userDetails.getEmail());
-        if(user.getEmail().equals(user.getEmail()) && hashEncoder.sha256(userDetails.getPassword()).equals(user.getPassword()))
+        if (user.getEmail().equals(user.getEmail())
+                && hashEncoder.sha256(userDetails.getPassword()).equals(user.getPassword()))
             return user;
         return null;
     }
 
     /**
      * User 생성
+     * 
      * @param userDetails
      * @return
      * @throws NoSuchAlgorithmException
@@ -96,6 +100,7 @@ public class UserCtroller {
 
     /**
      * 사진, 닉네임, 알람 설정 수정
+     * 
      * @param userDetails
      * @return
      * @throws ResourceNotFoundException
@@ -114,6 +119,7 @@ public class UserCtroller {
 
     /**
      * 비밀번호만 변경
+     * 
      * @param userDetails
      * @return
      * @throws ResourceNotFoundException
@@ -130,13 +136,13 @@ public class UserCtroller {
 
     /**
      * User 삭제
+     * 
      * @param userId
      * @return
      * @throws ResourceNotFoundException
      */
     @DeleteMapping("/users/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
