@@ -53,6 +53,19 @@
                   <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
               </v-checkbox>
+                 <!-- <v-switch
+                    v-model="switch1" color="success"
+                    :label="`알림허용에 동의합니다`"
+                  >
+                  <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
+                  </v-switch> -->
+              <v-file-input
+                :rules="[rules.profile]"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an avatar"
+                prepend-icon="mdi-camera"
+                label="Avatar"
+              ></v-file-input>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
@@ -72,8 +85,8 @@ export default {
      
 	},
 	created() {
-		this.nickname = this.$store.state.nickName,
-		this.checkboxAlarm = this.$store.state.userAlarm
+		this.nickname = this.$store.state.user.nickName,
+		this.checkboxAlarm = this.$store.state.user.userAlarm
 	},
   data() {
     return {
@@ -99,7 +112,8 @@ export default {
           (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
         maxLength: (len) => (v) =>
           (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`,
-        required: (v) => !!v || '약관에 동의해주세요.'
+        required: (v) => !!v || '약관에 동의해주세요.',
+        profile: (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!'
       }
     }
   },
@@ -121,3 +135,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* .bgimg{
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../static/bgimg2.jpg");
+  background-size: cover;
+} */
+</style>
+

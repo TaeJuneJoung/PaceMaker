@@ -1,6 +1,5 @@
-package com.ssafy.repository;
+package com.ssafy.Entity.Rooms;
 
-import com.ssafy.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
