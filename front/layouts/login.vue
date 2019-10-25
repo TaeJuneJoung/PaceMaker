@@ -3,9 +3,6 @@
     <v-img src="./pacemaker1.png" class="backimg">
       <nuxt />
     </v-img>
-    <v-footer app>
-      <span>&copy; 2019</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -16,8 +13,12 @@ export default {
   }
 }
 </script>
+
+<style src="~/assets/color.css"></style>
 <style scoped>
-.backimg {
-  height: 100vh;
+@media (min-width: 1000px) {
+  .backimg{
+    height: 100vh;
+  }
 }
 </style>
