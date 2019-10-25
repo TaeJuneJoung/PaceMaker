@@ -1,0 +1,19 @@
+.container .translate {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.container .ivory {
+  color: rgb(248, 246, 207);
+}
+
+#__layout .backivory {
+  background-color: rgb(248, 246, 207);
+}
+
+.v-text-field .v-counter {
+  color: ivory;
+}
+
+.theme--light .v-icon {
+  color: ivory;
+}

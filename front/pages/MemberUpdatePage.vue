@@ -3,24 +3,9 @@
     <v-row justify="center" align="center">
       <v-col sm="6" xs="10">
         <v-card class="pa-2 text-center translate">
-          <v-flex class="ivory ma-2 headline">Join</v-flex>
+          <v-flex class="ivory ma-2 headline">Member Update</v-flex>
           <v-card-text>
-            <v-form ref="joinform" v-model="valid" method="POST">
-              <v-flex class="ivory text-left">Email</v-flex>
-              <v-text-field
-                v-model="email"
-                :counter="30"
-                :rules="[rules.email]"
-                solo
-                label="E-mail"
-                required
-                :readonly="emailReadOnly"
-              >
-                <template v-slot:append>
-                  <v-flex class="mr-1" @click="emailCheck(email)">{{ isAgreeEmail ? '성공' : '중복확인' }}</v-flex>|
-                  <v-flex class="ml-1" @click="emailAuthCancle">취소</v-flex>
-                </template>
-              </v-text-field>
+            <v-form ref="joinform" v-model="valid">
               <v-flex class="ivory text-left">Nickname</v-flex>
               <v-text-field
                 v-model="nickname"
@@ -60,28 +45,31 @@
                 @click:append="rePasswordShow = !rePasswordShow"
               ></v-text-field>
               <v-flex v-if="password.length >= 8 && rePassword.length >= 8">
-                <small class="success--text" v-if="password === rePassword">비밀번호가 일치합니다.</small>
-                <small class="warning--text" v-else>비밀번호가 일치하지 않습니다.</small>
+                <small class="text-success" v-if="password === rePassword">비밀번호가 일치합니다.</small>
+                <small class="text-warning" v-else>비밀번호가 일치하지 않습니다.</small>
               </v-flex>
-              <v-checkbox v-model="checkboxEmail" color="success">
+              <v-checkbox v-model="checkboxAlarm" color="success">
                 <template v-slot:label>
-                  <v-flex class="ivory">PaceMaker에 대한 소식을 이메일로 받는데 동의합니다.</v-flex>
+                  <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
               </v-checkbox>
-              <v-checkbox
-                v-model="checkboxAgree"
-                color="success"
-                required
-                :rules="[rules.required]"
-              >
-                <template v-slot:label>
-                  <terms-of-service></terms-of-service>
-                </template>
-              </v-checkbox>
+                 <!-- <v-switch
+                    v-model="switch1" color="success"
+                    :label="`알림허용에 동의합니다`"
+                  >
+                  <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
+                  </v-switch> -->
+              <v-file-input
+                :rules="[rules.profile]"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an avatar"
+                prepend-icon="mdi-camera"
+                label="Avatar"
+              ></v-file-input>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn class="ma-4" color="success" @click="joinValidate">회원가입</v-btn>
+            <v-btn class="ma-4" color="success" @click="updateValidate">회원 수정</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -90,14 +78,16 @@
 </template>
 
 <script>
-import TermsOfService from '~/components/TermsOfService.vue'
-import { findUserEmail, createUser } from '../api/index.js'
 
 export default {
-  layout: 'login',
+  layout: 'default',
   components: {
-    TermsOfService
-  },
+     
+	},
+	created() {
+		this.nickname = this.$store.state.user.nickName,
+		this.checkboxAlarm = this.$store.state.user.userAlarm
+	},
   data() {
     return {
       valid: true,
@@ -105,11 +95,9 @@ export default {
       nickname: '',
       password: '',
       rePassword: '',
-      isAgreeEmail: false,
       passwordShow: false,
       rePasswordShow: false,
-      checkboxEmail: false,
-      checkboxAlram: false,
+      checkboxAlarm: false,
       checkboxAgree: false,
       isOnlyEmail: false,
       emailReadOnly: false,
@@ -124,53 +112,18 @@ export default {
           (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
         maxLength: (len) => (v) =>
           (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`,
-        required: (v) => !!v || '약관에 동의해주세요.'
+        required: (v) => !!v || '약관에 동의해주세요.',
+        profile: (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!'
       }
     }
   },
   methods: {
-    joinValidate() {
+    
+    updateValidate() {
       if (this.$refs.joinform.validate()) {
-        let data = {'email': this.email, 'nickname': this.nickname, 'password': this.password, 'authenticationFlag': this.checkboxAgree, 'alarmFlag': this.checkboxEmail}
-        createUser(data)
+        // 계정 생성
       }
     },
-    emailCheck(userEmail) {
-      userEmail = userEmail.replace('@', '%40')
-      findUserEmail(userEmail)
-        .then(({data}) => {
-          if (data) {
-            console.log('성공')
-            this.isAgreeEmail = true
-          } else {
-            this.isAgreeEmail = false
-          }
-        })
-        .catch(error => {
-          console.log('실패')
-          console.error(error)
-        })
-
-
-      // 데이터베이스 내용과 비교
-      // axios를 통해서 이메일을 있다면 true, 없다면 false
-      // if ('이메일요소') {
-      //   this.isOnlyEmail = true
-      //   this.emailReadOnly = true
-      // } else {
-      //   this.isOnlyEmail = false
-      //   this.emailReadOnly = false
-      // }
-    },
-    emailAuth() {
-      // 작성된 email에 email을 보내주게 axios 작성
-    },
-    emailAuthCancle() {
-      this.email = ''
-      this.isOnlyEmail = false
-      this.emailReadOnly = false
-    },
-    
     nicknameCheck() {
       // emailCheck와 로직 동일
     },
@@ -182,3 +135,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* .bgimg{
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../static/bgimg2.jpg");
+  background-size: cover;
+} */
+</style>
+
