@@ -1,28 +1,45 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col sm="12" class="py-0">
-        <v-card outlined class="pa-1">
-          <span>명예의 전당</span>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col sm="4" cols="12">
-        <v-card outlined height="550">
-        </v-card>
-      </v-col>
-      <v-col sm="8" cols="12">
-        <v-card outlined height="550" class="pa-1"></v-card>
+			<v-col sm="12" cols="12">
+				<v-flex>명예의 전당</v-flex>
+			</v-col>
+      <v-col sm="12" cols="12">
+          <v-row>
+            <v-col v-for="room in getRoomList" :key="room.roomId" cols="12" lg="4" sm="6">
+              <room :room="room" :limits="6" :load-more="true"></room>
+            </v-col>
+          </v-row>
       </v-col>
     </v-row>
   </v-container>    
 </template>
+
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import Room from '~/components/Room.vue'
+
 export default {
   layout: 'default',
+  components: {
+    Room
+  },
   data: () => ({
 
-  })
+  }),
+  computed: {
+    ...mapGetters({
+         getRoomList: 'room/getRoomList'
+      })
+  },
 }
 </script>
+
+<style scoped>
+.col-sm-6, .col-lg-4, .col-12 {
+	padding: 0;
+}
+.container {
+	padding: 0;
+}
+</style>

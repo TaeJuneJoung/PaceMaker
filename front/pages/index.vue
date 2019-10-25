@@ -8,9 +8,9 @@
           <v-card-text>
             <v-form ref="form">
               <v-flex class="ivory text-left">Email</v-flex>
-              <v-text-field v-model="email" :rules="[rules.email]" label="E-mail" solo required></v-text-field>
+              <v-text-field v-model="email" :rules="[rules.email]" label="E-mail" solo required @keyup.enter="validate"></v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
-              <v-text-field v-model="password" type="password" :rules="[rules.password]" label="Password" solo required></v-text-field>
+              <v-text-field v-model="password" type="password" :rules="[rules.password]" label="Password" solo required @keyup.enter="validate"></v-text-field>
             </v-form>
             <v-flex class="ivory">{{message}}</v-flex>
           </v-card-text>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { loginUser } from '../api/index.js'
+
 export default {
   layout: 'login',
   data: () => ({
@@ -41,10 +43,25 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        // 폼 유효성 검사 완료
-        // 로그인 진행
+        let loginData = {'email': this.email, 'pass': this.password}
+        loginUser(loginData)
+          .then(({data}) => {
+            if (data) {
+              //store.user에 저장 --> session저장
+              this.$store.nickName = data.email
+              this.$router.push('/MainPage')
+            } else {
+              this.message = "Email이나 비밀번호가 맞지 않습니다."
+            }
+          })
+          .catch(error => {
+            console.error(error)
+          })
       }
     }
   }
 }
 </script>
+
+<style scoped>
+</style>
