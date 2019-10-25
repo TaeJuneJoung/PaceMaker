@@ -43,12 +43,12 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        let loginData = {'email': this.email, 'pass': this.password}
+        let loginData = {'email': this.email, 'password': this.password}
         loginUser(loginData)
           .then(({data}) => {
             if (data) {
               //store.user에 저장 --> session저장
-              this.$store.nickName = data.email
+              this.$store.nickName = data.nickname
               this.$router.push('/MainPage')
             } else {
               this.message = "Email이나 비밀번호가 맞지 않습니다."

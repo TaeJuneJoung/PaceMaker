@@ -11,17 +11,17 @@
           </v-col>
         </v-col>
         <v-col cols="4" :xs="4" rows="2" class="pa-2 pl-0">
-          <v-card class="pa-2 test" outlined tile>진행률</v-card>
+          <v-card class="pa-2 h-100" outlined tile>진행률</v-card>
         </v-col>
       </v-row>
     </template>
     <template>
       <v-row class="sprint-height">
         <v-col cols="8" :xs="4" class="pa-2">
-          <v-card class="pa-2 test" outlined tile>스프린트 내용</v-card>
+          <v-card class="pa-2 h-100" outlined tile>스프린트 내용</v-card>
         </v-col>
         <v-col cols="4" rows="2" class="pa-2 pl-0">
-            <v-card class="pa-2 test" outlined tile>채팅창</v-card>
+            <v-card class="pa-2 h-100" outlined tile>채팅창</v-card>
         </v-col>
       </v-row>
     </template>
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-  .test{
+  .h-100{
     height: 100%;
   }
   .sprint-height{
