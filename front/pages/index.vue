@@ -8,9 +8,24 @@
           <v-card-text>
             <v-form ref="form">
               <v-flex class="ivory text-left">Email</v-flex>
-              <v-text-field v-model="email" :rules="[rules.email]" label="E-mail" solo required @keyup.enter="validate"></v-text-field>
+              <v-text-field
+                v-model="email"
+                :rules="[rules.email]"
+                label="E-mail"
+                solo
+                required
+                @keyup.enter="validate"
+              ></v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
-              <v-text-field v-model="password" type="password" :rules="[rules.password]" label="Password" solo required @keyup.enter="validate"></v-text-field>
+              <v-text-field
+                v-model="password"
+                type="password"
+                :rules="[rules.password]"
+                label="Password"
+                solo
+                required
+                @keyup.enter="validate"
+              ></v-text-field>
             </v-form>
             <v-flex class="ivory">{{message}}</v-flex>
           </v-card-text>
@@ -39,16 +54,19 @@ export default {
     },
     message: ''
   }),
-
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        let loginData = {'email': this.email, 'password': this.password}
+        const loginData = {'email': this.email, 'password': this.password}   
         loginUser(loginData)
           .then(({data}) => {
-            if (data) {
+            if (data.activateFlag){
+              this.message = "비활성화된 아이디입니다."
+            } else if (data) {
               //store.user에 저장 --> session저장
-              this.$store.nickName = data.nickname
+              //this.$store.nickName = data.nickname
+              this.$session.start()
+              this.$session.set('account',{'email':data.email,'nickname':data.nickname,'img':data.img,'point':data.point,'alarmFlag':data.alarmFlag})
               this.$router.push('/MainPage')
             } else {
               this.message = "Email이나 비밀번호가 맞지 않습니다."
@@ -64,7 +82,7 @@ export default {
 </script>
 
 <style>
-  .v-messages__wrapper{
-    font-weight: bold;
-  }
+.v-messages__wrapper {
+  font-weight: bold;
+}
 </style>
