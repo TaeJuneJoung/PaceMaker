@@ -17,7 +17,7 @@
         </v-toolbar>
           <v-col class="content_wid">
             <h1>Pace Maker에 오신 것을 환영합니다.</h1>
-            <span class="content_span" ></span>
+            
             <li>pacemaker 제품 및 서비스를 이용해 주셔서 감사합니다. </li>
             <p> pacemaker은 서비스의 변경사항을 반영하거나 법령, 규제, 보안 등의 이유로 본 약관이나 서비스에 적용되는 추가약관을 수정할 수 있습니다. pacemaker은 중대한 변경에 관하여 합당한 사전 통지를 제공할 것입니다. 모든 변경은 적어도 통지 후 30일 이후에 적용됩니다. 단, 이용자에게 편익을 주는 서비스의 새로운 기능 또는 설정과 관련된 변경이나 법률적인 사유로 인한 변경은 즉시 발효될 수 있습니다. 서비스에 대해 변경된 약관에 동의하지 않는 경우 해당 서비스의 사용을 중지해야 합니다.</p>
           
@@ -38,16 +38,10 @@ export default {
   data() {
     return {
       dialog: false,
-      agreement: false,
-      service_content:''
-    }
-  },
-  method:{
-    service(){
-      var con="";
-      this.service_content.push(con);
+      agreement: false
     }
   }
+
 }
 </script>
 
@@ -74,7 +68,5 @@ h1{
 li{
   padding: 0 0 20px 0;
 }
-.content_span{
-  direction: ltr;
-}
+
 </style>
