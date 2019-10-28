@@ -25,6 +25,7 @@
            <v-btn color=primary nuxt to="/MemberUpdatePage">회원 수정</v-btn>
            <v-btn class="mx-4" color=primary nuxt to="/*">회원 탈퇴</v-btn>
           </v-row>
+
           <v-simple-table >
             <template v-slot:default>
               <thead>
@@ -38,11 +39,11 @@
               </thead>
               <tbody>
                 <tr v-for="item in roomList" :key="item.summary">
-                  <td>{{ item.roomFlag }}</td>
+                  <td>{{ item.roomFlag ? "공개" : "비공개" }}</td>
                   <td>{{ item.summary }}</td>
                   <td>{{ item.userCount }}</td>
                   <td>{{ item.방주인 }}</td>
-                  <td>{{ item.completedFlag }}</td>
+                  <td>{{ item.completedFlag ? "완료" : "미완료" }}</td>
                 </tr>
               </tbody>
             </template>
@@ -65,16 +66,24 @@ export default {
       nickname: '',
       userpoint: 0,
       roomList: [],
+      roomtype: ''
+     
+
     }
   },
   created(){
-    this.nickname = this.$store.state.user.nickName
-    this.userpoint = this.$store.state.user.userPoint
-  },
-  methods: {
-    sprint(){
-      this.roomList = this.$store.state.room.roomList
 
+  },
+  mounted(){
+    this.userpoint = this.$store.state.user.userPoint
+    this.nickname = this.$store.state.user.nickName
+    this.roomList = this.$store.state.room.roomList
+    // this.script()
+  },
+
+  methods: {
+    async script(){
+      
     }
   }
 }
