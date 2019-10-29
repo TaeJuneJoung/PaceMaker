@@ -1,9 +1,6 @@
 <template>
   <v-container fluid>
     <v-row>
-			<v-col sm="12" cols="12">
-				<v-flex>명예의 전당</v-flex>
-			</v-col>
       <v-col sm="12" cols="12">
           <v-row>
             <v-col v-for="room in getRoomList" :key="room.roomId" cols="12" lg="4" sm="6">
@@ -21,6 +18,7 @@ import Room from '~/components/Room.vue'
 
 export default {
   layout: 'default',
+  middleware: 'auth',
   components: {
     Room
   },
@@ -29,8 +27,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-         getRoomList: 'room/getRoomList'
-      })
+      getRoomList: 'room/getRoomList'
+    })
   },
 }
 </script>

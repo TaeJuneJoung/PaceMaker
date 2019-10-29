@@ -1,10 +1,15 @@
 <template>
   <v-app dark>
+    <v-btn class="menu-icon" fab color="white" v-if="!drawer" @click="menuBtn">
+      <v-icon>mdi-format-list-bulleted-square</v-icon>
+    </v-btn>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <v-container>
         <v-flex class=headline ma-3>
-          <v-icon icon>mdi-run</v-icon>
-          {{ title }}
+          <nuxt-link to="/">
+            <v-icon icon>mdi-run</v-icon>
+            {{ title }}
+          </nuxt-link>
         </v-flex>
         <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
         <v-btn text @click="logout">로그아웃</v-btn>
@@ -68,11 +73,29 @@ export default {
   methods: {
     logout() {
       this.$session.remove('account')
-      this.$store.state.user.user = ''
-      this.$router.redirect('/')
+      this.$storage.setUniversal('isAuth', false)
+      this.$router.push('/')
+    },
+    menuBtn() {
+      this.drawer = !this.drawer
     }
   }
 }
 </script>
 
 <style src="../assets/color.css"></style>
+<style scoped>
+.menu-icon {
+  width: 40px;
+  height: 40px;
+  z-index: 80;
+  margin: 13px 0 0 11px;
+  font-size: 50px;
+  position: fixed;
+  border-radius: 50px;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+</style>

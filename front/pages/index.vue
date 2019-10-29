@@ -45,6 +45,7 @@ import { loginUser } from '../api/index.js'
 
 export default {
   layout: 'login',
+  middleware: 'guest',
   data: () => ({
     email: '',
     password: '',
@@ -60,16 +61,14 @@ export default {
         const loginData = {'email': this.email, 'password': this.password}   
         loginUser(loginData)
           .then(({data}) => {
-            if (data.authenticationFlag){
+            if (data.authenticationFlag === false){
               this.message = "이메일 인증이 필요한 아이디입니다."
             } else if(data.activateFlag === false) {
               this.message = "비활성화된 아이디입니다."
             } else if (data) {
-              //store.user에 저장 --> session저장
-              //this.$store.nickName = data.nickname
               this.$session.start()
               this.$session.set('account',{'email':data.email,'nickname':data.nickname,'img':data.img,'point':data.point,'alarmFlag':data.alarmFlag})
-              this.$store.state.user.user = this.$session.get('account')
+              this.$storage.setUniversal('isAuth', true)
               this.$router.push('/MainPage')
             } else {
               this.message = "Email이나 비밀번호가 맞지 않습니다."
