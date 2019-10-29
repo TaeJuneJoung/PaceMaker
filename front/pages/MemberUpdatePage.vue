@@ -5,7 +5,7 @@
         <v-card class="pa-2 text-center translate">
           <v-flex class="ivory ma-2 headline">Member Update</v-flex>
           <v-card-text>
-            <v-form ref="joinform" v-model="valid">
+            <v-form ref="updateform" v-model="valid">
               <v-flex class="ivory text-left">Nickname</v-flex>
               <v-text-field
                 v-model="nickname"
@@ -69,7 +69,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn class="ma-4" color="success" @click="updateValidate">회원 수정</v-btn>
+            <v-btn class="ma-4" color="success" @click="memberUpdate">회원 수정</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { putUser, updatePass } from '../api/index.js';
 
 export default {
   layout: 'default',
@@ -85,9 +86,16 @@ export default {
      
 	},
 	created() {
-		this.nickname = this.$store.state.user.nickName,
-		this.checkboxAlarm = this.$store.state.user.userAlarm
-	},
+		// this.nickname = this.$session.get("account").nickname
+    // this.checkboxAlarm = this.$session.get("account").alarmFlag
+    this.memberUpdate
+  },
+  mounted(){
+    this.email = this.$session.get("account").email
+    this.nickname = this.$session.get("account").nickname
+    this.checkboxAlarm = this.$session.get("account").alarmFlag
+
+  },
   data() {
     return {
       valid: true,
@@ -103,6 +111,7 @@ export default {
       emailReadOnly: false,
       isOnlyNickname: false,
       nicknameReadOnly: false,
+      img: '',
       rules: {
         email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.',
         password: (v) =>
@@ -119,9 +128,23 @@ export default {
   },
   methods: {
     
-    updateValidate() {
-      if (this.$refs.joinform.validate()) {
+    async memberUpdate() {
+      if (this.$refs.updateform) {
         // 계정 생성
+        const userData = {"email": this.email, "alarmFlag": this.checkboxAlarm ,"nickname": this.nickname, "img": this.img }
+        putUser(userData)
+          .then((res) => {
+						userData["point"] = this.$session.get('account')['point']
+            this.$session.set('account', userData) 
+            this.$router.push("/MemberInfoPage")
+          })
+          .catch(err => {console.log('안되난가?')})
+
+        if(this.password!='' && this.rePassword!=''){
+          updatePass(this.password)
+        }
+
+        console.log("완료")
       }
     },
     nicknameCheck() {
