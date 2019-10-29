@@ -21,6 +21,7 @@ import Room from '~/components/Room.vue'
 
 export default {
   layout: 'default',
+  middleware: 'auth',
   components: {
     Room
   },
@@ -29,8 +30,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
-         getRoomList: 'room/getRoomList'
-      })
+      getRoomList: 'room/getRoomList'
+    })
   },
 }
 </script>

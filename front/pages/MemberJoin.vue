@@ -95,6 +95,7 @@ import { findUserEmail, createUser } from '../api/index.js'
 
 export default {
   layout: 'login',
+  middleware: 'guest',
   components: {
     TermsOfService
   },
