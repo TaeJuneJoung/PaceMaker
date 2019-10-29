@@ -40,6 +40,12 @@ public class UserCtroller {
         return userRepository.findAll();
     }
 
+    @GetMapping("/users/check/{userEmail:.+}")
+    public Boolean getEmailCheck(@PathVariable @Valid String userEmail) {
+        User user = userRepository.findByEmail(userEmail);
+        if(user==null) return true;
+        return false;
+    }
     /**
      * email로 User 찾기
      * @param userEmail
