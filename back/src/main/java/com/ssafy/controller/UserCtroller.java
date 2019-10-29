@@ -40,9 +40,16 @@ public class UserCtroller {
         return userRepository.findAll();
     }
 
-    @GetMapping("/users/check/{userEmail:.+}")
+    @GetMapping("/users/check/email/{userEmail:.+}")
     public Boolean getEmailCheck(@PathVariable @Valid String userEmail) {
         User user = userRepository.findByEmail(userEmail);
+        if(user==null) return true;
+        return false;
+    }
+
+    @GetMapping("/users/check/nick/{nickname}")
+    public Boolean getNicknameCheck(@PathVariable(value = "nickname") String nickname) {
+        User user = userRepository.findByNickname(nickname);
         if(user==null) return true;
         return false;
     }
