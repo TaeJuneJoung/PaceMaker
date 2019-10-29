@@ -3,6 +3,7 @@ package com.ssafy.controller;
 import com.ssafy.exception.ResourceNotFoundException;
 import com.ssafy.model.User;
 import com.ssafy.model.UserEmailandPass;
+import com.ssafy.model.UserUpdate;
 import com.ssafy.repository.UserRepository;
 import com.ssafy.utility.HashEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,13 +99,11 @@ public class UserCtroller {
      * 사진, 닉네임, 알람 설정 수정
      * @param userDetails
      * @return
-     * @throws ResourceNotFoundException
      */
     @PutMapping("/users") // 사진, 닉네임, 알람설정
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
-        Long userId = userDetails.getId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+    public ResponseEntity<User> updateUser(@Valid @RequestBody UserUpdate userDetails) {
+        String email = userDetails.getEmail();
+        User user = userRepository.findByEmail(email);
         user.setNickname(userDetails.getNickname());
         user.setImg(userDetails.getImg());
         user.setAlarmFlag(userDetails.getAlarmFlag());
@@ -116,14 +115,13 @@ public class UserCtroller {
      * 비밀번호만 변경
      * @param userDetails
      * @return
-     * @throws ResourceNotFoundException
+     * @throws NoSuchAlgorithmException
      */
     @PutMapping("/users/pass")
-    public ResponseEntity<User> updatePass(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
-        Long userId = userDetails.getId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
-        user.setPassword(userDetails.getPassword());
+    public ResponseEntity<User> updatePass(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
+        String email = userDetails.getEmail();
+        User user = userRepository.findByEmail(email);
+        user.setPassword(hashEncoder.sha256(userDetails.getPassword()));
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
     }

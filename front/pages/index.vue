@@ -60,7 +60,7 @@ export default {
         const loginData = {'email': this.email, 'password': this.password}   
         loginUser(loginData)
           .then(({data}) => {
-            if (data.authenticationFlag){
+            if (data.authenticationFlag === false){
               this.message = "이메일 인증이 필요한 아이디입니다."
             } else if(data.activateFlag === false) {
               this.message = "비활성화된 아이디입니다."

@@ -19,55 +19,22 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <v-combobox v-model="select" :items="items" label="공개/비공개"></v-combobox>
+                    <v-select v-model="select" :items="items" label="공개/비공개"></v-select>
                   </v-col>
-                  <v-item-group mandatory>
-                    <v-container>
-                      <v-row>
-                        <v-col md="6">
-                          <v-item v-slot:default="{ active, toggle }">
-                            <v-card
-                              :color="active ? 'green' : ''"
-                              class="d-flex align-center"
-                              dark
-                              height="100"
-                              @click="sprintCnt(1)"
-                            >
-                              <v-scroll-y-transition>
-                                <div
-                                  v-if="active"
-                                  class="display-1 flex-grow-1 text-center"
-                                >Sprint 1개</div>
-                              </v-scroll-y-transition>
-                            </v-card>
-                          </v-item>
-                        </v-col>
-                        <v-col md="6">
-                          <v-item v-slot:default="{ active, toggle }">
-                            <v-card
-                              :color="active ? 'primary' : ''"
-                              class="d-flex align-center"
-                              dark
-                              height="100"
-                              @click="sprintCnt(4)"
-                            >
-                              <v-scroll-y-transition>
-                                <div
-                                  v-if="active"
-                                  class="display-1 flex-grow-1 text-center"
-                                >Sprint 4개</div>
-                              </v-scroll-y-transition>
-                            </v-card>
-                          </v-item>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-item-group>
-                  <SprintComp :propsdata="sprint"></SprintComp>
+                  <v-row>
+                    <v-col md="12">
+                      <p>Sprint</p>
+                      <v-btn-toggle mandatory>
+                        <v-btn value="1" @click="sprintCnt(1)" class="sprintBtn">1</v-btn>
+                        <v-btn value="4" @click="sprintCnt(4)" class="sprintBtn">4</v-btn>
+                      </v-btn-toggle>
+                    </v-col>
+                  </v-row>
+                  <SprintComp :propsdata="todoItems"></SprintComp>
                 </v-form>
               </v-card-text>
               <v-card-actions class="justify-end">
-                <v-btn class="ma-4" color="success">방 생성</v-btn>
+                <v-btn class="ma-4" color="success" @click="send">방 생성</v-btn>
               </v-card-actions>
             </v-card>
           </v-container>
@@ -87,13 +54,12 @@ export default {
             model: '',
             valid: true,
             title: '',
-            public: true,
-            sprint: 1,
-            select: '공개',
+            select: true,
             items: [
-                '공개',
-                '비공개'
+                {text:'공개',value:true},
+                {text:'비공개',value:false}
             ],
+            todoItems: {sprint:1, days : [{item:"day1"},{item:"day2"}]},
             rules: {
             minLength: (len) => (v) =>
                 (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
@@ -106,18 +72,33 @@ export default {
         SprintComp
     },
     methods: {
-        onCardClick(n){
-            this.model = n - 1;
-        },
-        sprintCnt(cnt){
-            if(cnt==4) {
-                this.sprint=4;
-                this.toggle=!this.toggle;
-            }else if(cnt==1){
-                this.sprint=1;
-                this.toggle=!this.toggle;
-            } 
+      sprintCnt(cnt){
+        if(cnt==4) {
+            this.todoItems.sprint=4;
+        }else if(cnt==1){
+            this.todoItems.sprint=1;
+        } 
+        const room = {sprint:[]};
+        for(let i=0;i<this.todoItems.sprint;i++){
+          room.sprint.push({
+            0: [{ todo: '', flag: false }],
+            1: [{ todo: '', flag: false }],
+            2: [{ todo: '', flag: false }],
+            3: [{ todo: '', flag: false }],
+            4: [{ todo: '', flag: false }],
+            5: [{ todo: '', flag: false }],
+            6: [{ todo: '', flag: false }]
+          })
         }
+        this.$store.commit('roomAdd/setRoom',room);
+      },
+      send(){
+        const room = {title:"",public:true,sprint:this.$store.state.roomAdd.room.sprint};
+        room.title = this.title;
+        room.public = this.select;
+        this.$store.commit('roomAdd/setRoom',room);
+        console.log(this.$store.state.roomAdd.room);
+      }
     }
 }
 </script>
@@ -145,6 +126,11 @@ export default {
 .cardTitle {
   font-size: 1.5rem;
   font-weight: bold;
+}
+.v-form .sprintBtn {
+  width: 150px;
+  color: #5a0808;
+  background-color: #ffbbbb !important;
 }
 @media (max-width: 800px) {
   .cardSetting {
