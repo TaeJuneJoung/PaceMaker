@@ -68,8 +68,8 @@ export default {
   methods: {
     logout() {
       this.$session.remove('account')
-      this.$store.state.user.user = ''
-      this.$router.redirect('/')
+      this.$storage.setUniversal('isAuth', false)
+      this.$router.push('/')
     }
   }
 }
