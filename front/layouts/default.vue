@@ -7,12 +7,12 @@
           {{ title }}
         </v-flex>
         <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
-        <v-btn text>로그아웃</v-btn>
+        <v-btn text @click="logout">로그아웃</v-btn>
         <v-flex class="ma-2">
           <v-avatar color="grey">
             <v-icon v-if="getUserIcon" dark>{{getUserIcon}}</v-icon>
           </v-avatar>
-          <span class="ml-2">{{this.$store.nickName}}</span>
+          <span class="ml-2" v-if="user">{{ user.nickname }}</span>
         </v-flex>
       </v-container>
       <v-list>
@@ -38,6 +38,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
+      user: '',
       drawer: null,
       items: [
         {
@@ -47,12 +48,15 @@ export default {
         },
         {
           icon: 'mdi-apps',
-          title: 'RoomList',
-          to: '/RoomList'
+          title: '방 생성',
+          to: '/RoomAdd'
         },
       ],
       title: 'PaceMaker'
     }
+  },
+  mounted() {
+    this.user = this.$session.get("account")
   },
   computed: {
     ...mapGetters({
@@ -62,7 +66,11 @@ export default {
     }),
   },
   methods: {
-
+    logout() {
+      this.$session.remove('account')
+      this.$store.state.user.user = ''
+      this.$router.redirect('/')
+    }
   }
 }
 </script>
