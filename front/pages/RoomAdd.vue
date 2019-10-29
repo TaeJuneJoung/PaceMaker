@@ -95,7 +95,8 @@ export default {
         room.title = this.title;
         room.public = this.select;
         this.$store.commit('roomAdd/setRoom',room);
-        console.log(this.$store.state.roomAdd.room);
+        const roomJson = this.$store.state.roomAdd.room;
+        console.log(JSON.stringify(roomJson));
       }
     }
 }

@@ -33,6 +33,19 @@ export const mutations = {
     state.room.title = value.title
     state.room.public = value.public
     state.room.sprint = value.sprint
+  },
+  setAddDay(state, value) {
+    const obj = { todo: '', flag: false }
+    state.room.sprint[value.sprint][value.day].push(obj)
+  },
+  setInsertDay(state, value) {
+    state.room.sprint[value.sprint][value.day][value.todo].todo = value.text
+  },
+  setCheckDay(state, value) {
+    state.room.sprint[value.sprint][value.day][value.todo].flag = value.flag
+  },
+  removeDay(state, value) {
+    state.room.sprint[value.sprint][value.day].splice(value.todo, 1)
   }
 }
 
