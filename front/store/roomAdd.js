@@ -3,22 +3,28 @@ export const state = () => ({
     title: '',
     public: true,
     sprint: [
-      {
-        0: [{ todo: '', flag: false }],
-        1: [{ todo: '', flag: false }],
-        2: [{ todo: '', flag: false }],
-        3: [{ todo: '', flag: false }],
-        4: [{ todo: '', flag: false }],
-        5: [{ todo: '', flag: false }],
-        6: [{ todo: '', flag: false }]
-      }
+      [
+        // sprint
+        [
+          // day
+          { todo: '', flag: false },
+          { todo: '', flag: false },
+          { todo: '', flag: false }
+        ],
+        [{ todo: '', flag: false }],
+        [{ todo: '', flag: false }],
+        [{ todo: '', flag: false }],
+        [{ todo: '', flag: false }],
+        [{ todo: '', flag: false }],
+        [{ todo: '', flag: false }]
+      ]
     ]
   }
 })
 
 export const getters = {
   getAddRoom: (state) => {
-    return state.addRoom
+    return state.room
   }
 }
 

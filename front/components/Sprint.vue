@@ -1,25 +1,47 @@
 <template>
   <v-expansion-panels>
-    <v-expansion-panel v-for="(item,i) in propsdata.sprint" :key="i">
-      <v-expansion-panel-header>Sprint{{i+1}}</v-expansion-panel-header>
+    <v-expansion-panel :key="i" v-for="i in propsdata.length">
+      <!--sprints-->
+      <v-expansion-panel-header>Sprint{{i}}</v-expansion-panel-header>
       <v-expansion-panel-content>
-        <transition-group name="list" tag="ul">
-          <li
-            :key="todoItem.item"
-            v-for="(todoItem, index) in this.$store.state.roomAdd.room.sprint[i]"
-            class="shadow"
-          >
-            <span>{{ todoItem.item }}</span>
+        <ul :key="day" v-for="day in propsdata[i-1].length">
+          <!--sprint-->
+          <li>{{day+7*(i-1)}}일</li>
+          <!--day-->
+          <li class="shadow" :key="item" v-for="item in propsdata[i-1][day-1].length">
+            <!--todo-->
+            <v-text-field solo required></v-text-field>
           </li>
-        </transition-group>
+        </ul>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
 
 <script>
+/*
+{{ getAddRoom.sprint[i].day0[0].todo }}
+  {
+    day0: [{ todo: '', flag: false }],
+    day1: [{ todo: '', flag: false }],
+    day2: [{ todo: '', flag: false }],
+    day3: [{ todo: '', flag: false }],
+    day4: [{ todo: '', flag: false }],
+    day5: [{ todo: '', flag: false }],
+    day6: [{ todo: '', flag: false }]
+  }
+*/
+import { mapGetters } from 'vuex'
 export default {
-  props:['propsdata']
+  props:['propsdata'],
+  mounted(){
+    console.log(this.propsdata[0][0].length);
+  },
+  computed: {
+    ...mapGetters({
+      getAddRoom: 'roomAdd/getAddRoom'
+    })
+  }
 };
 </script>
 

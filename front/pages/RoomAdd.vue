@@ -59,7 +59,7 @@ export default {
                 {text:'공개',value:true},
                 {text:'비공개',value:false}
             ],
-            todoItems: {sprint:1, days : [{item:"day1"},{item:"day2"}]},
+            todoItems:this.$store.state.roomAdd.room.sprint,
             rules: {
             minLength: (len) => (v) =>
                 (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
@@ -73,24 +73,22 @@ export default {
     },
     methods: {
       sprintCnt(cnt){
-        if(cnt==4) {
-            this.todoItems.sprint=4;
-        }else if(cnt==1){
-            this.todoItems.sprint=1;
-        } 
         const room = {sprint:[]};
-        for(let i=0;i<this.todoItems.sprint;i++){
-          room.sprint.push({
-            0: [{ todo: '', flag: false }],
-            1: [{ todo: '', flag: false }],
-            2: [{ todo: '', flag: false }],
-            3: [{ todo: '', flag: false }],
-            4: [{ todo: '', flag: false }],
-            5: [{ todo: '', flag: false }],
-            6: [{ todo: '', flag: false }]
-          })
+        for(let i=0;i<cnt;i++){
+          room.sprint.push(
+            [
+              [{ todo: '', flag: false }],
+              [{ todo: '', flag: false }],
+              [{ todo: '', flag: false }],
+              [{ todo: '', flag: false }],
+              [{ todo: '', flag: false }],
+              [{ todo: '', flag: false }],
+              [{ todo: '', flag: false }]
+            ]
+          )
         }
         this.$store.commit('roomAdd/setRoom',room);
+        this.todoItems = this.$store.state.roomAdd.room.sprint;
       },
       send(){
         const room = {title:"",public:true,sprint:this.$store.state.roomAdd.room.sprint};
