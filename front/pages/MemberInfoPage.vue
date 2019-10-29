@@ -15,7 +15,7 @@
               {{nickname}}
           </v-list-item>
           <v-list-item class="justify-center">
-              Point: {{userpoint}}
+              Point: {{userpoint}} p
           </v-list-item>
         </v-card>
       </v-col>
@@ -38,9 +38,9 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in roomList" :key="item.summary">
+                <tr v-for="(item, index) in roomList" :key="item.summary">
                   <td>{{ item.roomFlag ? "공개" : "비공개" }}</td>
-                  <td>{{ item.summary }}</td>
+                  <td @click="moveRoom(index+1)">{{ item.summary }}</td>
                   <td>{{ item.userCount }}</td>
                   <td>{{ item.방주인 }}</td>
                   <td>{{ item.completedFlag ? "완료" : "미완료" }}</td>
@@ -75,15 +75,16 @@ export default {
 
   },
   mounted(){
-    this.userpoint = this.$store.state.user.userPoint
-    this.nickname = this.$store.state.user.nickName
+    this.nickname = this.$session.get("account").nickname
+    this.userpoint = this.$session.get("account").point
     this.roomList = this.$store.state.room.roomList
-    // this.script()
   },
+  computed: {
 
+  },
   methods: {
-    async script(){
-      
+    async moveRoom(idx){
+      this.$router.push("/Room/"+idx)
     }
   }
 }
