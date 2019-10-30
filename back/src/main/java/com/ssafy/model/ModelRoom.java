@@ -1,14 +1,17 @@
 package com.ssafy.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "MODEL_ROOM")
-public class ModelRoom {
+@Table(name = "MODEL_ROOMS")
+public @Data
+class ModelRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "MODEL_ROOM_ID", nullable = false)
     private Long id;
 
     @Column(name = "ROOM_DATA", nullable = false)
@@ -17,15 +20,4 @@ public class ModelRoom {
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "USER_ID")
-//    private User user;
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//
-//        if (!user.getModelRooms().contains(this)) {
-//            user.getModelRooms().add(this);
-//        }
-//    }
 }
