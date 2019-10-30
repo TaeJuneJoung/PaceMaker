@@ -1,7 +1,5 @@
 package com.ssafy.model;
 
-import com.ssafy.model.Day;
-import com.ssafy.model.Room;
 import lombok.Data;
 
 import javax.persistence.*;

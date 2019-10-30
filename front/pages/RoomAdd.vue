@@ -46,6 +46,7 @@
 
 <script>
 import SprintComp from '~/components/Sprint.vue';
+import { createRoom } from '../api/roomAdd.js'
 
 export default {
     ayout: 'default',
@@ -96,7 +97,15 @@ export default {
         room.public = this.select;
         this.$store.commit('roomAdd/setRoom',room);
         const roomJson = this.$store.state.roomAdd.room;
-        console.log(JSON.stringify(roomJson));
+        createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson)}).then(({data}) => {
+          if(data){
+            alert("등록 완료");
+          }else{
+            alert("등록 실패");
+          }
+        }).catch(error => {
+          console.error(error)
+        });
       }
     }
 }
@@ -137,4 +146,6 @@ export default {
   }
 }
 </style>
+
+
 

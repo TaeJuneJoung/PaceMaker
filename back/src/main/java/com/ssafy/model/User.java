@@ -51,13 +51,11 @@ class User {
     @Column(name = "USER_IMG")
     private String img;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<ModelRoom> modelRooms = new ArrayList<ModelRoom>();
+    @OneToMany
+    @JoinColumn(name = "USER_ID")
+    private List<ModelRoom> modelRooms = new ArrayList<ModelRoom>();
 
-//    public void addmodelRoom(ModelRoom modelRoom) {
-//        this.modelRooms.add(modelRoom);
-//        if (modelRooms.getRoom() != this) {
-//            modelRooms.set(this);
-//        }
-//    }
+    public void addModelRoom(ModelRoom modelRoom) {
+        this.modelRooms.add(modelRoom);
+    }
 }

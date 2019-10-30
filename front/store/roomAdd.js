@@ -7,8 +7,6 @@ export const state = () => ({
         // sprint
         [
           // day
-          { todo: '', flag: false },
-          { todo: '', flag: false },
           { todo: '', flag: false }
         ],
         [{ todo: '', flag: false }],
