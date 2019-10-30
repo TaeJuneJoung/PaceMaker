@@ -1,26 +1,39 @@
 <template>
   <v-container fluid>
     <v-row align="center">
-      <v-col cols="6" class="pa-0">
+      <v-col sm="8" cols="12" class="pa-0">
         <v-card outlined>
           <v-stepper non-linear>
-            <v-stepper-header class="heightsm">
+            <v-stepper-header>
               <template v-for="n in steps">
-                <v-stepper-step editable :step="n" :key="n" @click="changeSprint(n)">{{n}} 주차</v-stepper-step>
+                <v-stepper-step editable :step="n" :key="n" @click="changeSprint(n)">Sprint {{n}}</v-stepper-step>
                 <v-divider v-if="n != steps" :key="`${n}-divider`"></v-divider>
               </template>
             </v-stepper-header>
           </v-stepper>
         </v-card>
       </v-col>
-      <v-col cols="6" class="pa-0">
-        <v-card outlined class="heightsm">
-          <v-card-title>{{room.title}}</v-card-title>
+      <v-col sm="4" cols="12" class="pa-0">
+        <v-card outlined class="text-center pb-2 pl-2 pr-2">
+          <span class="overline">전체 달성도</span>
+          <v-progress-linear
+            color="light-blue"
+            v-model="entireCompleted"
+            height="16"
+            reactive
+            striped
+          >
+            <strong>{{ Math.ceil(entireCompleted) }}</strong>
+          </v-progress-linear>
+          <span class="overline">스프린트 달성도</span>
+          <v-progress-linear color="amber" v-model="sprintCompleted" height="16" reactive striped>
+            <strong>{{ Math.ceil(sprintCompleted) }}%</strong>
+          </v-progress-linear>
         </v-card>
       </v-col>
     </v-row>
     <v-row align="center">
-      <v-col cols="12" class="pa-0">
+      <v-col sm="8" cols="12" class="pa-0">
         <v-card outlined>
           <v-row align="center" class="vh65 scroll">
             <v-item-group v-model="day" class="shrink mr-6 ml-6" mandatory tag="v-flex">
@@ -39,8 +52,8 @@
                     <v-card-text>
                       <v-row class="mb-4" align="center">
                         <strong class="title ml-5">Day {{ n }}</strong>
+                        <v-spacer></v-spacer>
                       </v-row>
-                      <v-divider></v-divider>
                     </v-card-text>
                     <v-list shaped>
                       <v-list-item-group multiple>
@@ -54,6 +67,7 @@
                               <v-list-item-content>
                                 <v-list-item-title v-text="item.todo"></v-list-item-title>
                               </v-list-item-content>
+
                               <v-list-item-action>
                                 <v-checkbox
                                   :input-value="active"
@@ -74,21 +88,42 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col cols="6" class="pa-0"></v-col>
+      <v-col sm="4" cols="12" class="pa-0">
+        <v-card outlined class="pa-2">
+          <span class="headline pl-2">COMMENTS</span>
+          <v-card class="vh65 scroll" id="scroll-target">
+            <v-list three-line id="scroll-content">
+              <template v-for="(comment, index) in comments">
+                <v-list-item :key="`${index}-list`">
+                  <v-list-item-content>
+                    <v-list-item-title class="text--primary" v-text="comment.title"></v-list-item-title>
+                    <v-list-item-subtitle v-text="comment.subtitle"></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider v-if="index != comments.length" :key="index"></v-divider>
+              </template>
+            </v-list>
+          </v-card>
+        </v-card>
+      </v-col>
+      <v-col cols="12">
+        <v-text-field
+          v-model="message"
+          :append-outer-icon="message? 'mdi-send' : ''"
+          outlined
+          clear-icon="mdi-close-circle"
+          clearable
+          label="Comment"
+          type="text"
+          @click:append-outer="sendMessage"
+          @click:clear="clearMessage"
+        ></v-text-field>
+      </v-col>
     </v-row>
-    <div class="text-center">
-      <v-btn class="ma-2" color="indigo" dark @click="joinRoom()">
-        <v-icon left>mdi-pencil</v-icon>참여하기
-      </v-btn>
-      <v-btn v-if="checkUser" class="ma-2" color="error" dark @click="deleteRoom()">
-        <v-icon left>mdi-trash-can</v-icon>삭제하기
-      </v-btn>
-    </div>
   </v-container>
 </template>
 <script>
 import { mapGetters , mapActions } from 'vuex'
-import { findRoomById , returnTestRoom } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
@@ -108,37 +143,87 @@ export default {
       [ { todo : "aaa4", flag : false } , { todo : "bbb4", flag : true } ],
       [ { todo : "aaa5", flag : false } , { todo : "bbb5", flag : true } ],
       [ { todo : "aaa6", flag : false } , { todo : "bbb6", flag : true } ]
+		],
+		comments: [
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
+			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"}
     ],
     room: {}
   }),
-  async created() {
+  created() {
 		this.roomId = this.$route.params.id
-    this.setRoomId(this.roomId)
-    this.room = await returnTestRoom()
-    this.sprint = this.room.sprint[0];
+		this.setRoomId(this.roomId)
+		//this.comments = this.getComments;
+		let cur = this.getCurrentDay;
+		this.curStep = cur.sprint;
+		this.day = cur.day;
+    this.sprint = this.room.sprint[curStep];
+    
   },
   methods: {
 		...mapActions({
 			setRoomId: 'room/setRoomId'
 		}),
+		toggleTodo(day, idx){
+			this.sprint[day][idx].flag = !this.sprint[day][idx].flag
+			//axios todo 한걸로 체크
+		},
 		changeSprint(n) {
-      this.curStep = n;
-      this.day = 0;
+			this.curStep = n;
+			this.day = 0;
 			this.sprint = this.room.sprint[n-1];
-    },
-    joinRoom() {
-      
-      //모델 룸 참여
-    }
+		},
+		sendMessage() {
+			//axios
+
+			let elem = document.getElementById('scroll-content')
+			let container = document.getElementById('scroll-target')
+			container.scrollTop = Math.floor(elem.offsetHeight);
+			this.clearMessage();
+		},
+		clearMessage() {
+			this.message ='';
+		}
   },
   computed: {
 		...mapGetters({
 			getRoomId: 'room/getRoomId'
-    }),
-    checkUser() {
-      // 모델 룸 제작자가 현재 로그인한 사용자와 같은지
-      return true;
-    }
+		}),
+		sprintCompleted() {
+			let sum = 0;
+			let cnt = 0;
+			this.sprint.forEach(element => {
+				element.forEach(element => {
+					sum++;
+					if(element.flag)
+						cnt++;
+				});
+			});
+			return cnt/sum * 100;
+		},
+		entireCompleted() {
+			//axios 현재 Room의 전체 진행도
+			return 50;
+		},
+		getCurrentDay() {
+			let cur = {
+				day: 0,
+				sprint: 0
+			}
+			// 날짜 계산
+			return cur;
+		},
+		getComments() {
+			//댓글 가져오기
+			return null
+		}
   }
 }
 </script>
@@ -160,16 +245,5 @@ export default {
 
 .scroll {
   overflow-y: auto;
-}
-.heightsm {
-  height: 70px;
-}
-.col-sm-6,
-.col-lg-4,
-.col-12 {
-  padding: 0;
-}
-.container {
-  padding: 0;
 }
 </style>
