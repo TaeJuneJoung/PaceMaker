@@ -15,6 +15,7 @@
                 solo
                 required
                 @keyup.enter="validate"
+                @focus="focusField"
               ></v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
               <v-text-field
@@ -25,9 +26,14 @@
                 solo
                 required
                 @keyup.enter="validate"
+                @focus="focusField"
               ></v-text-field>
             </v-form>
-            <v-flex class="ivory">{{message}}</v-flex>
+            <v-flex class="ivory" v-if="isFocus">{{message}}
+              <v-btn class="pb-1" text color="error" @click="reAuthentication" v-if="emailAuthentication">
+                {{ authMessage  }}
+              </v-btn>
+            </v-flex>
           </v-card-text>
           <v-card-actions class="text-xs-center">
             <v-btn block class="backivory" @click="validate">Login</v-btn>
@@ -41,14 +47,24 @@
 </template>
 
 <script>
-import { loginUser } from '../api/index.js'
+import { loginUser, sendUserMail } from '../api/index.js'
 
 export default {
   layout: 'login',
   middleware: 'guest',
+  head () {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '로그인 | %s',
+    }
+  },
   data: () => ({
     email: '',
     password: '',
+    emailAuthentication: false,
+    isFocus: false,
+    isAuth: false,
+    authMessage: '인증 재요청',
     rules: {
       email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요',
       password: (v) => !!v || 'Password를 입력해 주세요.'
@@ -61,9 +77,13 @@ export default {
         const loginData = {'email': this.email, 'password': this.password}   
         loginUser(loginData)
           .then(({data}) => {
+            this.isAuth = true
             if (data.authenticationFlag === false){
+              this.isFocus = true
               this.message = "이메일 인증이 필요한 아이디입니다."
+              this.emailAuthentication = true
             } else if(data.activateFlag === false) {
+              this.isFocus = true
               this.message = "비활성화된 아이디입니다."
             } else if (data) {
               this.$session.start()
@@ -71,11 +91,26 @@ export default {
               this.$storage.setUniversal('isAuth', true)
               this.$router.push('/MainPage')
             } else {
+              this.isFocus = true
               this.message = "Email이나 비밀번호가 맞지 않습니다."
             }
           })
           .catch(error => {
             console.error(error)
+          })
+      }
+    },
+    focusField() {
+      this.isFocus = false
+      this.isAuth = false
+    },
+    reAuthentication() {
+      if (this.isAuth) {
+        this.authMessage = 'Loading'
+        sendUserMail(this.email)
+          .then((response) => {
+            this.authMessage = '인증 재요청'
+            alert('메일이 발송되었습니다.')
           })
       }
     }

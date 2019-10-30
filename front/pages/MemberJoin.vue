@@ -14,11 +14,16 @@
                 solo
                 label="E-mail"
                 required
+                @blur="emailCheck"
                 :readonly="emailReadOnly"
               >
                 <template v-slot:append>
-                  <v-flex class="mr-1" @click="emailCheck(email)">{{ isAgreeEmail ? '성공' : '중복확인' }}</v-flex>|
-                  <v-flex class="ml-1" @click="emailAuthCancle">취소</v-flex>
+                  <v-btn text class="text-cursor" color="grey" v-if="isOnlyEmail==0">결과</v-btn>
+                  <v-row class="pr-1" v-else-if="isOnlyEmail==1">
+                    <v-icon class="check-btn" color="success">mdi-check</v-icon>
+                    <v-icon color="grey" @click="emailCheckCancel">mdi-close-circle-outline</v-icon>
+                  </v-row>
+                  <v-btn text class="text-cursor" color="warning" v-else>사용불가</v-btn>
                 </template>
               </v-text-field>
               <v-flex class="ivory text-left">Nickname</v-flex>
@@ -30,9 +35,15 @@
                 label="Nickname"
                 required
                 @blur="nicknameCheck"
+                :readonly="nicknameReadOnly"
               >
-                <template v-if="isOnlyNickname" v-slot:append>
-                  <v-flex class="ml-1" @click="nicknameCancle">취소</v-flex>
+                <template v-slot:append>
+                  <v-btn text color="grey" class="text-cursor" v-if="isOnlyNickname==0">결과</v-btn>
+                  <v-row class="pr-1" v-else-if="isOnlyNickname==1">
+                    <v-icon class="check-btn" color="success">mdi-check</v-icon>
+                    <v-icon color="grey" @click="nicknameCheckCancel">mdi-close-circle-outline</v-icon>
+                  </v-row>
+                  <v-btn text color="warning" class="text-cursor" v-else>사용불가</v-btn>
                 </template>
               </v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
@@ -63,9 +74,9 @@
                 <small class="success--text" v-if="password === rePassword">비밀번호가 일치합니다.</small>
                 <small class="warning--text" v-else>비밀번호가 일치하지 않습니다.</small>
               </v-flex>
-              <v-checkbox v-model="checkboxEmail" color="success">
+              <v-checkbox v-model="checkboxAlarm" color="success" dark>
                 <template v-slot:label>
-                  <v-flex class="ivory">PaceMaker에 대한 소식을 이메일로 받는데 동의합니다.</v-flex>
+                  <v-flex class="ivory">PaceMaker에 대한 알림을 받는 것에 동의합니다.</v-flex>
                 </template>
               </v-checkbox>
               <v-checkbox
@@ -73,6 +84,7 @@
                 color="success"
                 required
                 :rules="[rules.required]"
+                dark
               >
                 <template v-slot:label>
                   <terms-of-service></terms-of-service>
@@ -91,11 +103,22 @@
 
 <script>
 import TermsOfService from '~/components/TermsOfService.vue'
-import { findUserEmail, createUser } from '../api/index.js'
+import {
+  getCheckEmail,
+  getCheckNickname,
+  sendUserMail,
+  createUser
+} from '../api/index.js'
 
 export default {
   layout: 'login',
   middleware: 'guest',
+  head () {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '회원가입 | %s',
+    }
+  },
   components: {
     TermsOfService
   },
@@ -103,19 +126,20 @@ export default {
     return {
       valid: true,
       email: '',
+      isEmail: false,
+      isOnlyEmail: 0,
+      emailReadOnly: false,
       nickname: '',
+      isOnlyNickname: 0,
+      nicknameReadOnly: false,
+      checkboxAlram: false,
       password: '',
       rePassword: '',
       isAgreeEmail: false,
       passwordShow: false,
       rePasswordShow: false,
-      checkboxEmail: false,
-      checkboxAlram: false,
+      checkboxAlarm: false,
       checkboxAgree: false,
-      isOnlyEmail: false,
-      emailReadOnly: false,
-      isOnlyNickname: false,
-      nicknameReadOnly: false,
       rules: {
         email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.',
         password: (v) =>
@@ -132,54 +156,83 @@ export default {
   methods: {
     joinValidate() {
       if (this.$refs.joinform.validate()) {
-        let data = {'email': this.email, 'nickname': this.nickname, 'password': this.password, 'authenticationFlag': this.checkboxAgree, 'alarmFlag': this.checkboxEmail}
-        createUser(data)
+        let data = {
+          email: this.email,
+          nickname: this.nickname,
+          password: this.password,
+          authenticationFlag: this.checkboxAgree,
+          alarmFlag: this.checkboxAlarm
+        }
+        let email = this.email
+        email = email.replace('@', '%40')
+        sendUserMail(email)
+          .then(() => {
+            createUser(data)
+              .then(({data}) => {
+                this.$router.push('/')
+              })
+              .catch(error => {
+                console.error(error)
+              })
+          })
       }
     },
-    emailCheck(userEmail) {
-      userEmail = userEmail.replace('@', '%40')
-      findUserEmail(userEmail)
-        .then(({data}) => {
-          if (data) {
-            console.log('성공')
-            this.isAgreeEmail = true
-          } else {
-            this.isAgreeEmail = false
-          }
-        })
-        .catch(error => {
-          console.log('실패')
-          console.error(error)
-        })
-
-
-      // 데이터베이스 내용과 비교
-      // axios를 통해서 이메일을 있다면 true, 없다면 false
-      // if ('이메일요소') {
-      //   this.isOnlyEmail = true
-      //   this.emailReadOnly = true
-      // } else {
-      //   this.isOnlyEmail = false
-      //   this.emailReadOnly = false
-      // }
+    emailCheck() {
+      let email = this.email
+      this.isEmail = /.+@.+\..+/.test(email)
+      if (this.isEmail) {
+        email = email.replace('@', '%40')
+        getCheckEmail(email)
+          .then(({ data }) => {
+            if (data) {
+              this.isOnlyEmail = 1
+              this.emailReadOnly = data
+            } else {
+              this.isOnlyEmail = 2
+            }
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      }
     },
-    emailAuth() {
-      // 작성된 email에 email을 보내주게 axios 작성
-    },
-    emailAuthCancle() {
+    emailCheckCancel() {
       this.email = ''
-      this.isOnlyEmail = false
+      this.isOnlyEmail = 0
       this.emailReadOnly = false
     },
-    
     nicknameCheck() {
-      // emailCheck와 로직 동일
+      let nickname = this.nickname
+      if (nickname.length > 0) {
+        getCheckNickname(nickname)
+          .then(({ data }) => {
+            if (data) {
+              this.isOnlyNickname = 1
+              this.nicknameReadOnly = data
+            } else {
+              this.isOnlyNickname = 2
+            }
+          })
+          .catch((error) => {
+            console.log(this.nickname)
+            console.error(error)
+          })
+      }
     },
-    nicknameCancle() {
+    nicknameCheckCancel() {
       this.nickname = ''
-      this.isOnlyNickname = false
+      this.isOnlyNickname = 0
       this.nicknameReadOnly = false
     }
   }
 }
 </script>
+
+<style scoped>
+.check-btn {
+  z-index: 3;
+}
+.text-cursor {
+  cursor: text;
+}
+</style>

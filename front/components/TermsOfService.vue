@@ -8,7 +8,7 @@
       <v-card class="back-gray">
         <v-toolbar flat>
           <v-toolbar-title class="ml-12 title">
-            Pace Maker 약관 동의 내용
+            약관 동의
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn class="mr-12" icon @click.native="dialog = false">
