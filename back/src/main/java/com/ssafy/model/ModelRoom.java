@@ -20,4 +20,7 @@ class ModelRoom {
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
+    @Column(name = "IMG_URL")
+    private String img;
+
 }

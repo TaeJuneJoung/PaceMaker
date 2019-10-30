@@ -6,4 +6,5 @@ public @Data
 class ModelRoomInput {
     private String roomData;
     private String email;
+    private String img;
 }
