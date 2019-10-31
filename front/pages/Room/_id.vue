@@ -89,6 +89,7 @@
 <script>
 import { mapGetters , mapActions } from 'vuex'
 import { findRoomById , returnTestRoom } from '~/api/rooms.js'
+import { findModelRoomById, deleteRoomById } from '~/api/modelRoom.js'
 
 export default {
   layout: 'default',
@@ -109,14 +110,19 @@ export default {
       [ { todo : "aaa5", flag : false } , { todo : "bbb5", flag : true } ],
       [ { todo : "aaa6", flag : false } , { todo : "bbb6", flag : true } ]
     ],
-    room: {}
+    room: {},
+    roomMaker: ''
   }),
   async created() {
 		this.roomId = this.$route.params.id
     this.setRoomId(this.roomId)
     this.room = await returnTestRoom()
     this.sprint = this.room.sprint[0];
+    this.roomId = 99;
   },
+  mounted() {
+    this.roomMaker = this.$session.get('account').id;
+  },  
   methods: {
 		...mapActions({
 			setRoomId: 'room/setRoomId'
@@ -129,6 +135,16 @@ export default {
     joinRoom() {
       
       //모델 룸 참여
+    },
+    deleteRoom() {
+      if(this.checkUser){
+        if(deleteRoomById(this.roomId)=='err'){
+          window.alert('오류 : 삭제 실패')
+        }else{
+          window.alert('삭제 성공')
+          this.$router.push('/MainPage')
+        }
+      }
     }
   },
   computed: {
@@ -137,7 +153,7 @@ export default {
     }),
     checkUser() {
       // 모델 룸 제작자가 현재 로그인한 사용자와 같은지
-      return true;
+      return (this.roomMaker == this.room.userId);
     }
   }
 }
