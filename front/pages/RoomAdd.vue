@@ -112,8 +112,8 @@ export default {
         await addImg(img).then(({data}) => {
           imgName = data.fileName;
         });
-        createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":"./image/"+imgName}).then(({data}) => {
-          if(data){
+        createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":"/"+imgName}).then(({data}) => {
+          if(data){ 
             alert("등록 완료");
           }else{
             alert("등록 실패");
