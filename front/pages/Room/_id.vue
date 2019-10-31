@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="6" class="pa-0">
         <v-card outlined class="heightsm">
-          <v-card-title>{{room.title}}</v-card-title>
+          <v-card-title>{{title}}</v-card-title>
         </v-card>
       </v-col>
     </v-row>
@@ -88,12 +88,12 @@
 </template>
 <script>
 import { mapGetters , mapActions } from 'vuex'
-import { findRoomById , returnTestRoom } from '~/api/rooms.js'
 import { findModelRoomById, deleteRoomById } from '~/api/modelRoom.js'
 
 export default {
   layout: 'default',
   data: () => ({
+    title: '',
 		message: '',
 		steps: 4,
 		curStep: 1,
@@ -114,11 +114,19 @@ export default {
     roomMaker: ''
   }),
   async created() {
-		this.roomId = this.$route.params.id
-    this.setRoomId(this.roomId)
-    this.room = await returnTestRoom()
-    this.sprint = this.room.sprint[0];
-    this.roomId = 99;
+		this.roomId = this.$route.params.id;
+    this.setRoomId(this.roomId);
+    let response;
+    try {
+      response = await findModelRoomById(this.roomId);
+    } catch (err) {
+
+    }
+    this.room = response.data;
+    this.room.roomData = JSON.parse(this.room.roomData)
+    this.title = this.room.roomData.title;
+    this.sprint = this.room.roomData.sprint[0];
+    this.steps = this.room.roomData.sprint.length;
   },
   mounted() {
     this.roomMaker = this.$session.get('account').id;
@@ -130,7 +138,7 @@ export default {
 		changeSprint(n) {
       this.curStep = n;
       this.day = 0;
-			this.sprint = this.room.sprint[n-1];
+			this.sprint = this.room.roomData.sprint[n-1];
     },
     joinRoom() {
       
@@ -152,7 +160,6 @@ export default {
 			getRoomId: 'room/getRoomId'
     }),
     checkUser() {
-      // 모델 룸 제작자가 현재 로그인한 사용자와 같은지
       return (this.roomMaker == this.room.userId);
     }
   }

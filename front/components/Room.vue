@@ -17,12 +17,11 @@
         <v-flex>
           <nuxt-link :to="`/Room/${room.id}`">
             <v-icon class="room-card-icon">mdi-door-open</v-icon>
-            {{ room.summary }}
           </nuxt-link>
         </v-flex>
-        <v-flex class="text-gray">Date:</v-flex>
-        <v-flex class="text-gray">Action:</v-flex>
-        <v-flex class="text-gray mb-3">Member:</v-flex>
+        <v-flex class="text-gray">기간 : {{ period }}주</v-flex>
+        <v-flex class="text-gray">목표 : {{ title }}</v-flex>
+        <v-flex class="text-gray mb-3">만든 사람 : {{ madeBy }}</v-flex>
 
         <v-btn icon color="white">
           <v-icon>mdi-chevron-down</v-icon>
@@ -47,25 +46,43 @@
 </template>
 
 <script>
+import { getUser } from '~/api/index.js'
+
 export default {
   props: {
-    room: {}
+    room: {},
   },
   data() {
     return {
+      roomData: {},
+      title: '',
+      madeBy: '',
+      period: 0
     }
   },
-  created() {
-  
+  async created() {
+    // this.roomData = JSON.parse(this.room.roomData);
+    this.roomData = this.room.roomData;
+    this.title = this.roomData.title;
+    this.roomData.sprint.forEach(element => {
+      this.period++;
+    });
+    try {
+      let response = await getUser(this.room.userId);
+      this.madeBy = response.data.nickname;
+    } catch (err) {
+
+    }
+
   },
   methods: {
   },
   computed: {
     getImgsrc() {
       if(this.room.img === ( '' || null ))
-        return 'https://source.unsplash.com/random/600x400';
+        return 'https://source.unsplash.com/random/600x450';
       else
-        return '.' + this.room.img;
+        return this.room.img;
     }
   }
 }
