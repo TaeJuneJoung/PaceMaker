@@ -2,18 +2,18 @@
   <v-container fluid>
     <v-row>
       <v-col sm="12" cols="12">
-          <v-row>
-            <v-col v-for="room in getRoomList" :key="room.roomId" cols="12" lg="4" sm="6">
-              <room :room="room" :limits="6" :load-more="true"></room>
-            </v-col>
-          </v-row>
+        <v-row>
+          <v-col v-for="room in modelRoomList" :key="room.id" cols="12" lg="4" sm="6">
+            <room :room="room" :limits="6" :load-more="true"></room>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
-  </v-container>    
+  </v-container>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { getAllModelRoom } from '~/api/modelRoom.js'
 import Room from '~/components/Room.vue'
 
 export default {
@@ -23,21 +23,26 @@ export default {
     Room
   },
   data: () => ({
-
+    modelRoomList: []
   }),
+  async created() {
+    let response = await getAllModelRoom();
+    this.modelRoomList = response.data;
+    console.log(this.modelRoomList)
+  }, 
   computed: {
-    ...mapGetters({
-      getRoomList: 'room/getRoomList'
-    })
+
   },
 }
 </script>
 
 <style scoped>
-.col-sm-6, .col-lg-4, .col-12 {
-	padding: 0;
+.col-sm-6,
+.col-lg-4,
+.col-12 {
+  padding: 0;
 }
 .container {
-	padding: 0;
+  padding: 0;
 }
 </style>

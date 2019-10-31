@@ -1,8 +1,15 @@
 import axios from 'axios'
-import { findRoomById } from './rooms'
 
 const config = {
 	baseUrl: 'http://localhost:8080/api/v1/modelrooms'
+}
+
+async function getAllModelRoom() {
+  try{
+    return await axios.get(`${config.baseUrl}`)
+  } catch (err) {
+    return 'err'
+  }
 }
 
 async function findModelRoomById(id) {
@@ -22,6 +29,7 @@ async function deleteRoomById(id) {
 }
 
 export {
+  getAllModelRoom,
   findModelRoomById,
   deleteRoomById
 }
