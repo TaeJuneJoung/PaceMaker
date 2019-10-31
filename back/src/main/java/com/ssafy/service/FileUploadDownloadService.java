@@ -4,6 +4,7 @@ import com.ssafy.exception.FileDownloadException;
 import com.ssafy.exception.FileUploadException;
 import com.ssafy.model.UploadFile;
 import com.ssafy.repository.UploadFileRepository;
+import com.ssafy.utility.HashEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -11,24 +12,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Optional;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 @Service
 public class FileUploadDownloadService {
 
     private final Path fileLocation;
     private final UploadFileRepository uploadFileRepository;
+    private final HashEncoder hashEncoder;
 
     @Autowired
-    public FileUploadDownloadService(UploadFileRepository uploadFileRepository) {
+    public FileUploadDownloadService(UploadFileRepository uploadFileRepository, HashEncoder hashEncoder) {
         this.fileLocation = Paths.get("../front/image")
                 .toAbsolutePath().normalize();
         this.uploadFileRepository = uploadFileRepository;
+        this.hashEncoder = hashEncoder;
 
         try {
             Files.createDirectories(this.fileLocation);
@@ -37,9 +42,13 @@ public class FileUploadDownloadService {
         }
     }
 
-    public UploadFile storeFile(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        
+    public UploadFile storeFile(MultipartFile file) throws NoSuchAlgorithmException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss", Locale.KOREA);
+        String dateToString = dateFormat.format(new Timestamp(System.currentTimeMillis()));
+        dateToString.concat(StringUtils.cleanPath(file.getOriginalFilename()));
+        String hash = hashEncoder.sha1(dateToString);
+        String fileName = hash.concat(".".concat(file.getContentType().split("/")[1]));
+
         try {
             // 파일명에 부적합 문자가 있는지 확인한다.
             if(fileName.contains(".."))
@@ -58,43 +67,5 @@ public class FileUploadDownloadService {
             throw new FileUploadException("["+fileName+"] 파일 업로드에 실패하였습니다. 다시 시도하십시오.",e);
         }
     }
-
-
-    public Resource loadFileAsResource(String fileName) {
-        try {
-            Path filePath = this.fileLocation.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-
-            if(resource.exists()) {
-                return resource;
-            }else {
-                throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.");
-            }
-        }catch(MalformedURLException e) {
-            throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.", e);
-        }
-    }
-
-    public Iterable<UploadFile> getFileList(){
-        Iterable<UploadFile> iterable = uploadFileRepository.findAll();
-
-        if(null == iterable) {
-            throw new FileDownloadException("업로드 된 파일이 존재하지 않습니다.");
-        }
-
-        return  iterable;
-    }
-
-    public Optional<UploadFile> getUploadFile(Long id) {
-        Optional<UploadFile> uploadFile = uploadFileRepository.findById(id);
-
-        if(null == uploadFile) {
-            throw new FileDownloadException("해당 아이디["+id+"]로 업로드 된 파일이 존재하지 않습니다.");
-        }
-        return uploadFile;
-    }
-
-
-
 
 }

@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,17 +19,8 @@ public class FileUploadController {
         this.service = service;
     }
 
-    @GetMapping("/uploadFiles")
-    public Iterable<UploadFile> getUploadFileList(){
-        return service.getFileList();
-    }
-
-    @GetMapping("/uploadFile/{id}")
-    public Optional<UploadFile> getUploadFile(@PathVariable Long id){
-        return service.getUploadFile(id);
-    }
     @PostMapping("/uploadFile")
-    public UploadFile uploadFile(@RequestParam("file") MultipartFile file) {
+    public UploadFile uploadFile(@RequestParam("file") MultipartFile file) throws NoSuchAlgorithmException {
         UploadFile uploadFile = service.storeFile(file);
 
         return uploadFile;
