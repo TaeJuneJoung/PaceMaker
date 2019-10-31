@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -53,6 +52,7 @@ public class ModelRoomCtroller {
         ModelRoom modelRoom = new ModelRoom();
         modelRoom.setRoomData(modelRoomInput.getRoomData());
         modelRoom.setUserId(user.getId());
+        modelRoom.setImg(modelRoomInput.getImg());
         ModelRoom newModelRoom = modelRoomRepository.save(modelRoom);
         if(newModelRoom == null) return false;
         return true;

@@ -8,4 +8,8 @@ function createRoom(roomData) {
   return axios.post(`${config.baseUrl}modelrooms`, roomData)
 }
 
-export { createRoom }
+function addImg(imgData) {
+  return axios.post(`${config.baseUrl}uploadFile`, imgData)
+}
+
+export { createRoom, addImg }
