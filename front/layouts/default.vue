@@ -32,6 +32,16 @@
       </v-list>
     </v-navigation-drawer>
     <v-content class="mx-6">
+      <Modal v-if="this.$store.state.achievement.showModal" @close="modalClose">
+        <h3 slot="header">
+          {{this.$store.state.modal.header}}
+          <span class="fas fa-times closeModalBtn" @click="modalClose">X</span>
+        </h3>
+        <div slot="body">
+          {{this.$store.state.modal.body}}
+          <img :src="this.$store.state.modal.img"> 
+        </div>
+      </Modal>
       <nuxt />
     </v-content>
   </v-app>
@@ -39,6 +49,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Modal from '~/components/Modal.vue';
 
 export default {
   data() {
@@ -60,6 +71,9 @@ export default {
       title: 'PaceMaker'
     }
   },
+  components: {
+    Modal
+  },
   mounted() {
     this.user = this.$session.get("account")
   },
@@ -78,6 +92,9 @@ export default {
     },
     menuBtn() {
       this.drawer = !this.drawer
+    },
+    modalClose() {
+      this.$store.commit('achievement/setShowModal',false);
     }
   }
 }
