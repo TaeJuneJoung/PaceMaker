@@ -36,29 +36,34 @@ public class UserCtroller {
      * @return 모든 User info
      */
     @GetMapping("/users")
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @GetMapping("/users/check/email/{userEmail:.+}")
     public Boolean getEmailCheck(@PathVariable @Valid String userEmail) {
         User user = userRepository.findByEmail(userEmail);
-        if(user==null) return true;
+        if (user == null)
+            return true;
         return false;
     }
 
     @GetMapping("/users/check/nick/{nickname}")
     public Boolean getNicknameCheck(@PathVariable(value = "nickname") String nickname) {
         User user = userRepository.findByNickname(nickname);
-        if(user==null) return true;
+        if (user == null)
+            return true;
         return false;
     }
+
     /**
      * email로 User 찾기
+     * 
      * @param userEmail
      * @return User
      * @throws ResourceNotFoundException
      */
+
     @GetMapping("/users/email/{userEmail:.+}")
     public User getEmailUser(@PathVariable @Valid String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail);
@@ -80,6 +85,7 @@ public class UserCtroller {
 
     /**
      * Login
+     * 
      * @param userDetails
      * @return True => User, False => null
      * @throws NoSuchAlgorithmException
@@ -87,13 +93,15 @@ public class UserCtroller {
     @PostMapping("/users/login")
     public User loginCheck(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
         User user = userRepository.findByEmail(userDetails.getEmail());
-        if(user.getEmail().equals(user.getEmail()) && hashEncoder.sha256(userDetails.getPassword()).equals(user.getPassword()))
+        if (user.getEmail().equals(user.getEmail())
+                && hashEncoder.sha256(userDetails.getPassword()).equals(user.getPassword()))
             return user;
         return null;
     }
 
     /**
      * User 생성
+     * 
      * @param userDetails
      * @return
      * @throws NoSuchAlgorithmException
@@ -110,6 +118,7 @@ public class UserCtroller {
 
     /**
      * 사진, 닉네임, 알람 설정 수정
+     * 
      * @param userDetails
      * @return
      */
@@ -126,12 +135,14 @@ public class UserCtroller {
 
     /**
      * 비밀번호만 변경
+     * 
      * @param userDetails
      * @return
      * @throws NoSuchAlgorithmException
      */
     @PutMapping("/users/pass")
-    public ResponseEntity<User> updatePass(@Valid @RequestBody UserEmailandPass userDetails) throws NoSuchAlgorithmException {
+    public ResponseEntity<User> updatePass(@Valid @RequestBody UserEmailandPass userDetails)
+            throws NoSuchAlgorithmException {
         String email = userDetails.getEmail();
         User user = userRepository.findByEmail(email);
         user.setPassword(hashEncoder.sha256(userDetails.getPassword()));
@@ -141,13 +152,13 @@ public class UserCtroller {
 
     /**
      * User 삭제
+     * 
      * @param userId
      * @return
      * @throws ResourceNotFoundException
      */
     @DeleteMapping("/users/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
