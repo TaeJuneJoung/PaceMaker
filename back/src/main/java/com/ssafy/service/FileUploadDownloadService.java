@@ -30,7 +30,7 @@ public class FileUploadDownloadService {
 
     @Autowired
     public FileUploadDownloadService(UploadFileRepository uploadFileRepository, HashEncoder hashEncoder) {
-        this.fileLocation = Paths.get("../front/static")
+        this.fileLocation = Paths.get("../front/static/images")
                 .toAbsolutePath().normalize();
         this.uploadFileRepository = uploadFileRepository;
         this.hashEncoder = hashEncoder;
