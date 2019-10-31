@@ -16,8 +16,17 @@ function deleteRoomById(id) {
   return axios.delete(`${config.baseUrl}/${id}`)
 }
 
+async function findModelRoomByUserId(id) {
+  try {
+    return await axios.get(`${config.baseUrl}/user/${id}`)
+  } catch (err) {
+    return 'err'
+  }
+}
+
 export {
   getAllModelRoom,
   findModelRoomById,
-  deleteRoomById
+  deleteRoomById,
+  findModelRoomByUserId
 }

@@ -48,7 +48,7 @@
                 <small class="text-success" v-if="password === rePassword">비밀번호가 일치합니다.</small>
                 <small class="text-warning" v-else>비밀번호가 일치하지 않습니다.</small>
               </v-flex>
-              <v-checkbox v-model="checkboxAlarm" color="success">
+              <v-checkbox v-model="checkboxAlarm" color="success" dark>
                 <template v-slot:label>
                   <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
@@ -138,7 +138,9 @@ export default {
             this.$session.set('account', userData) 
             this.$router.push("/MemberInfoPage")
           })
-          .catch(err => {console.log('안되난가?')})
+          .catch(err => {
+            this.$router.push("/")
+          })
 
         if(this.password!='' && this.rePassword!=''){
           updatePass(this.password)
