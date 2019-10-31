@@ -13,7 +13,7 @@ function getUser(userId) {
 }
 
 function findUserEmail(email) {
-	return axios.get(`${config.baseUrl}users/${email}`)
+	return axios.get(`${config.baseUrl}users/email/${email}`)
 }
 /**
  * 가입시, 이메일 중복 확인

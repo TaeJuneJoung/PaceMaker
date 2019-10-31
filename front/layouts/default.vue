@@ -55,11 +55,6 @@ export default {
           icon: 'mdi-apps',
           title: '방 생성',
           to: '/RoomAdd'
-        },
-        {
-          icon: 'mdi-clipboard-list',
-          title: '참여 방 목록',
-          to: '/MyRoomList'
         }
       ],
       title: 'PaceMaker'

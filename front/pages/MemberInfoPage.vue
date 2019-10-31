@@ -25,29 +25,8 @@
            <v-btn color=primary nuxt to="/MemberUpdatePage">회원 수정</v-btn>
            <v-btn class="mx-4" color=primary nuxt to="/*">회원 탈퇴</v-btn>
           </v-row>
-
-          <v-simple-table >
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">방 분류</th>
-                  <th class="text-left">방 이름</th>
-                  <th class="text-left">인원수</th>
-                  <th class="text-left">방 주인</th>
-                  <th class="text-left">완료 여부</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in roomList" :key="item.summary">
-                  <td>{{ item.roomFlag ? "공개" : "비공개" }}</td>
-                  <td @click="moveRoom(index+1)">{{ item.summary }}</td>
-                  <td>{{ item.userCount }}</td>
-                  <td>{{ item.방주인 }}</td>
-                  <td>{{ item.completedFlag ? "완료" : "미완료" }}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+          <MyRoomList></MyRoomList>
+          
         </v-card>
       </v-col>
     </v-row>
@@ -55,37 +34,52 @@
 </template>
 
 <script>
+import MyRoomList from "../components/MyRoomList.vue"
 
 export default {
   layout: 'default',
-   components: {
-     
+  components: {
+     MyRoomList
   },
   data() {
     return{
       nickname: '',
       userpoint: 0,
-      roomList: [],
-      roomtype: ''
-     
-
     }
   },
   created(){
-
+  
   },
   mounted(){
     this.nickname = this.$session.get("account").nickname
     this.userpoint = this.$session.get("account").point
-    this.roomList = this.$store.state.room.roomList
   },
   computed: {
-
+    
   },
   methods: {
-    async moveRoom(idx){
-      this.$router.push("/Room/"+idx)
-    }
+    // async roomList(){
+      
+    //   var Myroom = findModelRoomByUserId(this.id)
+    //     .then((res) => {
+    //       for(var i=0; i<res.data.length; i++){
+    //         this.roomlist.push(JSON.parse(res.data[i].roomData))
+    //         this.roomsprint = JSON.parse(res.data[i].roomData).sprint[0]
+    //       }
+          
+    //       for(var i=0; i<this.roomsprint.length; i++){
+    //         if(!this.roomsprint[i][0].flag){
+    //           break;
+    //         }
+    //         else{
+    //           this.complete_flag = true;
+    //         }
+    //       }
+    //     }
+    //   )
+      
+    // }
+    
   }
 }
 </script>
