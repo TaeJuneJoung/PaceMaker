@@ -50,8 +50,8 @@
 <script>
 import SprintComp from '~/components/Sprint.vue';
 import FormData from 'form-data'
-import { createRoom } from '../api/roomAdd.js'
-import { addImg } from '../api/roomAdd.js'
+import { getAchieve, putAchieve } from '../api/achieve.js'
+import { createRoom, addImg } from '../api/roomAdd.js'
 
 export default {
     ayout: 'default',
@@ -106,13 +106,31 @@ export default {
         room.public = this.select;
         this.$store.commit('roomAdd/setRoom',room);
         const roomJson = this.$store.state.roomAdd.room;
+        
         let img = new FormData();
-        let imgName = '';
-        img.append('file', this.img, this.img.fileName);
-        await addImg(img).then(({data}) => {
-          imgName = data.fileName;
+        let imgName = null;
+        if(this.img!==''){
+          img.append('file', this.img, this.img.fileName);
+          await addImg(img).then(({data}) => {
+            imgName = "/images/"+data.fileName;
+          });
+        }
+
+        let achieveData = {};
+        await getAchieve(15).then(({data}) => {
+          achieveData = data;
         });
-        createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":"/images/"+imgName}).then(({data}) => {
+        achieveData.modelRoom += 1;
+        await putAchieve(achieveData);
+        
+        const achieveModal = this.$store.state.achievement.makerAchieve;
+        achieveModal.forEach(element => {
+          if(element.room == achieveData.modelRoom){
+            this.$store.commit('modal/setModalData',{header:element.name,body:"바디 테스트",img:element.img});
+            this.$store.commit('achievement/setShowModal',true);
+          }
+        });
+        createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":imgName}).then(({data}) => {
           if(data){ 
             alert("등록 완료");
           }else{

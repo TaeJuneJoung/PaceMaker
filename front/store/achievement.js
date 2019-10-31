@@ -27,7 +27,8 @@ export const state = () => ({
 		{ id: 3, room: 100, name: "목표 달성의 달인", img: "achieve/room03.svg" },
 		{ id: 4, room: 1000, name: "마스터피스", img: "achieve/room04.svg" },
 		{ id: 5, room: 100000000, name: "God of God", img: "achieve/room05.svg" },
-	]
+	],
+	showModal: false
 })
 
 export const getters = {
@@ -43,4 +44,10 @@ export const getters = {
 	getRoomAchieve: state => {
 		return state.roomAchieve
 	}
+}
+
+export const mutations = {
+	setShowModal(state, value) {
+	  state.showModal = value
+	},
 }
