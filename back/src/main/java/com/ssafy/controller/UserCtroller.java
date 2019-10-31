@@ -59,7 +59,7 @@ public class UserCtroller {
      * @return User
      * @throws ResourceNotFoundException
      */
-    @GetMapping("/users/{userEmail:.+}")
+    @GetMapping("/users/email/{userEmail:.+}")
     public User getEmailUser(@PathVariable @Valid String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail);
         return user;
@@ -71,7 +71,7 @@ public class UserCtroller {
      * @return userId와 일치하는 User
      * @throws ResourceNotFoundException
      */
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/id/{id}")
     public User getUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
