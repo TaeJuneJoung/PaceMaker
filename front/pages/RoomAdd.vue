@@ -113,7 +113,7 @@ export default {
           imgName = data.fileName;
         });
         createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":"/"+imgName}).then(({data}) => {
-          if(data){
+          if(data){ 
             alert("등록 완료");
           }else{
             alert("등록 실패");
