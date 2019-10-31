@@ -1,6 +1,7 @@
 export const state = () => ({
+	userAchieve: {},
+	// 업적 데이터
 	coinAchieve: [
-		// id, coin, 업적명, img
 		{ id: 1, coin: 100, name: "천리 길도 한 걸음부터", img: "achieve/coin01.svg" },
 		{ id: 2, coin: 500, name: "떡상각", img: "achieve/coin02.svg" },
 		{ id: 3, coin: 1000, name: "떡상중", img: "achieve/coin03.svg" },
