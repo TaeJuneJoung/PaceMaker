@@ -9,7 +9,7 @@ function getUserList() {
 }
 
 function getUser(userId) {
-	return axios.get(`${config.baseUrl}users/${userId}`)
+	return axios.get(`${config.baseUrl}users/id/${userId}`)
 }
 
 function findUserEmail(email) {
