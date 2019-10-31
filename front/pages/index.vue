@@ -87,7 +87,7 @@ export default {
               this.message = "비활성화된 아이디입니다."
             } else if (data) {
               this.$session.start()
-              this.$session.set('account',{'email':data.email,'nickname':data.nickname,'img':data.img,'point':data.point,'alarmFlag':data.alarmFlag})
+              this.$session.set('account',{'email':data.email,'nickname':data.nickname,'img':data.img,'point':data.point,'alarmFlag':data.alarmFlag,'id':data.id})
               this.$storage.setUniversal('isAuth', true)
               this.$router.push('/MainPage')
             } else {
