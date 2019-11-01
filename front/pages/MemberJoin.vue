@@ -93,7 +93,8 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn class="ma-4" color="success" @click="joinValidate">회원가입</v-btn>
+            <v-btn class="joinBtn" color="error" nuxt to="/">홈으로</v-btn>
+            <v-btn class="joinBtn" color="success" @click="joinValidate">회원가입</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
