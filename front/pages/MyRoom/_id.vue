@@ -5,7 +5,7 @@
         <v-card outlined>
           <v-stepper non-linear>
             <v-stepper-header>
-              <template v-for="n in steps">
+              <template v-for="n in room.steps">
                 <v-stepper-step editable :step="n" :key="n" @click="changeSprint(n)">Sprint {{n}}</v-stepper-step>
                 <v-divider v-if="n != steps" :key="`${n}-divider`"></v-divider>
               </template>
@@ -55,31 +55,15 @@
                         <v-spacer></v-spacer>
                       </v-row>
                     </v-card-text>
-                    <v-list shaped>
-                      <v-list-item-group multiple>
-                        <template v-for="(item, i) in sprint[n-1]">
-                          <v-list-item
-                            :key="`item-${i}`"
-                            :value="item.todo"
-                            active-class="deep-purple--text text--accent-4"
-                          >
-                            <template v-slot:default="{ active }">
-                              <v-list-item-content>
-                                <v-list-item-title v-text="item.todo"></v-list-item-title>
-                              </v-list-item-content>
-
-                              <v-list-item-action>
-                                <v-checkbox
-                                  :input-value="active"
-                                  :true-value="item"
-                                  color="deep-purple accent-4"
-                                  @click="toggleTodo(n-1, i)"
-                                ></v-checkbox>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
+                    <v-list tile v-for="(todo, index) in sprint[n-1]" :key="index" dense dark>
+                      <v-list-item>
+                        <v-checkbox
+                          :value="todo.todo"
+                          :key="todo.todo"
+                          :label="todo.todo"
+                          v-model="todo.flag"
+                        ></v-checkbox>
+                      </v-list-item>
                     </v-list>
                   </v-card>
                 </v-window-item>
@@ -123,62 +107,46 @@
   </v-container>
 </template>
 <script>
-import { mapGetters , mapActions } from 'vuex'
+import { findRoomById } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
   data: () => ({
+    model: [],
 		message: '',
 		steps: 4,
 		curStep: 1,
 		length: 7,
     day: 0,
 		roomId: 0,
-    sprint: 
-    [
-      [ { todo : "aaa0", flag : false } , { todo : "bbb0", flag : true }  , { todo : "ccc0", flag : true }  , { todo : "ddd0", flag : true }  , { todo : "eee0", flag : true } ],
-      [ { todo : "aaa1", flag : false } , { todo : "bbb1", flag : true } ],
-      [ { todo : "aaa2", flag : false } , { todo : "bbb2", flag : true } ],
-      [ { todo : "aaa3", flag : false } , { todo : "bbb3", flag : true } ],
-      [ { todo : "aaa4", flag : false } , { todo : "bbb4", flag : true } ],
-      [ { todo : "aaa5", flag : false } , { todo : "bbb5", flag : true } ],
-      [ { todo : "aaa6", flag : false } , { todo : "bbb6", flag : true } ]
-		],
-		comments: [
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaa"},
-			{title: "nickname1" , subtitle: "content1aaaaaaaaaaaaaaaaaaaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"}
-    ],
+    sprints: [],
+    sprint: [],
+		comments: [],
     room: {}
   }),
-  created() {
-		this.roomId = this.$route.params.id
-		this.setRoomId(this.roomId)
-		//this.comments = this.getComments;
-		let cur = this.getCurrentDay;
-		this.curStep = cur.sprint;
-		this.day = cur.day;
-    this.sprint = this.room.sprint[curStep];
-    
+  async created() {
+    this.roomId = this.$route.params.id
+    let response;
+    try {
+      response = await findRoomById(this.roomId);
+      this.room = response.data;
+      this.sprints = JSON.parse(this.room.sprints);
+      console.log(this.room);
+      this.sprint = this.sprints[this.room.currentDay];
+    } catch (err) {
+
+    }
   },
   methods: {
-		...mapActions({
-			setRoomId: 'room/setRoomId'
-		}),
 		toggleTodo(day, idx){
-			this.sprint[day][idx].flag = !this.sprint[day][idx].flag
+      this.sprint[day][idx].flag = !this.sprint[day][idx].flag
+      console.log(this.sprint[day][idx].flag)
 			//axios todo 한걸로 체크
 		},
 		changeSprint(n) {
 			this.curStep = n;
 			this.day = 0;
-			this.sprint = this.room.sprint[n-1];
+			this.sprint = this.sprints[n-1];
 		},
 		sendMessage() {
 			//axios
@@ -190,12 +158,12 @@ export default {
 		},
 		clearMessage() {
 			this.message ='';
-		}
+    },
+    log(item) {
+      console.log(item);
+    }
   },
   computed: {
-		...mapGetters({
-			getRoomId: 'room/getRoomId'
-		}),
 		sprintCompleted() {
 			let sum = 0;
 			let cnt = 0;
@@ -209,8 +177,19 @@ export default {
 			return cnt/sum * 100;
 		},
 		entireCompleted() {
-			//axios 현재 Room의 전체 진행도
-			return 50;
+      //axios 현재 Room의 전체 진행도
+      let cnt = 0;
+      let done = 0;
+      this.sprints.forEach(sprint => {
+        sprint.forEach(day => {
+          day.forEach(todo => {
+            cnt++;
+            if(todo.flag)
+              done++;
+          })
+        })
+      });
+			return done/cnt * 100;
 		},
 		getCurrentDay() {
 			let cur = {

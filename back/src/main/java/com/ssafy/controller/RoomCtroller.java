@@ -19,6 +19,11 @@ public class RoomCtroller {
     @Autowired
     private RoomRepository roomRepository;
 
+    @GetMapping("/rooms/user/{id}")
+    public List<Room> getAllRoomsByUserId(@PathVariable(value = "id") Long userId) {
+        return roomRepository.findByUserId(userId);
+    }
+
     @GetMapping("/rooms")
     public List<Room> getAllRooms(){
         return roomRepository.findAll();

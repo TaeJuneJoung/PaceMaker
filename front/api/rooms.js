@@ -12,7 +12,12 @@ function createRoom(room) {
 	return axios.post(`${config.baseUrl}` , room)
 }
 
+function findRoomByUserId(id) {
+	return axios.get(`${config.baseUrl}/user/${id}`)
+}
+
 export {
-  findRoomById,
+	findRoomById,
+	findRoomByUserId,
   createRoom
 }

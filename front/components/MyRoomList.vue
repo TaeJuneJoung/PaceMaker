@@ -1,49 +1,56 @@
 <template>
   <v-container fluid>
-      <v-col cols="12">
-          <v-data-iterator
-            :items="roomlist"
-            hide-default-footer
-          >
-            <template v-slot:header>
-              <v-toolbar flat>
-                <v-row justify="end" align="center">
-                  <v-col cols="8" sm="3">
-                    <v-text-field
-                      label="검색"
-                      v-model="search"
-                      hide-details
-                      append-outer-icon="mdi-magnify"
-                      single-line
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="4" sm="3">
-                    <v-select label="분류" v-model="key" :items="keys" hide-details></v-select>
-                  </v-col>
-                </v-row>
-              </v-toolbar>
-            
-              <v-row class="pa-2">
-                <v-col v-for="(room, index) in roomlist" :key="room.title" cols="12" lg="4" sm="6">
-                  <v-hover v-slot:default="{ hover }">
-                      <v-card class="mx-auto card-black" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
-                        <v-container @click="moveRoom(index+1)">
-                          <v-flex class="text-gray">방 분류: {{ room.public ? "공개" : "비공개" }} </v-flex>
-                          <v-flex class="text-gray">방 이름: {{ room.title }} </v-flex>
-                          <v-flex class="text-gray mb-3">완료 여부: {{ complete_flag ? "완료" : "진행중"}} </v-flex>
-                        </v-container>
-                      </v-card>
-                  </v-hover>
-                </v-col>
-              </v-row>
-            </template>
-          </v-data-iterator>
-      </v-col>
+    <v-tabs
+      v-model="tab"
+      background-color="deep-purple accent-4"
+      class="elevation-2"
+      dark
+      grow
+      right
+    >
+      <v-tabs-slider></v-tabs-slider>
+
+      <v-tab v-for="(tab, index) in tabs" :key="index" :href="`#tab-${index}`">{{ tab.title }}</v-tab>
+
+      <v-tab-item v-for="(tab, index) in tabs" :key="index" :value="'tab-' + index">
+        <v-row class="pa-2">
+          <v-col cols="6" v-for="(room , index) in tab.list" :key="index">
+            <v-card v-if="isMyRoomTab(tab.title)" class="pa-2" outlined hover dark nuxt :to="`/MyRoom/${room.id}`">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>{{room.title ? room.title : '제목없음'}}</v-list-item-title>
+                  <v-divider></v-divider>
+                  <v-list-item-subtitle>{{ isMyRoomTab(tab.title) ? getCompleteFlag(room.completeFlag) + '/' : '' }} {{ getRoomFlag(room.roomFlag) }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>{{ room.steps }} 주</v-list-item-subtitle>
+                  <v-list-item-subtitle
+                    v-if="isMyRoomTab(tab.title)"
+                  >시작 : {{ getStartDate(room.createDate) }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+            <v-card v-else class="pa-2" outlined hover dark nuxt :to="`/Room/${room.id}`">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>{{room.title ? room.title : '제목없음'}}</v-list-item-title>
+                  <v-divider></v-divider>
+                  <v-list-item-subtitle>{{ isMyRoomTab(tab.title) ? getCompleteFlag(room.completeFlag) + '/' : '' }} {{ getRoomFlag(room.roomFlag) }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>{{ room.steps }} 주</v-list-item-subtitle>
+                  <v-list-item-subtitle
+                    v-if="isMyRoomTab(tab.title)"
+                  >시작 : {{ getStartDate(room.createDate) }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-tab-item>
+    </v-tabs>
   </v-container>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { findModelRoomByUserId } from "../api/modelRoom.js"
+import { findRoomByUserId } from "../api/rooms.js"
+import { findModelRoomByUserId } from "~/api/modelRoom.js"
 
 export default {
   layout: 'default',
@@ -51,6 +58,19 @@ export default {
 
   },
   data: () => ({
+    tab: null,
+    noDataText: '현재 참가한 방이 없습니다.',
+    ipp: 4,
+    tabs: [
+      { 
+        title:'참가한 방 목록',
+        list: []
+      },
+      { 
+        title:'만든 방 목록',
+        list: []
+      }
+    ],
     search: '',
     page: 1,
     itemsPerPage: 4,
@@ -65,42 +85,60 @@ export default {
     roomsprint:[],
     complete_flag: false
   }),
-  created() {
-
+  async created() {
   },
-  mounted(){
+  async mounted(){
     this.id = this.$session.get("account").id
-    this.getMyRoomList()
+    try {
+      let response = await findRoomByUserId(this.$session.get('account').id);
+      let response2 = await findModelRoomByUserId(this.$session.get('account').id);
+      // let roomdata = JSON
+      // let templist = JSON.parse(response2.data.roomData);
+      response2.data.forEach(room => {
+        let temp = JSON.parse(room.roomData);
+        let cnt = 0;
+        temp.sprint.forEach(element => {
+          cnt++;
+        });
+        temp.steps = cnt;
+        temp.id = room.id;
+        temp.roomFlag = temp.public;
+        this.tabs[1].list.push(temp);
+        // console.log(temp);
+      });
+
+      this.tabs[0].list = response.data;
+    } catch(err) {
+      console.log(err)
+    }
+    console.log(this.tabs[0].list)
   },
   computed: {
-    
   },
   methods: {
-    async moveRoom(idx){
-      this.$router.push("/MyRoom/"+idx)
+    nextPage () {
+      if (this.page + 1 <= this.numberOfPages) this.page += 1
     },
-    async getMyRoomList(){
-      
-      let Myroom = findModelRoomByUserId(this.id)
-        .then((res) => {
-          for(let i=0; i<res.data.length; i++){
-            this.roomlist.push(JSON.parse(res.data[i].roomData))
-            this.roomsprint = JSON.parse(res.data[i].roomData).sprint[0]
-          }
-          
-          for(let i=0; i<this.roomsprint.length; i++){
-            if(!this.roomsprint[i][0].flag){
-              break;
-            }
-            else{
-              this.complete_flag = true;
-            }
-          }
-        }
-      )
-      
+    formerPage () {
+      if (this.page - 1 >= 1) this.page -= 1
+    },
+    numberOfPages(list) {
+      return Math.ceil(list.length / this.ipp);
+    },
+    getCompleteFlag(flag) {
+      return flag ? '완료' : '미완료';
+    },
+    getRoomFlag(flag) {
+      return flag ? '공개' : '비공개';
+    },
+    getStartDate(date) {
+      let day = new Date(date);
+      return day.toLocaleString();
+    },
+    isMyRoomTab(tab){
+      return tab==="참가한 방 목록";
     }
-  },
+   },
   
 }
 </script>
