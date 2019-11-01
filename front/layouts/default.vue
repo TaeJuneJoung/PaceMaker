@@ -5,7 +5,7 @@
     </v-btn>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <v-container>
-        <v-flex class=headline ma-3>
+        <v-flex class="headline" ma-3>
           <nuxt-link to="/">
             <v-icon icon>mdi-run</v-icon>
             {{ title }}
@@ -35,11 +35,16 @@
       <Modal v-if="this.$store.state.achievement.showModal" @close="modalClose">
         <h3 slot="header">
           {{this.$store.state.modal.header}}
-          <span class="fas fa-times closeModalBtn" @click="modalClose">X</span>
+          <span
+            class="fas fa-times closeModalBtn"
+            @click="modalClose"
+          >
+            <v-icon>mdi-close</v-icon>
+          </span>
         </h3>
         <div slot="body">
-          {{this.$store.state.modal.body}}
-          <img :src="this.$store.state.modal.img"> 
+          <img class="modalImg" :src="this.$store.state.modal.img" />
+          <pre class="modalBodyText">{{this.$store.state.modal.body}}</pre>
         </div>
       </Modal>
       <nuxt />
@@ -114,5 +119,18 @@ export default {
 a {
   text-decoration: none;
   color: black;
+}
+.modalImg {
+  width: 220px;
+  margin-bottom: 20px;
+}
+.closeModalBtn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+.modalBodyText {
+  font-weight: bold;
 }
 </style>
