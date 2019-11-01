@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels>
+  <v-expansion-panels accordion>
     <v-expansion-panel :key="i" v-for="i in propsdata.length">
       <!--sprints-->
       <v-expansion-panel-header>Sprint{{i}}</v-expansion-panel-header>
@@ -107,10 +107,10 @@ li {
   cursor: pointer;
   border-radius: 40px;
   font-weight: bold;
-  height: 40px;
-  line-height: 40px;
-  width: 40px;
-  top: 8px;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+  top: 14px;
   text-align: center;
 }
 .addBtn:hover {
@@ -121,12 +121,13 @@ li {
   cursor: pointer;
   border-radius: 40px;
   font-weight: bold;
-  height: 40px;
-  line-height: 40px;
-  width: 40px;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+  min-width: 30px;
   text-align: center;
-  margin-left: 10px;
-  margin-top: 4px;
+  margin-left: 5px;
+  margin-top: 8px;
 }
 .removeBtn:hover {
   background: #b24d4e;
