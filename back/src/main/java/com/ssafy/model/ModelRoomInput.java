@@ -7,4 +7,5 @@ class ModelRoomInput {
     private String roomData;
     private String email;
     private String img;
+    private Long userCount;
 }
