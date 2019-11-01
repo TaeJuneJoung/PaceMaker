@@ -13,12 +13,6 @@
         </v-flex>
         <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
         <v-btn text @click="logout">로그아웃</v-btn>
-        <v-flex class="ma-2">
-          <v-avatar color="grey">
-            <v-icon v-if="getUserIcon" dark>{{getUserIcon}}</v-icon>
-          </v-avatar>
-          <span class="ml-2" v-if="user">{{ user.nickname }}</span>
-        </v-flex>
       </v-container>
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>

@@ -1,7 +1,7 @@
 <template>
   <v-hover v-slot:default="{ hover }">
     <v-card class="mx-auto card-black" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
-      <v-img :src="getImgsrc">
+      <v-img :src="getImgsrc" width="600" height="34.65vh">
         <v-expand-transition>
           <v-flex
             v-if="hover"
@@ -19,13 +19,10 @@
             <v-icon class="room-card-icon">mdi-door-open</v-icon>
           </nuxt-link>
         </v-flex>
-        <v-flex class="text-gray">기간 : {{ period }}주</v-flex>
-        <v-flex class="text-gray">목표 : {{ title }}</v-flex>
-        <v-flex class="text-gray">만든 사람 : {{ madeBy }}</v-flex>
-        <v-flex class="text-gray">사용한 사람 수 : {{ count }}</v-flex>
-        <v-btn icon color="white">
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
+        <v-flex class="text-white"><span class="text-lightblue">기간 : </span>{{ period }}주</v-flex>
+        <v-flex class="text-white"><span class="text-lightblue">목표 : </span>{{ title }}</v-flex>
+        <v-flex class="text-white"><span class="text-lightblue">만든 사람 : </span>{{ madeBy }}</v-flex>
+        <v-flex class="text-white"><span class="text-lightblue">사용한 사람 수 : </span>{{ count }}</v-flex>
 
         <!-- <v-flex class="float-right">
               <v-btn outlined color="white">참여하기</v-btn>
@@ -92,11 +89,15 @@ export default {
 
 <style scoped>
 .card-black {
-  background-color: black;
+  background-color: #353534;
   color: white;
 }
 .text-gray {
   color: #666666;
+}
+.text-lightblue{
+  color: #96d5f5;
+  font-weight: bold;
 }
 .room-card-icon {
   color: white;

@@ -7,11 +7,11 @@
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card class="back-gray">
         <v-toolbar flat>
-          <v-toolbar-title class="ml-12 title">
+          <v-toolbar-title class="ml-10 title">
             약관 동의
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn class="mr-12" icon @click.native="dialog = false">
+          <v-btn class="mr-5" icon @click.native="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>

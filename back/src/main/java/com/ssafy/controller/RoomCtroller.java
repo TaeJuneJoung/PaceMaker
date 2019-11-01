@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import com.ssafy.exception.ResourceNotFoundException;
 import com.ssafy.model.Room;
+import com.ssafy.model.RoomSprintInput;
 import com.ssafy.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,17 @@ public class RoomCtroller {
     @PostMapping("/rooms")
     public Room createEmployee(@Valid @RequestBody Room employee) {
         return roomRepository.save(employee);
+    }
+
+    @PutMapping("/rooms/sprints/{id}")
+    public ResponseEntity<Room> updateSprints(@PathVariable(value = "id") Long roomId,
+                                           @Valid @RequestBody RoomSprintInput roomDetails) throws ResourceNotFoundException {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found for this id :: " + roomId));
+
+        room.setSprints(roomDetails.getSprints());
+        final Room updatedEmployee = roomRepository.save(room);
+        return ResponseEntity.ok(updatedEmployee);
     }
 
     @PutMapping("/rooms/{id}")
