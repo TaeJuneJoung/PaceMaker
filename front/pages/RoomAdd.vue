@@ -117,27 +117,33 @@ export default {
         }
 
         let achieveData = {};
-        await getAchieve(15).then(({data}) => {
+        await getAchieve(this.$session.get("account").id).then(({data}) => {
           achieveData = data;
         });
         achieveData.modelRoom += 1;
         await putAchieve(achieveData);
         
-        const achieveModal = this.$store.state.achievement.makerAchieve;
-        achieveModal.forEach(element => {
-          if(element.room == achieveData.modelRoom){
-            this.$store.commit('modal/setModalData',{header:element.name,body:"바디 테스트",img:element.img});
-            this.$store.commit('achievement/setShowModal',true);
-          }
-        });
-        createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":imgName}).then(({data}) => {
+        
+        await createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":imgName}).then(({data}) => {
           if(data){ 
-            alert("등록 완료");
+            this.$store.commit('modal/setModalData',{header:"등록 성공",body:"방이 생성되었습니다.",img:""});
+            this.$store.commit('achievement/setShowModal',true);
           }else{
-            alert("등록 실패");
+            this.$store.commit('modal/setModalData',{header:"등록 실패",body:"방 생성을 실패하였습니다.",img:""});
+            this.$store.commit('achievement/setShowModal',true);
           }
         }).catch(error => {
           console.error(error)
+        });
+        
+        this.$router.push('/MainPage');
+
+        const achieveModal = this.$store.state.achievement.makerAchieve;
+        achieveModal.forEach(element => {
+          if(element.number == achieveData.modelRoom){
+            this.$store.commit('modal/setModalData',{header:element.name,body:"방 생성 성공!! \n 업적을 취득하였습니다.",img:element.img});
+            this.$store.commit('achievement/setShowModal',true);
+          }
         });
       }
     }

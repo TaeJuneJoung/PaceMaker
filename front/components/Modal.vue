@@ -11,7 +11,6 @@
           <div class="modal-body">
             <slot name="body">default body</slot>
           </div>
-
         </div>
       </div>
     </div>
@@ -23,6 +22,9 @@ export default {};
 </script>
 
 <style>
+.modal-body {
+  text-align: center;
+}
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -40,6 +42,7 @@ export default {};
 }
 .modal-container {
   width: 300px;
+  position: relative;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -51,6 +54,7 @@ export default {};
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
+  text-align: center;
 }
 .modal-body {
   margin: 20px 0;
