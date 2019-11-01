@@ -47,19 +47,16 @@
                         <template v-for="(item, i) in sprint[n-1]">
                           <v-list-item
                             :key="`item-${i}`"
-                            :value="item.todo"
                             active-class="deep-purple--text text--accent-4"
                           >
-                            <template v-slot:default="{ active }">
+                            <template>
                               <v-list-item-content>
                                 <v-list-item-title v-text="item.todo"></v-list-item-title>
                               </v-list-item-content>
                               <v-list-item-action>
                                 <v-checkbox
-                                  :input-value="active"
                                   :true-value="item"
                                   color="deep-purple accent-4"
-                                  @click="toggleTodo(n-1, i)"
                                 ></v-checkbox>
                               </v-list-item-action>
                             </template>
