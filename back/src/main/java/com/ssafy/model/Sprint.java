@@ -31,18 +31,6 @@ class Sprint {
     @OneToMany(mappedBy = "sprint")
     private List<Day> days;
 
-    // Lazy fetch 하지 않은 컬럼들만 미리 가져오고, 요청할 때 쿼리를 날려서 맵핑함.
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROOM_ID")
-    private Room room;
-
-    public void setRoom(Room room) {
-        this.room = room;
-
-        if (!room.getSprints().contains(this)) {
-            room.getSprints().add(this);
-        }
-    }
 
 
 }

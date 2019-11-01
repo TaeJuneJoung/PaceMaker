@@ -23,4 +23,7 @@ class ModelRoom {
     @Column(name = "IMG_URL")
     private String img;
 
+    @Column(name = "USER_COUNT")
+    private Long userCount;
+
 }

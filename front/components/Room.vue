@@ -21,8 +21,8 @@
         </v-flex>
         <v-flex class="text-gray">기간 : {{ period }}주</v-flex>
         <v-flex class="text-gray">목표 : {{ title }}</v-flex>
-        <v-flex class="text-gray mb-3">만든 사람 : {{ madeBy }}</v-flex>
-
+        <v-flex class="text-gray">만든 사람 : {{ madeBy }}</v-flex>
+        <v-flex class="text-gray">사용한 사람 수 : {{ count }}</v-flex>
         <v-btn icon color="white">
           <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
@@ -57,12 +57,14 @@ export default {
       roomData: {},
       title: '',
       madeBy: '',
-      period: 0
+      period: 0,
+      count: 0
     }
   },
   async created() {
     // this.roomData = JSON.parse(this.room.roomData);
     this.roomData = this.room.roomData;
+    this.count = this.room.userCount;
     this.title = this.roomData.title;
     this.roomData.sprint.forEach(element => {
       this.period++;
