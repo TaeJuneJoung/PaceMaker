@@ -87,22 +87,7 @@
         </v-card>
       </v-col>
       <v-col sm="4" cols="12" class="pa-0">
-        <v-card outlined class="pa-2">
-          <span class="headline pl-2">COMMENTS</span>
-          <v-card class="vh65 scroll" id="scroll-target">
-            <v-list three-line id="scroll-content">
-              <template v-for="(comment, index) in comments">
-                <v-list-item :key="`${index}-list`">
-                  <v-list-item-content>
-                    <v-list-item-title class="text--primary" v-text="comment.title"></v-list-item-title>
-                    <v-list-item-subtitle v-text="comment.subtitle"></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider v-if="index != comments.length" :key="index"></v-divider>
-              </template>
-            </v-list>
-          </v-card>
-        </v-card>
+        <Comment></Comment>
       </v-col>
       <v-col cols="12">
         <v-text-field
@@ -121,10 +106,14 @@
   </v-container>
 </template>
 <script>
+import Comment from '../../components/Comment.vue'
 import { findRoomById , updateRoomSprintById } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
+  components: {
+    Comment
+  },
   data: () => ({
     model: [],
     message: '',
