@@ -124,17 +124,17 @@ export default {
         await putAchieve(achieveData);
         
         
-        // await createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":imgName}).then(({data}) => {
-        //   if(data){ 
-        //     this.$store.commit('modal/setModalData',{header:"등록 성공",body:"방이 생성되었습니다.",img:""});
-        //     this.$store.commit('achievement/setShowModal',true);
-        //   }else{
-        //     this.$store.commit('modal/setModalData',{header:"등록 실패",body:"방 생성을 실패하였습니다.",img:""});
-        //     this.$store.commit('achievement/setShowModal',true);
-        //   }
-        // }).catch(error => {
-        //   console.error(error)
-        // });
+        await createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":imgName}).then(({data}) => {
+          if(data){ 
+            this.$store.commit('modal/setModalData',{header:"등록 성공",body:"방이 생성되었습니다.",img:""});
+            this.$store.commit('achievement/setShowModal',true);
+          }else{
+            this.$store.commit('modal/setModalData',{header:"등록 실패",body:"방 생성을 실패하였습니다.",img:""});
+            this.$store.commit('achievement/setShowModal',true);
+          }
+        }).catch(error => {
+          console.error(error)
+        });
         
         this.$router.push('/MainPage');
 
