@@ -126,4 +126,7 @@ export default {
   font-weight: bold;
   height: 15px;
 }
+.v-expansion-panel-content__wrap{
+  padding: 0;
+}
 </style>

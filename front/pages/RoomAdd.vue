@@ -164,6 +164,9 @@ export default {
 .container {
   padding: 0;
 }
+.v-btn-toggle{
+  width: 100%;
+}
 .cardSetting {
   background: rgba(255, 255, 255, 0.9);
   margin: 10vh auto;
@@ -175,7 +178,7 @@ export default {
   font-weight: bold;
 }
 .v-form .sprintBtn {
-  width: 150px;
+  width: 50%;
   color: #5a0808;
   background-color: #ffbbbb !important;
 }
