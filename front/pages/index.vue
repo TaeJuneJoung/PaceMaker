@@ -29,10 +29,15 @@
                 @focus="focusField"
               ></v-text-field>
             </v-form>
-            <v-flex class="ivory" v-if="isFocus">{{message}}
-              <v-btn class="pb-1" text color="error" @click="reAuthentication" v-if="emailAuthentication">
-                {{ authMessage  }}
-              </v-btn>
+            <v-flex class="ivory" v-if="isFocus">
+              {{message}}
+              <v-btn
+                class="pb-1"
+                text
+                color="error"
+                @click="reAuthentication"
+                v-if="emailAuthentication"
+              >{{ authMessage }}</v-btn>
             </v-flex>
           </v-card-text>
           <v-card-actions class="text-xs-center">
@@ -52,10 +57,10 @@ import { loginUser, sendUserMail } from '../api/index.js'
 export default {
   layout: 'login',
   middleware: 'guest',
-  head () {
+  head() {
     return {
       title: 'PaceMaker',
-      titleTemplate: '로그인 | %s',
+      titleTemplate: '로그인 | %s'
     }
   },
   data: () => ({
@@ -74,28 +79,35 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        const loginData = {'email': this.email, 'password': this.password}   
+        const loginData = { email: this.email, password: this.password }
         loginUser(loginData)
-          .then(({data}) => {
+          .then(({ data }) => {
             this.isAuth = true
-            if (data.authenticationFlag === false){
+            if (data.authenticationFlag === false) {
               this.isFocus = true
-              this.message = "이메일 인증이 필요한 아이디입니다."
+              this.message = '이메일 인증이 필요한 아이디입니다.'
               this.emailAuthentication = true
-            } else if(data.activateFlag === false) {
+            } else if (data.activateFlag === false) {
               this.isFocus = true
-              this.message = "비활성화된 아이디입니다."
+              this.message = '비활성화된 아이디입니다.'
             } else if (data) {
               this.$session.start()
-              this.$session.set('account',{'email':data.email,'nickname':data.nickname,'img':data.img,'point':data.point,'alarmFlag':data.alarmFlag,'id':data.id})
+              this.$session.set('account', {
+                email: data.email,
+                nickname: data.nickname,
+                img: data.img,
+                point: data.point,
+                alarmFlag: data.alarmFlag,
+                id: data.id
+              })
               this.$storage.setUniversal('isAuth', true)
               this.$router.push('/MainPage')
             } else {
               this.isFocus = true
-              this.message = "Email이나 비밀번호가 맞지 않습니다."
+              this.message = 'Email이나 비밀번호가 맞지 않습니다.'
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(error)
           })
       }
@@ -107,11 +119,10 @@ export default {
     reAuthentication() {
       if (this.isAuth) {
         this.authMessage = 'Loading'
-        sendUserMail(this.email)
-          .then((response) => {
-            this.authMessage = '인증 재요청'
-            alert('메일이 발송되었습니다.')
-          })
+        sendUserMail(this.email).then((response) => {
+          this.authMessage = '인증 재요청'
+          alert('메일이 발송되었습니다.')
+        })
       }
     }
   }
@@ -119,14 +130,14 @@ export default {
 </script>
 
 <style>
-#maxWidth{
+#maxWidth {
   max-width: 1200px;
 }
 .v-messages__wrapper {
   font-weight: bold;
   height: 15px;
 }
-.v-expansion-panel-content__wrap{
+.v-expansion-panel-content__wrap {
   padding: 0;
 }
 </style>

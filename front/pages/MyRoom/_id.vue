@@ -87,31 +87,30 @@
         </v-card>
       </v-col>
       <v-col sm="4" cols="12" class="pa-0">
-        <Comment></Comment>
+        <comment-view></comment-view>
       </v-col>
       <v-col cols="12">
-        <v-text-field
-          v-model="message"
-          :append-outer-icon="message? 'mdi-send' : ''"
-          outlined
-          clear-icon="mdi-close-circle"
-          clearable
-          label="Comment"
-          type="text"
-          @click:append-outer="sendMessage"
-          @click:clear="clearMessage"
-        ></v-text-field>
+        <comment></comment>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
+import CommentView from '../../components/CommentView.vue'
 import Comment from '../../components/Comment.vue'
-import { findRoomById , updateRoomSprintById } from '~/api/rooms.js'
+import { findRoomById, updateRoomSprintById } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '나의 목표방 | %s'
+    }
+  },
   components: {
+    CommentView,
     Comment
   },
   data: () => ({
@@ -129,7 +128,7 @@ export default {
   }),
   async created() {
     this.roomId = this.$route.params.id
-    this.room.steps = 0;
+    this.room.steps = 0
     let response
     try {
       response = await findRoomById(this.roomId)
@@ -147,10 +146,13 @@ export default {
       try {
         let sprints = {
           sprints: JSON.stringify(this.sprints)
-        };
-        let response = await updateRoomSprintById( this.$route.params.id , sprints );
-      } catch(err) {
-        console.log(err)
+        }
+        let response = await updateRoomSprintById(
+          this.$route.params.id,
+          sprints
+        )
+      } catch (err) {
+        console.error(err)
       }
     },
     changeSprint(n) {

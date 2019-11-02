@@ -48,105 +48,128 @@
 </template>
 
 <script>
-import SprintComp from '~/components/Sprint.vue';
+import SprintComp from '~/components/Sprint.vue'
 import FormData from 'form-data'
 import { getAchieve, putAchieve } from '../api/achieve.js'
 import { createRoom, addImg } from '../api/roomAdd.js'
 
 export default {
-    ayout: 'default',
-    data() {
-        return {
-            model: '',
-            valid: true,
-            title: '',
-            select: true,
-            img : '',
-            items: [
-                {text:'공개',value:true},
-                {text:'비공개',value:false}
-            ],
-            todoItems:this.$store.state.roomAdd.room.sprint,
-            rules: {
-            minLength: (len) => (v) =>
-                (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
-            maxLength: (len) => (v) =>
-                (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`,
-            }
-        }
-    },
-    components: {
-        SprintComp
-    },
-    methods: {
-      setImg(e){
-        this.img = e;
-      },
-      sprintCnt(cnt){
-        const room = {sprint:[]};
-        for(let i=0;i<cnt;i++){
-          room.sprint.push(
-            [
-              [{ todo: '', flag: false }],
-              [{ todo: '', flag: false }],
-              [{ todo: '', flag: false }],
-              [{ todo: '', flag: false }],
-              [{ todo: '', flag: false }],
-              [{ todo: '', flag: false }],
-              [{ todo: '', flag: false }]
-            ]
-          )
-        }
-        this.$store.commit('roomAdd/setRoom',room);
-        this.todoItems = this.$store.state.roomAdd.room.sprint;
-      },
-      async send(){
-        const room = {title:"",public:true,sprint:this.$store.state.roomAdd.room.sprint};
-        room.title = this.title;
-        room.public = this.select;
-        this.$store.commit('roomAdd/setRoom',room);
-        const roomJson = this.$store.state.roomAdd.room;
-        
-        let img = new FormData();
-        let imgName = null;
-        if(this.img!==''){
-          img.append('file', this.img, this.img.fileName);
-          await addImg(img).then(({data}) => {
-            imgName = "/images/"+data.fileName;
-          });
-        }
-
-        let achieveData = {};
-        await getAchieve(this.$session.get("account").id).then(({data}) => {
-          achieveData = data;
-        });
-        achieveData.modelRoom += 1;
-        await putAchieve(achieveData);
-        
-        
-        await createRoom({"email": this.$session.get('account').email,"roomData": JSON.stringify(roomJson), "img":imgName}).then(({data}) => {
-          if(data){ 
-            this.$store.commit('modal/setModalData',{header:"등록 성공",body:"방이 생성되었습니다.",img:""});
-            this.$store.commit('achievement/setShowModal',true);
-          }else{
-            this.$store.commit('modal/setModalData',{header:"등록 실패",body:"방 생성을 실패하였습니다.",img:""});
-            this.$store.commit('achievement/setShowModal',true);
-          }
-        }).catch(error => {
-          console.error(error)
-        });
-        
-        this.$router.push('/MainPage');
-
-        const achieveModal = this.$store.state.achievement.makerAchieve;
-        achieveModal.forEach(element => {
-          if(element.number == achieveData.modelRoom){
-            this.$store.commit('modal/setModalData',{header:element.name,body:"방 생성 성공!! \n 업적을 취득하였습니다.",img:element.img});
-            this.$store.commit('achievement/setShowModal',true);
-          }
-        });
+  layout: 'default',
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '방생성 | %s'
+    }
+  },
+  data() {
+    return {
+      model: '',
+      valid: true,
+      title: '',
+      select: true,
+      img: '',
+      items: [{ text: '공개', value: true }, { text: '비공개', value: false }],
+      todoItems: this.$store.state.roomAdd.room.sprint,
+      rules: {
+        minLength: (len) => (v) =>
+          (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
+        maxLength: (len) => (v) =>
+          (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`
       }
     }
+  },
+  components: {
+    SprintComp
+  },
+  methods: {
+    setImg(e) {
+      this.img = e
+    },
+    sprintCnt(cnt) {
+      const room = { sprint: [] }
+      for (let i = 0; i < cnt; i++) {
+        room.sprint.push([
+          [{ todo: '', flag: false }],
+          [{ todo: '', flag: false }],
+          [{ todo: '', flag: false }],
+          [{ todo: '', flag: false }],
+          [{ todo: '', flag: false }],
+          [{ todo: '', flag: false }],
+          [{ todo: '', flag: false }]
+        ])
+      }
+      this.$store.commit('roomAdd/setRoom', room)
+      this.todoItems = this.$store.state.roomAdd.room.sprint
+    },
+    async send() {
+      const room = {
+        title: '',
+        public: true,
+        sprint: this.$store.state.roomAdd.room.sprint
+      }
+      room.title = this.title
+      room.public = this.select
+      this.$store.commit('roomAdd/setRoom', room)
+      const roomJson = this.$store.state.roomAdd.room
+
+      let img = new FormData()
+      let imgName = null
+      if (this.img !== '') {
+        img.append('file', this.img, this.img.fileName)
+        await addImg(img).then(({ data }) => {
+          imgName = '/images/' + data.fileName
+        })
+      }
+
+      let achieveData = {}
+      await getAchieve(this.$session.get('account').id).then(({ data }) => {
+        achieveData = data
+      })
+      achieveData.modelRoom += 1
+      await putAchieve(achieveData)
+
+      await createRoom({
+        email: this.$session.get('account').email,
+        roomData: JSON.stringify(roomJson),
+        img: imgName
+      })
+        .then(({ data }) => {
+          if (data) {
+            this.$store.commit('modal/setModalData', {
+              header: '등록 성공',
+              body: '방이 생성되었습니다.',
+              img: ''
+            })
+            this.$store.commit('achievement/setShowModal', true)
+          } else {
+            this.$store.commit('modal/setModalData', {
+              header: '등록 실패',
+              body: '방 생성을 실패하였습니다.',
+              img: ''
+            })
+            this.$store.commit('achievement/setShowModal', true)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+
+      this.$router.push('/MainPage')
+
+      const achieveModal = this.$store.state.achievement.makerAchieve
+      achieveModal.forEach((element) => {
+        if (element.number == achieveData.modelRoom) {
+          this.$store.commit('modal/setModalData', {
+            header: element.name,
+            body: '방 생성 성공!! \n 업적을 취득하였습니다.',
+            img: element.img
+          })
+          this.$store.commit('achievement/setShowModal', true)
+        }
+      })
+    }
+  }
 }
 </script>
 
@@ -164,7 +187,7 @@ export default {
 .container {
   padding: 0;
 }
-.v-btn-toggle{
+.v-btn-toggle {
   width: 100%;
 }
 .cardSetting {

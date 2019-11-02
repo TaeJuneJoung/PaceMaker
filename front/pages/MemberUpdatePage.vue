@@ -74,23 +74,26 @@
 </template>
 
 <script>
-import { putUser, updatePass } from '../api/index.js';
+import { putUser, updatePass } from '../api/index.js'
 import FormData from 'form-data'
 import { addImg } from '../api/roomAdd.js'
 
 export default {
   layout: 'default',
-  components: {
-     
-	},
-	created() {
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '회원수정 | %s'
+    }
+  },
+  created() {
     this.memberUpdate
   },
-  mounted(){
-    this.email = this.$session.get("account").email
-    this.nickname = this.$session.get("account").nickname
-    this.checkboxAlarm = this.$session.get("account").alarmFlag
-
+  mounted() {
+    this.email = this.$session.get('account').email
+    this.nickname = this.$session.get('account').nickname
+    this.checkboxAlarm = this.$session.get('account').alarmFlag
   },
   data() {
     return {
@@ -114,40 +117,56 @@ export default {
           (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
         maxLength: (len) => (v) =>
           (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`,
-        profile: (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!'
+        profile: (value) =>
+          !value ||
+          value.size < 2000000 ||
+          'Avatar size should be less than 2 MB!'
       }
     }
   },
   methods: {
-    setImg(e){
-      this.img = e;
+    setImg(e) {
+      this.img = e
     },
     async memberUpdate() {
       if (this.$refs.updateform) {
-        let img = new FormData();
-        let imgName = null;
-        if(this.img!==''){
-          img.append('file', this.img, this.img.fileName);
-          await addImg(img).then(({data}) => {
-            imgName = "/images/"+data.fileName;
-          });
+        let img = new FormData()
+        let imgName = null
+        if (this.img !== '') {
+          img.append('file', this.img, this.img.fileName)
+          await addImg(img).then(({ data }) => {
+            imgName = '/images/' + data.fileName
+          })
         }
-        const userData = {"email": this.email, "alarmFlag": this.checkboxAlarm ,"nickname": this.nickname, "img": imgName }
+        const userData = {
+          email: this.email,
+          alarmFlag: this.checkboxAlarm,
+          nickname: this.nickname,
+          img: imgName
+        }
         putUser(userData)
           .then((res) => {
-            this.$store.commit('modal/setModalData',{header:"회원 수정",body:"회원정보가 수정되었습니다.",img:""});
-            this.$store.commit('achievement/setShowModal',true);
-            userData["point"] = this.$session.get('account')['point']
-            this.$session.set('account', userData)  
-            this.$router.push("/MemberInfoPage")
+            this.$store.commit('modal/setModalData', {
+              header: '회원 수정',
+              body: '회원정보가 수정되었습니다.',
+              img: ''
+            })
+            this.$store.commit('achievement/setShowModal', true)
+            userData['point'] = this.$session.get('account')['point']
+            this.$session.set('account', userData)
+            this.$router.push('/MemberInfoPage')
           })
-          .catch(err => {
-            this.$store.commit('modal/setModalData',{header:"회원 수정",body:"회원정보가 수정이 실패하였습니다.",img:""});
-            this.$store.commit('achievement/setShowModal',true);
-            this.$router.push("/")
+          .catch((err) => {
+            this.$store.commit('modal/setModalData', {
+              header: '회원 수정',
+              body: '회원정보가 수정이 실패하였습니다.',
+              img: ''
+            })
+            this.$store.commit('achievement/setShowModal', true)
+            this.$router.push('/')
           })
 
-        if(this.password!='' && this.rePassword!=''){
+        if (this.password != '' && this.rePassword != '') {
           updatePass(this.password)
         }
       }
