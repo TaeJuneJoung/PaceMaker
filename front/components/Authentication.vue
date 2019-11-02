@@ -23,8 +23,8 @@
         <v-btn block class="backivory" @click="numValidate">확인</v-btn>
       </template>
     </v-card-text>
-    <v-card-actions class="text-xs-center">
-			<v-btn color="error" nuxt to="/">홈으로</v-btn>
+    <v-card-actions class="justify-end">
+			<v-btn class="homeBtn" color="error" nuxt to="/">홈으로</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -114,3 +114,8 @@ export default {
 }
 </script>
 <style src="assets/color.css"></style>
+<style scoped>
+.homeBtn{
+  margin: 0 9px 0 auto;
+}
+</style>

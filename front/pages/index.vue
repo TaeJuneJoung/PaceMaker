@@ -1,6 +1,6 @@
 <template>
   <v-container justify-center align-center fill-height="true">
-    <v-row justify="center" align="center">
+    <v-row justify="center" align="center" id="maxWidth">
       <v-col sm="5" xs="10">
         <v-card raised class="pa-2 text-center translate member-text-bold">
           <v-flex class="ivory ma-2 headline">Member login</v-flex>
@@ -118,8 +118,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+#maxWidth{
+  max-width: 1200px;
+}
 .v-messages__wrapper {
   font-weight: bold;
+  height: 15px;
+}
+.v-expansion-panel-content__wrap{
+  padding: 0;
 }
 </style>

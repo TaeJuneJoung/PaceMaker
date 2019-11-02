@@ -28,7 +28,7 @@ function putAchieve(achieveData) {
  * return Object
  */
 function getAchieve(userId) {
-	return axios.get(`${config.baseUrl}/userId`)
+	return axios.get(`${config.baseUrl}/${userId}`)
 }
 
 export {

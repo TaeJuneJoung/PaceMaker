@@ -47,19 +47,16 @@
                         <template v-for="(item, i) in sprint[n-1]">
                           <v-list-item
                             :key="`item-${i}`"
-                            :value="item.todo"
                             active-class="deep-purple--text text--accent-4"
                           >
-                            <template v-slot:default="{ active }">
+                            <template>
                               <v-list-item-content>
                                 <v-list-item-title v-text="item.todo"></v-list-item-title>
                               </v-list-item-content>
                               <v-list-item-action>
                                 <v-checkbox
-                                  :input-value="active"
                                   :true-value="item"
                                   color="deep-purple accent-4"
-                                  @click="toggleTodo(n-1, i)"
                                 ></v-checkbox>
                               </v-list-item-action>
                             </template>
@@ -87,8 +84,8 @@
   </v-container>
 </template>
 <script>
-import { mapGetters , mapActions } from 'vuex'
 import { findModelRoomById, deleteRoomById } from '~/api/modelRoom.js'
+import { createRoom } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
@@ -101,21 +98,12 @@ export default {
     day: 0,
 		roomId: 0,
     sprint: 
-    [
-      [ { todo : "aaa0", flag : false } , { todo : "bbb0", flag : true }  , { todo : "ccc0", flag : true }  , { todo : "ddd0", flag : true }  , { todo : "eee0", flag : true } ],
-      [ { todo : "aaa1", flag : false } , { todo : "bbb1", flag : true } ],
-      [ { todo : "aaa2", flag : false } , { todo : "bbb2", flag : true } ],
-      [ { todo : "aaa3", flag : false } , { todo : "bbb3", flag : true } ],
-      [ { todo : "aaa4", flag : false } , { todo : "bbb4", flag : true } ],
-      [ { todo : "aaa5", flag : false } , { todo : "bbb5", flag : true } ],
-      [ { todo : "aaa6", flag : false } , { todo : "bbb6", flag : true } ]
-    ],
+    [],
     room: {},
     roomMaker: ''
   }),
   async created() {
 		this.roomId = this.$route.params.id;
-    this.setRoomId(this.roomId);
     let response;
     try {
       response = await findModelRoomById(this.roomId);
@@ -132,17 +120,28 @@ export default {
     this.roomMaker = this.$session.get('account').id;
   },  
   methods: {
-		...mapActions({
-			setRoomId: 'room/setRoomId'
-		}),
 		changeSprint(n) {
       this.curStep = n;
       this.day = 0;
 			this.sprint = this.room.roomData.sprint[n-1];
     },
-    joinRoom() {
+    async joinRoom() {
+      let data = {
+        title: this.title, steps : this.steps ,currentDay: 0,
+        createDate: new Date(),
+        userId: this.$session.get('account').id,
+        userName: this.$session.get('account').nickname,
+        modelId: this.roomId,
+        roomFlag: this.room.roomData.public,
+        completeFlag: false,
+        sprints: JSON.stringify(this.room.roomData.sprint)
+      }
       
-      //모델 룸 참여
+      try {
+        await createRoom(data);
+      } catch (err) {
+        console.log(err);
+      }
     },
     deleteRoom() {
       if(this.checkUser){
@@ -156,9 +155,6 @@ export default {
     }
   },
   computed: {
-		...mapGetters({
-			getRoomId: 'room/getRoomId'
-    }),
     checkUser() {
       return (this.roomMaker == this.room.userId);
     }

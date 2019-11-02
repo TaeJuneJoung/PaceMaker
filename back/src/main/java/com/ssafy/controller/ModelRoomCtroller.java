@@ -53,6 +53,7 @@ public class ModelRoomCtroller {
         modelRoom.setRoomData(modelRoomInput.getRoomData());
         modelRoom.setUserId(user.getId());
         modelRoom.setImg(modelRoomInput.getImg());
+        modelRoom.setUserCount(modelRoomInput.getUserCount());
         ModelRoom newModelRoom = modelRoomRepository.save(modelRoom);
         if(newModelRoom == null) return false;
         return true;

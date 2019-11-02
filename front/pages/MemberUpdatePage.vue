@@ -53,15 +53,11 @@
                   <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
                 </template>
               </v-checkbox>
-                 <!-- <v-switch
-                    v-model="switch1" color="success"
-                    :label="`알림허용에 동의합니다`"
-                  >
-                  <v-flex class="ivory">PaceMaker에 대한 알림허용에 동의합니다.</v-flex>
-                  </v-switch> -->
+
               <v-file-input
                 :rules="[rules.profile]"
-                accept="image/png, image/jpeg, image/bmp"
+                accept="image/*"
+                @change="setImg"
                 placeholder="Pick an avatar"
                 prepend-icon="mdi-camera"
                 label="Avatar"
@@ -79,6 +75,8 @@
 
 <script>
 import { putUser, updatePass } from '../api/index.js';
+import FormData from 'form-data'
+import { addImg } from '../api/roomAdd.js'
 
 export default {
   layout: 'default',
@@ -86,8 +84,6 @@ export default {
      
 	},
 	created() {
-		// this.nickname = this.$session.get("account").nickname
-    // this.checkboxAlarm = this.$session.get("account").alarmFlag
     this.memberUpdate
   },
   mounted(){
@@ -107,13 +103,10 @@ export default {
       rePasswordShow: false,
       checkboxAlarm: false,
       checkboxAgree: false,
-      isOnlyEmail: false,
-      emailReadOnly: false,
       isOnlyNickname: false,
       nicknameReadOnly: false,
       img: '',
       rules: {
-        email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.',
         password: (v) =>
           /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(v || '') ||
           '비밀번호를 작성하여주세요. 비밀번호는 영문, 숫자, 특수문자를 포함하여야 합니다.',
@@ -121,32 +114,42 @@ export default {
           (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
         maxLength: (len) => (v) =>
           (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`,
-        required: (v) => !!v || '약관에 동의해주세요.',
         profile: (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!'
       }
     }
   },
   methods: {
-    
+    setImg(e){
+      this.img = e;
+    },
     async memberUpdate() {
       if (this.$refs.updateform) {
-        // 계정 생성
-        const userData = {"email": this.email, "alarmFlag": this.checkboxAlarm ,"nickname": this.nickname, "img": this.img }
+        let img = new FormData();
+        let imgName = null;
+        if(this.img!==''){
+          img.append('file', this.img, this.img.fileName);
+          await addImg(img).then(({data}) => {
+            imgName = "/images/"+data.fileName;
+          });
+        }
+        const userData = {"email": this.email, "alarmFlag": this.checkboxAlarm ,"nickname": this.nickname, "img": imgName }
         putUser(userData)
           .then((res) => {
-						userData["point"] = this.$session.get('account')['point']
-            this.$session.set('account', userData) 
+            this.$store.commit('modal/setModalData',{header:"회원 수정",body:"회원정보가 수정되었습니다.",img:""});
+            this.$store.commit('achievement/setShowModal',true);
+            userData["point"] = this.$session.get('account')['point']
+            this.$session.set('account', userData)  
             this.$router.push("/MemberInfoPage")
           })
           .catch(err => {
+            this.$store.commit('modal/setModalData',{header:"회원 수정",body:"회원정보가 수정이 실패하였습니다.",img:""});
+            this.$store.commit('achievement/setShowModal',true);
             this.$router.push("/")
           })
 
         if(this.password!='' && this.rePassword!=''){
           updatePass(this.password)
         }
-
-        console.log("완료")
       }
     },
     nicknameCheck() {

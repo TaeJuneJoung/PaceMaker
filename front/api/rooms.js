@@ -1,18 +1,23 @@
 import axios from 'axios'
 
 const config = {
-	baseUrl: 'http://localhost:8080/api/v1/rooms'
+  baseUrl: 'http://localhost:8080/api/v1/rooms'
 }
 
 async function findRoomById(id) {
-	return await axios.get(`${config.baseUrl}/${id}`)
+  return await axios.get(`${config.baseUrl}/${id}`)
 }
 
-function returnTestRoom() {
-	return {'userId':'15' ,'title':'testRoom','public':false,'sprint':[[[{'todo':'qwerqwer','flag':false}],[{'todo':'qwerqwe','flag':false}],[{'todo':'rqwer','flag':false}],[{'todo':'qwereqwr','flag':false}],[{'todo':'wqerqwer','flag':false}],[{'todo':'qwerqw','flag':false}],[{'todo':'rwrwer','flag':false}]],[[{'todo':'werwer','flag':false}],[{'todo':'werwer','flag':false}],[{'todo':'werwe','flag':false}],[{'todo':'rewr','flag':false}],[{'todo':'erwer','flag':false}],[{'todo':'werw','flag':false}],[{'todo':'werwe','flag':false}]],[[{'todo':'','flag':false}],[{'todo':'','flag':false}],[{'todo':'qwerqwer','flag':false}],[{'todo':'qwerqwer','flag':false}],[{'todo':'qwerqwer','flag':false}],[{'todo':'qwerqw','flag':false}],[{'todo':'rqwer','flag':false}]],[[{'todo':'qwerqwer','flag':false}],[{'todo':'','flag':false}],[{'todo':'','flag':false}],[{'todo':'','flag':false}],[{'todo':'','flag':false}],[{'todo':'','flag':false}],[{'todo':'','flag':false}]]]}
+function createRoom(room) {
+  return axios.post(`${config.baseUrl}`, room)
 }
 
-export {
-  findRoomById,
-  returnTestRoom,
+function findRoomByUserId(id) {
+  return axios.get(`${config.baseUrl}/user/${id}`)
 }
+
+function updateRoomSprintById(id, sprint) {
+  return axios.put(`${config.baseUrl}/sprints/${id}`, sprint)
+}
+
+export { findRoomById, findRoomByUserId, createRoom, updateRoomSprintById }

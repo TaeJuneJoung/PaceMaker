@@ -4,7 +4,7 @@
       <v-col sm="12" cols="12">
         <v-row>
           <template v-for="room in modelRoomList">
-            <v-col v-if="room.roomData.public" :key="room.id" cols="12" lg="4" sm="6">
+            <v-col v-if="room.roomData.public" :key="room.id" cols="12" lg="4" sm="6" xl="3">
               <room :room="room" :limits="6" :load-more="true"></room>
             </v-col>
           </template>
