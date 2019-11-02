@@ -4,8 +4,8 @@
       <v-col cols="12" sm="12">
         <v-card class="pa-2">
           <v-row class="justify-sm-end justify-center pr-sm-4">
-            <v-btn class="mr-2" color="primary" nuxt to="/MemberUpdatePage">회원 수정</v-btn>
-            <v-btn class="ml-2" color="primary" nuxt to="/*">회원 탈퇴</v-btn>
+            <v-btn class="mr-2" color="secondary" nuxt to="/MemberUpdatePage">회원 수정</v-btn>
+            <v-btn class="ml-2" color="error" nuxt to="/*">회원 탈퇴</v-btn>
           </v-row>
           <v-list-item class="grow">
             <v-row>
@@ -72,6 +72,7 @@ export default {
     this.userId = this.$session.get('account').id
     this.nickname = this.$session.get('account').nickname
     this.getUserAchieve()
+    this.userImg = this.$session.get('account').img
   },
   computed: {
     ...mapGetters({ coinAchieve: 'achievement/getCoinAchieve' }),

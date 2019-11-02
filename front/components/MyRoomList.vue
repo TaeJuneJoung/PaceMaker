@@ -2,7 +2,8 @@
   <v-container fluid style="height:100%">
     <v-tabs
       v-model="tab"
-      background-color="accent-4"
+      background-color="#ffbbbb"
+      color="#424242"
       class="elevation-6"
       dark
       grow
@@ -147,13 +148,6 @@ export default {
 .container {
   padding: 0;
 }
-.card-black {
-  background-color: black;
-  color: white;
-}
-.text-gray {
-  color: #666666;
-}
 .room-card-icon {
   color: white;
   font-size: 16px;
@@ -161,10 +155,20 @@ export default {
 }
 a {
   text-decoration: none;
-  color: white;
+  color: #000;
 }
+
+.v-application--is-ltr .v-tab{
+  color: #000 !important;
+}
+
+.v-application a {
+  color: #000;
+  font-weight: bold;
+}
+
 .v-application a:hover {
-  color: #aaa;
+  color: #000;
 }
 .v-card--reveal {
   align-items: center;
