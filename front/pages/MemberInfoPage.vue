@@ -28,11 +28,13 @@
                   </v-col>
                 </v-row>
                 <v-row class="achievePlace">
-                  <span class="achieveEach" v-for="(n, index) in achieveValue" :key="index" @click="modalAchieve(n.name, n.img)">
-                    <v-img
-                      :src="`${n.img}`"
-                      class="achieveImg mx-auto"
-                    />
+                  <span
+                    class="achieveEach"
+                    v-for="(n, index) in achieveValue"
+                    :key="index"
+                    @click="modalAchieve(n.name, n.img)"
+                  >
+                    <v-img :src="`${n.img}`" class="achieveImg mx-auto" />
                   </span>
                 </v-row>
               </v-col>
@@ -56,6 +58,13 @@ import { getAchieve } from '../api/achieve.js'
 
 export default {
   layout: 'default',
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '마이페이지 | %s'
+    }
+  },
   components: {
     MyRoomList
   },
@@ -132,7 +141,7 @@ export default {
   max-height: 20px;
   background-color: #e2e2e2;
 }
-.achieveEach{
+.achieveEach {
   cursor: pointer;
   padding: 10px;
   background: #e2e2e2;

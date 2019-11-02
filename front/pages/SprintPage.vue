@@ -21,7 +21,7 @@
           <v-card class="pa-2 h-100" outlined tile>스프린트 내용</v-card>
         </v-col>
         <v-col cols="4" rows="2" class="pa-2 pl-0">
-            <v-card class="pa-2 h-100" outlined tile>채팅창</v-card>
+          <v-card class="pa-2 h-100" outlined tile>채팅창</v-card>
         </v-col>
       </v-row>
     </template>
@@ -30,16 +30,22 @@
 
 <script>
 export default {
-  layout: 'default'
+  layout: 'default',
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '스프린트 | %s'
+    }
+  }
 }
 </script>
 
 <style scoped>
-  .h-100{
-    height: 100%;
-  }
-  .sprint-height{
-    height: 700px;
-  }
-
+.h-100 {
+  height: 100%;
+}
+.sprint-height {
+  height: 700px;
+}
 </style>

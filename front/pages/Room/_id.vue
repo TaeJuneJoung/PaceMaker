@@ -54,10 +54,7 @@
                                 <v-list-item-title v-text="item.todo"></v-list-item-title>
                               </v-list-item-content>
                               <v-list-item-action>
-                                <v-checkbox
-                                  :true-value="item"
-                                  color="deep-purple accent-4"
-                                ></v-checkbox>
+                                <v-checkbox :true-value="item" color="deep-purple accent-4"></v-checkbox>
                               </v-list-item-action>
                             </template>
                           </v-list-item>
@@ -89,45 +86,51 @@ import { createRoom } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '모델방 | %s'
+    }
+  },
   data: () => ({
     title: '',
-		message: '',
-		steps: 4,
-		curStep: 1,
-		length: 7,
+    message: '',
+    steps: 4,
+    curStep: 1,
+    length: 7,
     day: 0,
-		roomId: 0,
-    sprint: 
-    [],
+    roomId: 0,
+    sprint: [],
     room: {},
     roomMaker: ''
   }),
   async created() {
-		this.roomId = this.$route.params.id;
-    let response;
+    this.roomId = this.$route.params.id
+    let response
     try {
-      response = await findModelRoomById(this.roomId);
-    } catch (err) {
-
-    }
-    this.room = response.data;
+      response = await findModelRoomById(this.roomId)
+    } catch (err) {}
+    this.room = response.data
     this.room.roomData = JSON.parse(this.room.roomData)
-    this.title = this.room.roomData.title;
-    this.sprint = this.room.roomData.sprint[0];
-    this.steps = this.room.roomData.sprint.length;
+    this.title = this.room.roomData.title
+    this.sprint = this.room.roomData.sprint[0]
+    this.steps = this.room.roomData.sprint.length
   },
   mounted() {
-    this.roomMaker = this.$session.get('account').id;
-  },  
+    this.roomMaker = this.$session.get('account').id
+  },
   methods: {
-		changeSprint(n) {
-      this.curStep = n;
-      this.day = 0;
-			this.sprint = this.room.roomData.sprint[n-1];
+    changeSprint(n) {
+      this.curStep = n
+      this.day = 0
+      this.sprint = this.room.roomData.sprint[n - 1]
     },
     async joinRoom() {
       let data = {
-        title: this.title, steps : this.steps ,currentDay: 0,
+        title: this.title,
+        steps: this.steps,
+        currentDay: 0,
         createDate: new Date(),
         userId: this.$session.get('account').id,
         userName: this.$session.get('account').nickname,
@@ -136,18 +139,18 @@ export default {
         completeFlag: false,
         sprints: JSON.stringify(this.room.roomData.sprint)
       }
-      
+
       try {
-        await createRoom(data);
+        await createRoom(data)
       } catch (err) {
-        console.log(err);
+        console.error(err)
       }
     },
     deleteRoom() {
-      if(this.checkUser){
-        if(deleteRoomById(this.roomId)=='err'){
+      if (this.checkUser) {
+        if (deleteRoomById(this.roomId) == 'err') {
           window.alert('오류 : 삭제 실패')
-        }else{
+        } else {
           window.alert('삭제 성공')
           this.$router.push('/MainPage')
         }
@@ -156,7 +159,7 @@ export default {
   },
   computed: {
     checkUser() {
-      return (this.roomMaker == this.room.userId);
+      return this.roomMaker == this.room.userId
     }
   }
 }
