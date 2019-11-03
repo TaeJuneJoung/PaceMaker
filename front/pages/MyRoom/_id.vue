@@ -36,7 +36,7 @@
       <v-col sm="8" cols="12" class="pa-0">
         <v-card outlined>
           <v-row justify="center" align="center">
-            <v-item-group v-model="day" class="shrink mr-6 ml-6" mandatory tag="v-flex">
+            <v-item-group v-model="day" class="shrink mr-4 ml-4" mandatory tag="v-flex">
               <v-item v-for="n in length" :key="n" v-slot:default="{ active, toggle }">
                 <v-btn :input-value="active" icon @click="toggle">
                   <v-icon>mdi-record</v-icon>
@@ -89,7 +89,7 @@
       <v-col sm="4" cols="12" class="pa-0 vh20">
         <comment-view></comment-view>
       </v-col>
-      <v-col cols="12" class="pt-0 pb-0">
+      <v-col cols="12" class="pt-0 pb-0 mt-sm-3">
         <comment></comment>
       </v-col>
     </v-row>
@@ -115,7 +115,6 @@ export default {
   },
   data: () => ({
     model: [],
-    message: '',
     steps: 4,
     curStep: 1,
     length: 7,
@@ -123,7 +122,6 @@ export default {
     roomId: 0,
     sprints: [],
     sprint: [],
-    comments: [],
     room: {}
   }),
   async created() {
@@ -134,7 +132,6 @@ export default {
       response = await findRoomById(this.roomId)
       this.room = response.data
       this.sprints = JSON.parse(this.room.sprints)
-      // console.log(this.room)
       this.sprint = this.sprints[this.room.currentDay]
     } catch (err) {}
   },
@@ -160,17 +157,6 @@ export default {
       this.day = 0
       this.sprint = this.sprints[n - 1]
     },
-    sendMessage() {
-      //axios
-
-      let elem = document.getElementById('scroll-content')
-      let container = document.getElementById('scroll-target')
-      container.scrollTop = Math.floor(elem.offsetHeight)
-      this.clearMessage()
-    },
-    clearMessage() {
-      this.message = ''
-    }
   },
   computed: {
     sprintCompleted() {
@@ -210,27 +196,23 @@ export default {
       // 날짜 계산
       return cur
     },
-    getComments() {
-      //댓글 가져오기
-      return null
-    }
   }
 }
 </script>
 <style scoped>
-.dayText{
+.dayText {
   text-indent: 15px;
 }
-.dayCard{
+.dayCard {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.h-100{
+.h-100 {
   height: 100%;
   padding-top: 0;
   padding-bottom: 0;
 }
-.sprintOverline{
+.sprintOverline {
   font-weight: bold;
   font-size: 0.95rem;
 }
@@ -250,7 +232,7 @@ export default {
   .vh65 {
     height: 40vh;
   }
-  .vh20{
+  .vh20 {
     height: 26vh;
   }
 }

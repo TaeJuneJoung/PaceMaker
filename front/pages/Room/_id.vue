@@ -1,7 +1,12 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="pb-0 mt-10">
     <v-row align="center">
-      <v-col cols="6" class="pa-0">
+      <v-col cols="12" class="pa-0">
+        <v-card outlined class="heightsm">
+          <v-card-title>{{title}}</v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="12" class="pa-0">
         <v-card outlined>
           <v-stepper non-linear>
             <v-stepper-header class="heightsm">
@@ -13,64 +18,60 @@
           </v-stepper>
         </v-card>
       </v-col>
-      <v-col cols="6" class="pa-0">
-        <v-card outlined class="heightsm">
-          <v-card-title>{{title}}</v-card-title>
-        </v-card>
-      </v-col>
     </v-row>
-    <v-row align="center">
+    <v-row>
       <v-col cols="12" class="pa-0">
         <v-card outlined>
-          <v-row align="center" class="vh65 scroll">
-            <v-item-group v-model="day" class="shrink mr-6 ml-6" mandatory tag="v-flex">
+          <v-row justify="center" align="center">
+            <v-item-group v-model="day" class="shrink mr-4 ml-4" mandatory tag="v-flex">
               <v-item v-for="n in length" :key="n" v-slot:default="{ active, toggle }">
-                <div>
-                  <v-btn :input-value="active" icon @click="toggle">
-                    <v-icon>mdi-record</v-icon>
-                  </v-btn>
-                </div>
+                <v-btn
+                  :color="active ? 'primary' : 'grey'"
+                  :input-value="active"
+                  icon
+                  @click="toggle"
+                >
+                  <v-icon>mdi-record</v-icon>
+                </v-btn>
               </v-item>
             </v-item-group>
-            <v-col>
-              <v-window v-model="day" class="elevation-1 mr-5" vertical>
-                <v-window-item v-for="n in length" :key="n">
-                  <v-card>
-                    <v-card-text>
-                      <v-row class="mb-4" align="center">
-                        <strong class="title ml-5">Day {{ n }}</strong>
-                      </v-row>
-                      <v-divider></v-divider>
-                    </v-card-text>
-                    <v-list shaped>
-                      <v-list-item-group multiple>
-                        <template v-for="(item, i) in sprint[n-1]">
-                          <v-list-item
-                            :key="`item-${i}`"
-                            active-class="deep-purple--text text--accent-4"
-                          >
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title v-text="item.todo"></v-list-item-title>
-                              </v-list-item-content>
-                              <v-list-item-action>
-                                <v-checkbox :true-value="item" color="deep-purple accent-4"></v-checkbox>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
-                  </v-card>
-                </v-window-item>
-              </v-window>
-            </v-col>
           </v-row>
         </v-card>
       </v-col>
-      <v-col cols="6" class="pa-0"></v-col>
     </v-row>
+    <v-col cols="12" class="pa-0">
+      <v-row justify="center" class="vh65 scroll">
+        <v-col cols="12" class="h-100">
+          <v-card outlined>
+            <v-window v-model="day" class="elevation-1" vertical>
+              <v-window-item v-for="n in length" :key="n">
+                <v-card-text>
+                  <strong class="title ml-5">Day {{ n }}</strong>
+                  <v-divider></v-divider>
+                </v-card-text>
+                <v-list shaped>
+                  <v-col>
+                    <v-list-item-group multiple>
+                      <template v-for="(item, i) in sprint[n-1]">
+                        <v-list-item :key="`item-${i}`" active-class="primary--text text--accent-4">
+                          <v-list-item-content>
+                            <v-list-item-title v-text="item.todo"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-list-item-group>
+                  </v-col>
+                </v-list>
+              </v-window-item>
+            </v-window>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-col>
     <div class="text-center">
+      <v-btn class="ma-2" color="grey" dark @click="back">
+        <v-icon left>mdi-arrow-left-circle</v-icon>뒤로가기
+      </v-btn>
       <v-btn class="ma-2" color="indigo" dark @click="joinRoom()">
         <v-icon left>mdi-pencil</v-icon>참여하기
       </v-btn>
@@ -155,6 +156,9 @@ export default {
           this.$router.push('/MainPage')
         }
       }
+    },
+    back() {
+      this.$router.push('/MainPage')
     }
   },
   computed: {
@@ -165,6 +169,12 @@ export default {
 }
 </script>
 <style scoped>
+.h-100 {
+  height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 @media screen and (min-width: 769px) {
   .vh65 {
     height: 65vh;
@@ -193,5 +203,9 @@ export default {
 }
 .container {
   padding: 0;
+}
+
+.v-item--active {
+  color: red;
 }
 </style>
