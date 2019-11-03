@@ -9,6 +9,7 @@
     type="text"
     @click:append-outer="sendMessage"
     @click:clear="clearMessage"
+		@keyup.enter="sendMessage"
   ></v-text-field>
 </template>
 
@@ -36,8 +37,7 @@ export default {
       }
       createComment(commentData)
         .then(({ data }) => {
-					console.log(data)
-					// state에 추가
+          this.$store.dispatch('comment/setCommentList', commentData.modelRoomId)
         })
         .catch((error) => {
           console.error(error)
