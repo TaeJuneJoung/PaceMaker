@@ -137,6 +137,9 @@ export default {
   font-weight: bold;
   height: 15px;
 }
+.commet .v-text-field__details{
+  display: none;
+}
 .v-expansion-panel-content__wrap {
   padding: 0;
 }

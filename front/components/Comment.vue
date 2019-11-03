@@ -7,6 +7,7 @@
     clearable
     label="Comment"
     type="text"
+    class="commet"
     @click:append-outer="sendMessage"
     @click:clear="clearMessage"
 		@keyup.enter="sendMessage"

@@ -1,6 +1,5 @@
 <template>
   <v-card outlined class="pa-2">
-    <span class="headline pl-2">COMMENTS</span>
     <v-card class="vh65 scroll" id="scroll-target">
       <v-list three-line id="scroll-content">
         <v-col cols="12">
@@ -50,9 +49,9 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 768px) {
   .vh65 {
-    height: 65vh;
+    height: 69vh;
   }
   .vh25 {
     height: 25vh;
@@ -61,8 +60,14 @@ export default {
     height: 50vh;
   }
 }
+@media screen and (max-width: 767px) {
+  .vh65 {
+    height: 22vh;
+  }
+}
 
 .scroll {
   overflow-y: auto;
 }
+
 </style>
