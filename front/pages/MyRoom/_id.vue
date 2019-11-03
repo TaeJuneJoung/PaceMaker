@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="pb-0">
     <v-row align="center">
       <v-col sm="8" cols="12" class="pa-0">
         <v-card outlined>
@@ -15,7 +15,7 @@
       </v-col>
       <v-col sm="4" cols="12" class="pa-0">
         <v-card outlined class="text-center pb-2 pl-2 pr-2">
-          <span class="overline">전체 달성도</span>
+          <span class="sprintOverline">전체 달성도</span>
           <v-progress-linear
             color="light-blue"
             v-model="entireCompleted"
@@ -25,7 +25,7 @@
           >
             <strong>{{ Math.ceil(entireCompleted) }}%</strong>
           </v-progress-linear>
-          <span class="overline">스프린트 달성도</span>
+          <span class="sprintOverline">스프린트 달성도</span>
           <v-progress-linear color="amber" v-model="sprintCompleted" height="16" reactive striped>
             <strong>{{ Math.ceil(sprintCompleted) }}%</strong>
           </v-progress-linear>
@@ -47,11 +47,11 @@
         </v-card>
         <v-card>
           <v-row justify="center" align="center" class="vh65">
-            <v-col cols="8">
-              <v-window v-model="day" class="elevation-1" vertical>
-                <v-window-item v-for="n in length" :key="n">
-                  <v-col cols="12" class="pa-0">
-                    <v-card dark class="pa-2">
+            <v-col cols="12" class="h-100">
+              <v-window v-model="day" class="elevation-1 h-100" vertical>
+                <v-window-item v-for="n in length" :key="n" class="h-100">
+                  <v-col cols="12" class="pa-0 h-100">
+                    <v-card dark class="pa-2 h-100 dayCard">
                       <v-row align="center">
                         <strong class="title ml-5">Day {{ n }}</strong>
                       </v-row>
@@ -67,10 +67,10 @@
                           @click="toggleTodo(n-1, index)"
                         >
                           <v-row justify="center" align="center">
-                            <v-col class="pa-0" sm="10" cols="9">
+                            <v-col class="pa-0 dayText" sm="11" cols="10">
                               <strong>{{todo.todo}}</strong>
                             </v-col>
-                            <v-col class="pa-0" sm="1" cols="2" justify="end">
+                            <v-col class="pa-0 text-center" sm="1" cols="2" justify="end">
                               <v-icon
                                 right
                               >{{ todo.flag ? 'mdi-check-circle' : 'mdi-radiobox-blank' }}</v-icon>
@@ -86,10 +86,10 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col sm="4" cols="12" class="pa-0">
+      <v-col sm="4" cols="12" class="pa-0 vh20">
         <comment-view></comment-view>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" class="pt-0 pb-0">
         <comment></comment>
       </v-col>
     </v-row>
@@ -218,9 +218,25 @@ export default {
 }
 </script>
 <style scoped>
-@media screen and (min-width: 769px) {
+.dayText{
+  text-indent: 15px;
+}
+.dayCard{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.h-100{
+  height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.sprintOverline{
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+@media screen and (min-width: 768px) {
   .vh65 {
-    height: 65vh;
+    height: 66.7vh;
   }
   .vh25 {
     height: 25vh;
@@ -230,7 +246,13 @@ export default {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
+  .vh65 {
+    height: 40vh;
+  }
+  .vh20{
+    height: 26vh;
+  }
 }
 
 .scroll {
