@@ -6,10 +6,10 @@
         <v-col cols="12">
           <v-row v-for="(comment, index) in getCommentList" :key="index">
             <v-col cols="12" :class="comment.nickname == nickname ? 'blue--text' : 'black--text'">
-              {{comment.nickname}}: {{comment.context}}
-              <v-col class="text-center p-0">
+              <b>{{comment.nickname}}</b>: {{comment.context}}
+              <v-flex class="text-right">
                 <small>{{ getCommentDate[index] }}</small>
-              </v-col>
+              </v-flex>
             </v-col>
           </v-row>
         </v-col>
