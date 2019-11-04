@@ -7,22 +7,36 @@
       <v-container>
         <v-flex class="headline" ma-3>
           <nuxt-link to="/">
-            <v-icon icon>mdi-run</v-icon>
-            {{ title }}
+            <img src="/achieve/maker04.svg" id="mainIcon">
+            <span id="mainTitle">{{ title }}</span>
           </nuxt-link>
         </v-flex>
-        <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
-        <v-btn text @click="logout">로그아웃</v-btn>
+        <!-- <v-btn text nuxt to="/MemberInfoPage">마이 페이지</v-btn>
+        <v-btn text @click="logout">로그아웃</v-btn> -->
       </v-container>
       <v-list>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+        <div  v-for="(item, i) in items" :key="i">
+          <div v-if="item.event">
+            <v-list-item :to="item.to" router exact @click="logout">
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"/>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+          <div v-else>
+            <v-list-item :to="item.to" router exact>
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"/>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-content class="mx-6">
@@ -58,13 +72,24 @@ export default {
       items: [
         {
           icon: 'mdi-home',
-          title: 'Home',
+          title: '홈',
           to: '/MainPage'
+        },
+        {
+          icon: 'mdi-account',
+          title: '마이 페이지',
+          to: '/MemberInfoPage'
         },
         {
           icon: 'mdi-apps',
           title: '방 생성',
           to: '/RoomAdd'
+        },
+        {
+          icon: 'mdi-logout',
+          title: '로그아웃',
+          to: '/',
+          event: 'logout'
         }
       ],
       title: 'PaceMaker'
@@ -100,7 +125,22 @@ export default {
 </script>
 
 <style src="../assets/color.css"></style>
+
 <style scoped>
+#mainIcon{
+  width: 60px;
+  position: absolute;
+  left: 8px;
+  top: 19px;
+}
+#mainTitle{
+  position: relative;
+  left: 50px;
+  top: 8px;
+  font-size: 28px;
+  font-weight: 500;
+  text-shadow: 0px 0px 6px #6bb5d2;
+}
 .menu-icon {
   width: 40px;
   height: 40px;

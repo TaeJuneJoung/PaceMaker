@@ -221,7 +221,6 @@ export default {
             }
           })
           .catch((error) => {
-            console.log(this.nickname)
             console.error(error)
           })
       }

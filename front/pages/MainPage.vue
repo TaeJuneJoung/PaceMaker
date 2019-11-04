@@ -21,22 +21,33 @@ import Room from '~/components/Room.vue'
 export default {
   layout: 'default',
   middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: 'Main | %s'
+    }
+  },
   components: {
     Room
   },
   data: () => ({
+    userId: 0,
+    nickname: '',
     modelRoomList: []
   }),
   async created() {
-    let response = await getAllModelRoom();
-    this.modelRoomList = response.data;
-    this.modelRoomList.forEach(room => {
+    let response = await getAllModelRoom()
+    this.modelRoomList = response.data
+    this.modelRoomList.forEach((room) => {
       room.roomData = JSON.parse(room.roomData)
-    });
-  }, 
-  computed: {
-
+    })
   },
+  mounted() {
+    const user = this.$session.get('account')
+    this.userId = user.id
+    this.nickname = user.nickname
+  },
+  computed: {}
 }
 </script>
 

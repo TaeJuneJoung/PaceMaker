@@ -4,8 +4,8 @@
       <v-col cols="12" sm="12">
         <v-card class="pa-2">
           <v-row class="justify-sm-end justify-center pr-sm-4">
-            <v-btn class="mr-2" color="primary" nuxt to="/MemberUpdatePage">회원 수정</v-btn>
-            <v-btn class="ml-2" color="primary" nuxt to="/*">회원 탈퇴</v-btn>
+            <v-btn class="mr-2" color="secondary" nuxt to="/MemberUpdatePage">회원 수정</v-btn>
+            <v-btn class="ml-2" color="error" nuxt to="/*">회원 탈퇴</v-btn>
           </v-row>
           <v-list-item class="grow">
             <v-row>
@@ -28,11 +28,13 @@
                   </v-col>
                 </v-row>
                 <v-row class="achievePlace">
-                  <span class="achieveEach" v-for="(n, index) in achieveValue" :key="index" @click="modalAchieve(n.name, n.img)">
-                    <v-img
-                      :src="`${n.img}`"
-                      class="achieveImg mx-auto"
-                    />
+                  <span
+                    class="achieveEach"
+                    v-for="(n, index) in achieveValue"
+                    :key="index"
+                    @click="modalAchieve(n.name, n.img)"
+                  >
+                    <v-img :src="`${n.img}`" class="achieveImg mx-auto" />
                   </span>
                 </v-row>
               </v-col>
@@ -56,6 +58,13 @@ import { getAchieve } from '../api/achieve.js'
 
 export default {
   layout: 'default',
+  middleware: 'auth',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '마이페이지 | %s'
+    }
+  },
   components: {
     MyRoomList
   },
@@ -72,6 +81,7 @@ export default {
     this.userId = this.$session.get('account').id
     this.nickname = this.$session.get('account').nickname
     this.getUserAchieve()
+    this.userImg = this.$session.get('account').img
   },
   computed: {
     ...mapGetters({ coinAchieve: 'achievement/getCoinAchieve' }),
@@ -131,7 +141,7 @@ export default {
   max-height: 20px;
   background-color: #e2e2e2;
 }
-.achieveEach{
+.achieveEach {
   cursor: pointer;
   padding: 10px;
   background: #e2e2e2;
