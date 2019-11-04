@@ -63,7 +63,6 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'login',
-  middleware: 'auth',
   head() {
     return {
       title: 'PaceMaker',

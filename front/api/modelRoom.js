@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const config = {
-	baseUrl: 'http://localhost:8080/api/v1/modelrooms'
+	baseUrl: 'http://0.0.0.0:8080/api/v1/modelrooms'
 }
 
 function getAllModelRoom() {

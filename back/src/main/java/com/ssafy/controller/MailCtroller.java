@@ -61,7 +61,7 @@ public class MailCtroller {
             // 4. 메일 제목과 본문
             mailSender.setSubject("[PaceMaker] 회원가입 인증 메일");
             mailSender.setText(new StringBuffer().append("<h1>회원가입 인증메일입니다.</h1>")
-                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://localhost:8080/api/v1/auth/?email=" + userEmail)
+                    .append("<p>밑의 링크를 클릭하면 메일이 인증 됩니다.</p>").append("<a href='http://0.0.0.0:8080/api/v1/auth/?email=" + userEmail)
                     .append("&hash=" + hash + "' target='_blank'>메일 인증 링크</a>")
                     .toString()
             );
@@ -77,7 +77,7 @@ public class MailCtroller {
     @GetMapping("/auth/")
     public String authMail(@RequestParam("email") String userEmail, @RequestParam("hash") String userHash) {
         AuthMail auth = authMailRep.findByEmail(userEmail);
-        String url = "http://localhost:3000/";
+        String url = "http://0.0.0.0:3000/";
         if (auth.getAuth().equals(userHash)) {
             User user = userRepository.findByEmail(userEmail);
             user.setAuthenticationFlag(true);
