@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const config = {
-	baseUrl: 'http://0.0.0.0:8080/api/v1/comments'
+  baseUrl: 'http://13.124.241.124:8080/api/v1/comments'
 }
 
 /**
@@ -10,7 +10,7 @@ const config = {
  * return Object
  */
 function getComment(modelRoomId) {
-	return axios.get(`${config.baseUrl}/model/${modelRoomId}`)
+  return axios.get(`${config.baseUrl}/model/${modelRoomId}`)
 }
 
 /**
@@ -19,10 +19,7 @@ function getComment(modelRoomId) {
  * return Object
  */
 function createComment(commentData) {
-	return axios.post(`${config.baseUrl}`, commentData)
+  return axios.post(`${config.baseUrl}`, commentData)
 }
 
-export {
-	getComment,
-	createComment,
-}
+export { getComment, createComment }
