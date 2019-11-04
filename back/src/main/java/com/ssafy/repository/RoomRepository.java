@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findByUserId(Long userId);
+    Long countByUserIdAndModelId(Long userId, Long modelId);
 }
