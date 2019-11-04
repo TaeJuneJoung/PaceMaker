@@ -1,16 +1,16 @@
 import axios from 'axios'
 
 const config = {
-	baseUrl: 'http://0.0.0.0:8080/api/v1/usersAchieve'
+  baseUrl: 'http://13.124.241.124:8080/api/v1/usersAchieve'
 }
 
 /**
  * 가입시, 업적데이터 생성
- * param {} userId 
+ * param {} userId
  * return Object
  */
 function createAchieve(userId) {
-	return axios.post(`${config.baseUrl}`, {"userId": userId})
+  return axios.post(`${config.baseUrl}`, { userId: userId })
 }
 
 /**
@@ -19,7 +19,7 @@ function createAchieve(userId) {
  * return Object
  */
 function putAchieve(achieveData) {
-	return axios.put(`${config.baseUrl}`, achieveData)
+  return axios.put(`${config.baseUrl}`, achieveData)
 }
 
 /**
@@ -28,11 +28,7 @@ function putAchieve(achieveData) {
  * return Object
  */
 function getAchieve(userId) {
-	return axios.get(`${config.baseUrl}/${userId}`)
+  return axios.get(`${config.baseUrl}/${userId}`)
 }
 
-export {
-	createAchieve,
-	putAchieve,
-	getAchieve
-}
+export { createAchieve, putAchieve, getAchieve }
