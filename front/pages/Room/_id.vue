@@ -83,7 +83,7 @@
 </template>
 <script>
 import { findModelRoomById, deleteRoomById } from '~/api/modelRoom.js'
-import { createRoom } from '~/api/rooms.js'
+import { createRoom, countByUserIdAndModelId } from '~/api/rooms.js'
 
 export default {
   layout: 'default',
@@ -128,6 +128,12 @@ export default {
       this.sprint = this.room.roomData.sprint[n - 1]
     },
     async joinRoom() {
+      let count = await countByUserIdAndModelId(this.$session.get('account').id , this.roomId);
+      if(count.data > 0) {
+        window.alert("이미 진행중인 스프린트입니다.");
+        return;
+      }
+
       let data = {
         title: this.title,
         steps: this.steps,

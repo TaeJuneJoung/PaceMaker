@@ -6,7 +6,7 @@
           <v-stepper non-linear>
             <v-stepper-header>
               <template v-for="n in room.steps">
-                <v-stepper-step editable :step="n" :key="n" @click="changeSprint(n)">{{n}} 주차</v-stepper-step>
+                <v-stepper-step editable :step="curStep" :key="n" @click="changeSprint(n)">{{n}} 주차</v-stepper-step>
                 <v-divider v-if="n != steps" :key="`${n}-divider`"></v-divider>
               </template>
             </v-stepper-header>
@@ -18,7 +18,7 @@
           <span class="sprintOverline">전체 달성도</span>
           <v-progress-linear
             color="light-blue"
-            v-model="entireCompleted"
+            :value="entireCompleted"
             height="16"
             reactive
             striped
@@ -26,7 +26,7 @@
             <strong>{{ Math.ceil(entireCompleted) }}%</strong>
           </v-progress-linear>
           <span class="sprintOverline">스프린트 달성도</span>
-          <v-progress-linear color="amber" v-model="sprintCompleted" height="16" reactive striped>
+          <v-progress-linear color="amber" :value="sprintCompleted" height="16" reactive striped>
             <strong>{{ Math.ceil(sprintCompleted) }}%</strong>
           </v-progress-linear>
         </v-card>
@@ -78,6 +78,25 @@
                           </v-row>
                         </v-card>
                       </template>
+                      <v-card light flat class="pa-2 ma-1">
+                        <v-row justify="center" alingn="center">
+                          <v-col class="pa-0" cols="10" sm="11">
+                            <v-text-field
+                              dense
+                              class="ml-4"
+                              hide-details
+                              label="할일 추가"
+                              outlined
+                              v-model="todoinput"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col class="pa-0 text-center" cols="2" sm="1" justify="end">
+                            <v-btn text icon color="primary" @click="addTodo(n-1)">
+                              <v-icon>mdi-plus-circle</v-icon>
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                      </v-card>
                     </v-card>
                   </v-col>
                 </v-window-item>
@@ -114,8 +133,8 @@ export default {
     Comment
   },
   data: () => ({
+    todoinput: '',
     model: [],
-    steps: 4,
     curStep: 1,
     length: 7,
     day: 0,
@@ -138,7 +157,6 @@ export default {
   methods: {
     async toggleTodo(day, idx) {
       this.sprint[day][idx].flag = !this.sprint[day][idx].flag
-      console.log(this.sprint[day][idx].flag)
       //axios todo 한걸로 체크
       try {
         let sprints = {
@@ -157,6 +175,25 @@ export default {
       this.day = 0
       this.sprint = this.sprints[n - 1]
     },
+    async addTodo(day) {
+      let todo = {
+        todo: this.todoinput,
+        flag: false
+      }
+      this.sprint[day].push(todo);
+      this.todoinput = '';
+      let sprints = {
+        sprints: JSON.stringify(this.sprints)
+      }
+      try {
+        let respons = await updateRoomSprintById(
+          this.$route.params.id,
+          sprints
+        )
+      } catch(err) {
+        console.log(err);
+      }
+    }
   },
   computed: {
     sprintCompleted() {
@@ -194,7 +231,18 @@ export default {
         sprint: 0
       }
       // 날짜 계산
-      return cur
+      let date = new Date();
+      let sdate = new Date(this.room.roomCreateDate);
+      let dif = parseInt((date - sdate)/(24*60*60*1000));
+      let week = Math.floor(dif/7);
+
+      if(week > this.room.steps) {
+        
+      } else {
+        cur.day = dif%7;
+        cur.sprint = Math.floor(dif/7);
+        return cur;
+      }
     },
   }
 }
