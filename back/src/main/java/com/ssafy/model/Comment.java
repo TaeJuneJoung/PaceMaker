@@ -17,6 +17,9 @@ class Comment {
     @Column(name = "user_nickname", nullable = false)
     private String nickname;
 
+    @Column(name = "user_id",nullable = false)
+    private Long userId;
+
     @Column(name = "context", nullable = false)
     private String context;
 
