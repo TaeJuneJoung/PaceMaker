@@ -30,6 +30,11 @@ public class RoomCtroller {
         return roomRepository.findAll();
     }
 
+    @GetMapping("/rooms/user/{uid}/modelroom/{rid}")
+    public Long getRoomByUserIdAndModelRoomId(@PathVariable(value ="uid") Long userId, @PathVariable(value ="rid") Long roomId) {
+        return roomRepository.countByUserIdAndModelId(userId, roomId);
+    }
+
     @GetMapping("/rooms/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable(value = "id") Long roomId) throws ResourceNotFoundException{
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found for this id :: " + roomId));
