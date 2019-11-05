@@ -157,7 +157,10 @@ export default {
         await plusModelRoomUserCount(this.roomId);
       } catch (err) {
         console.error(err)
+        window.alert('오류 : 참가 실패')
       }
+      window.alert('방에 참가했습니다.');
+      this.$router.push('/MemberInfoPage')
     },
     deleteRoom() {
       if (this.checkUser) {
