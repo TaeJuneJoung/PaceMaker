@@ -38,33 +38,33 @@ export default {
       }
       createComment(commentData)
         .then(({ data }) => {
-          this.$store.dispatch('comment/setCommentList', commentData.modelRoomId)
-          let achieveData = {}
-          await getAchieve(this.$session.get('account').id).then(({ data }) => {
-            achieveData = data
-          })
-          achieveData.comment += 1
-          await putAchieve(achieveData)
-
-          const achieveModal = this.$store.state.achievement.commentAchieve;
-          achieveModal.forEach((element) => {
-            if (element.number == achieveData.comment) {
-              this.$store.commit('modal/setModalData', {
-                header: element.name,
-                body: '댓글 등록 성공!! \n 업적을 취득하였습니다.',
-                img: element.img
-              })
-              this.$store.commit('achievement/setShowModal', true)
-            }
-          })
         })
         .catch((error) => {
           console.error(error)
         })
-      let elem = document.getElementById('scroll-content')
-      let container = document.getElementById('scroll-target')
-      container.scrollTop = Math.floor(elem.offsetHeight)
-      this.clearMessage()
+        this.$store.dispatch('comment/setCommentList', commentData.modelRoomId)
+        let achieveData = {}
+        await getAchieve(this.$session.get('account').id).then(({ data }) => {
+          achieveData = data
+        })
+        achieveData.comment += 1
+        await putAchieve(achieveData)
+
+        const achieveModal = this.$store.state.achievement.commentAchieve;
+        achieveModal.forEach((element) => {
+          if (element.number == achieveData.comment) {
+            this.$store.commit('modal/setModalData', {
+              header: element.name,
+              body: '댓글 등록 성공!! \n 업적을 취득하였습니다.',
+              img: element.img
+            })
+            this.$store.commit('achievement/setShowModal', true)
+          }
+        })
+        let elem = document.getElementById('scroll-content')
+        let container = document.getElementById('scroll-target')
+        container.scrollTop = Math.floor(elem.offsetHeight)
+        this.clearMessage()
     },
     clearMessage() {
       this.message = ''
