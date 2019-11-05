@@ -118,6 +118,7 @@
 import CommentView from '../../components/CommentView.vue'
 import Comment from '../../components/Comment.vue'
 import { findRoomById, updateRoomSprintById } from '~/api/rooms.js'
+import { getAchieve, putAchieve } from '../api/achieve.js'
 
 export default {
   layout: 'default',
@@ -165,8 +166,35 @@ export default {
   },
   methods: {
     async toggleTodo(day, idx) {
-      this.sprint[day][idx].flag = !this.sprint[day][idx].flag
       //axios todo 한걸로 체크
+      if(this.sprint[day][idx].flag){
+        let achieveData = {}
+        await getAchieve(this.$session.get('account').id).then(({ data }) => {
+          achieveData = data
+        })
+        achieveData.coin += 10
+        await putAchieve(achieveData)
+        this.sprint[day][idx].flag = !this.sprint[day][idx].flag
+      } else {
+        let achieveData = {}
+        await getAchieve(this.$session.get('account').id).then(({ data }) => {
+          achieveData = data
+        })
+        achieveData.coin -= 10
+        await putAchieve(achieveData)
+        this.sprint[day][idx].flag = !this.sprint[day][idx].flag
+      }
+      const achieveModal = this.$store.state.achievement.coinAchieve
+      achieveModal.forEach((element) => {
+        if (element.number == achieveData.coin) {
+          this.$store.commit('modal/setModalData', {
+            header: element.name,
+            body: '코인 획득!! \n 업적을 취득하였습니다.',
+            img: element.img
+          })
+          this.$store.commit('achievement/setShowModal', true)
+        }
+      })
       try {
         let sprints = {
           sprints: JSON.stringify(this.sprints)

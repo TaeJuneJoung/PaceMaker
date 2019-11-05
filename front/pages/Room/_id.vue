@@ -163,6 +163,25 @@ export default {
       try {
         await createRoom(data)
         await plusModelRoomUserCount(this.roomId);
+
+        let achieveData = {}
+        await getAchieve(this.$session.get('account').id).then(({ data }) => {
+          achieveData = data
+        })
+        achieveData.room += 1
+        await putAchieve(achieveData)
+
+        const achieveModal = this.$store.state.achievement.roomAchieve;
+        achieveModal.forEach((element) => {
+          if (element.number == achieveData.room) {
+            this.$store.commit('modal/setModalData', {
+              header: element.name,
+              body: '방 참여 성공!! \n 업적을 취득하였습니다.',
+              img: element.img
+            })
+            this.$store.commit('achievement/setShowModal', true)
+          }
+        })
       } catch (err) {
         console.error(err)
         this.modalOn('에러' , '참가 실패');
