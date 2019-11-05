@@ -132,7 +132,8 @@ export default {
       await createRoom({
         email: this.$session.get('account').email,
         roomData: JSON.stringify(roomJson),
-        img: imgName
+        img: imgName,
+        userCount: 0
       })
         .then(({ data }) => {
           if (data) {

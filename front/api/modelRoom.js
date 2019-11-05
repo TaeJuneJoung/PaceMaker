@@ -20,9 +20,14 @@ function findModelRoomByUserId(id) {
   return axios.get(`${config.baseUrl}/user/${id}`)
 }
 
+function plusModelRoomUserCount(id) {
+  return axios.put(`${config.baseUrl}/plusUserCount/${id}`)
+}
+
 export {
   getAllModelRoom,
   findModelRoomById,
   deleteRoomById,
-  findModelRoomByUserId
+  findModelRoomByUserId,
+  plusModelRoomUserCount
 }

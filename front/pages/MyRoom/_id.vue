@@ -3,11 +3,11 @@
     <v-row align="center">
       <v-col sm="8" cols="12" class="pa-0">
         <v-card outlined>
-          <v-stepper non-linear>
+          <v-stepper non-linear v-model="getCurrentDay.sprint">
             <v-stepper-header>
               <template v-for="n in room.steps">
-                <v-stepper-step editable :step="curStep" :key="n" @click="changeSprint(n)">{{n}} 주차</v-stepper-step>
-                <v-divider v-if="n != steps" :key="`${n}-divider`"></v-divider>
+                <v-stepper-step editable :step="n" :key="n" @click="changeSprint(n)">{{n}} 주차</v-stepper-step>
+                <v-divider v-if="n != room.steps" :key="`${n}-divider`"></v-divider>
               </template>
             </v-stepper-header>
           </v-stepper>
@@ -141,18 +141,27 @@ export default {
     roomId: 0,
     sprints: [],
     sprint: [],
-    room: {}
+    room: {},
+    date: {
+      day:0,
+      sprint:0
+    }
   }),
   async created() {
     this.roomId = this.$route.params.id
     this.room.steps = 0
     let response
     try {
-      response = await findRoomById(this.roomId)
-      this.room = response.data
-      this.sprints = JSON.parse(this.room.sprints)
-      this.sprint = this.sprints[this.room.currentDay]
-    } catch (err) {}
+      response = await findRoomById(this.roomId);
+      this.room = response.data;
+      this.sprints = JSON.parse(this.room.sprints);
+      this.sprint = this.sprints[this.room.currentDay];
+      this.date = this.getCurrentDay();
+      this.changeSprint(this.getCurrentDay().sprint);
+      this.day = this.getCurrentDay1.day;
+    } catch (err) {
+
+    }
   },
   methods: {
     async toggleTodo(day, idx) {
@@ -193,7 +202,24 @@ export default {
       } catch(err) {
         console.log(err);
       }
-    }
+    },
+    getCurrentDay() {
+      let cur = {
+        day: 0,
+        sprint: 0
+      }
+      // 날짜 계산
+      let date = new Date();
+      let sdate = new Date(this.room.createDate);
+      let dif = parseInt((date - sdate)/(24*60*60*1000));
+      let week = Math.floor(dif/7);
+      if(week <= this.room.steps) {
+        cur.sprint = week +1
+        cur.day = dif%8;
+      }
+      return cur;
+
+    },
   },
   computed: {
     sprintCompleted() {
@@ -236,13 +262,11 @@ export default {
       let dif = parseInt((date - sdate)/(24*60*60*1000));
       let week = Math.floor(dif/7);
 
-      if(week > this.room.steps) {
-        
-      } else {
+      if(week <= this.room.steps) {
+        cur.sprint = week
         cur.day = dif%7;
-        cur.sprint = Math.floor(dif/7);
-        return cur;
       }
+      return cur;
     },
   }
 }

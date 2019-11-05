@@ -25,6 +25,11 @@ public class RoomCtroller {
         return roomRepository.findByUserId(userId);
     }
 
+    @GetMapping("/rooms/user/{uid}/modelroom/{mid}")
+    public Long countRoomByUserIdAndModelId(@PathVariable(value = "uid") Long userId, @PathVariable(value = "mid") Long modelId) {
+        return roomRepository.countByUserIdAndModelId(userId, modelId);
+    }
+
     @GetMapping("/rooms")
     public List<Room> getAllRooms(){
         return roomRepository.findAll();

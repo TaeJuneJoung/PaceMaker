@@ -7,6 +7,7 @@ import com.ssafy.model.User;
 import com.ssafy.repository.ModelRoomRepository;
 import com.ssafy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -58,6 +59,16 @@ public class ModelRoomCtroller {
         if(newModelRoom == null) return false;
         return true;
     }
+
+    @PutMapping("/modelrooms/plusUserCount/{id}")
+    public ResponseEntity<ModelRoom> updateModelRoomUserCount(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+        ModelRoom modelRoom = modelRoomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ModelRoom not fount for this id :: " + id));
+        modelRoom.setUserCount(modelRoom.getUserCount()+1);
+        final ModelRoom updated = modelRoomRepository.save(modelRoom);
+        return ResponseEntity.ok(updated);
+    }
+
 
     @DeleteMapping("/modelrooms/{id}")
     public Map<String, Boolean> deleteModelRoom(@PathVariable(value = "id") Long modelId)
