@@ -116,7 +116,6 @@ export default {
     updatePassword() {
       // 비밀번호 유효성 검사 완료
       // 비밀번호 재설정 진행
-      console.log('OK' + this.isAuthCompleted)
       this.resultCard = true
     }
   },

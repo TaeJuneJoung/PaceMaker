@@ -24,7 +24,7 @@
       </template>
     </v-card-text>
     <v-card-actions class="justify-end">
-			<v-btn class="homeBtn" color="error" nuxt to="/">홈으로</v-btn>
+      <v-btn class="homeBtn" color="error" nuxt to="/">홈으로</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -76,7 +76,6 @@ export default {
         // 인증번호 유효함
         // 인증번호 맞는지 확인후 비밀번호 재설정 진행
         this.authComplete();
-        console.log(this.$store.state.authCompleted);
         clearInterval(this.timer);
       }
     },
@@ -115,7 +114,7 @@ export default {
 </script>
 <style src="assets/color.css"></style>
 <style scoped>
-.homeBtn{
+.homeBtn {
   margin: 0 9px 0 auto;
 }
 </style>
