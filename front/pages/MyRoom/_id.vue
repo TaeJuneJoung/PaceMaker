@@ -167,8 +167,8 @@ export default {
   methods: {
     async toggleTodo(day, idx) {
       //axios todo 한걸로 체크
+      let achieveData = {};
       if(this.sprint[day][idx].flag){
-        let achieveData = {}
         await getAchieve(this.$session.get('account').id).then(({ data }) => {
           achieveData = data
         })
@@ -176,7 +176,6 @@ export default {
         await putAchieve(achieveData)
         this.sprint[day][idx].flag = !this.sprint[day][idx].flag
       } else {
-        let achieveData = {}
         await getAchieve(this.$session.get('account').id).then(({ data }) => {
           achieveData = data
         })
