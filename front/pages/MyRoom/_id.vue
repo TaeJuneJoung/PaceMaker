@@ -118,7 +118,7 @@
 import CommentView from '../../components/CommentView.vue'
 import Comment from '../../components/Comment.vue'
 import { findRoomById, updateRoomSprintById } from '~/api/rooms.js'
-import { getAchieve, putAchieve } from '../api/achieve.js'
+import { getAchieve, putAchieve } from '~/api/achieve.js'
 
 export default {
   layout: 'default',
