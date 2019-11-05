@@ -155,7 +155,6 @@ export default {
         let img = new FormData()
         let imgName = null
         if (this.img === this.beforeImg) {
-          console.log(this.img)
           imgName = this.img
         } else if (this.img !== '') {
           img.append('file', this.img, this.img.fileName)

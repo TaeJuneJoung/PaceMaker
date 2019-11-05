@@ -17,12 +17,21 @@
       <v-tab-item v-for="(tab, index) in tabs" :key="index" :value="'tab-' + index">
         <v-row class="pa-5">
           <v-col cols="12" sm="6" md="4" lg="3" v-for="(room , index) in tab.list" :key="index">
-            <v-card v-if="isMyRoomTab(tab.title)" class="pa-2" hover dark nuxt :to="`/MyRoom/${room.id}`">
+            <v-card
+              v-if="isMyRoomTab(tab.title)"
+              class="pa-2"
+              hover
+              dark
+              nuxt
+              :to="`/MyRoom/${room.id}`"
+            >
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>{{room.title ? room.title : '제목없음'}}</v-list-item-title>
                   <v-divider></v-divider>
-                  <v-list-item-subtitle class="mt-2">공개 여부 : {{ isMyRoomTab(tab.title) ? getCompleteFlag(room.completeFlag) + '/' : '' }} {{ getRoomFlag(room.roomFlag) }}</v-list-item-subtitle>
+                  <v-list-item-subtitle
+                    class="mt-2"
+                  >공개 여부 : {{ isMyRoomTab(tab.title) ? getCompleteFlag(room.completeFlag) + '/' : '' }} {{ getRoomFlag(room.roomFlag) }}</v-list-item-subtitle>
                   <v-list-item-subtitle>기간 : {{ room.steps }} 주</v-list-item-subtitle>
                   <v-list-item-subtitle
                     v-if="isMyRoomTab(tab.title)"
@@ -113,7 +122,6 @@ export default {
     } catch(err) {
       console.log(err)
     }
-    console.log(this.tabs[0].list)
   },
   computed: {
   },
@@ -158,7 +166,7 @@ a {
   color: #000;
 }
 
-.v-application--is-ltr .v-tab{
+.v-application--is-ltr .v-tab {
   color: #000 !important;
 }
 
