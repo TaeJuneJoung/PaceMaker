@@ -30,7 +30,7 @@ export default {
     ...mapGetters({ getModelRoomId: 'comment/getModelRoomId' })
   },
   methods: {
-    sendMessage() {
+    async sendMessage() {
       const commentData = {
         nickname: this.nickname,
         modelRoomId: this.getModelRoomId,
