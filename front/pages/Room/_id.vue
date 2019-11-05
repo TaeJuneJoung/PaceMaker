@@ -127,6 +127,14 @@ export default {
     this.roomMaker = this.$session.get('account').id
   },
   methods: {
+    modalOn(header, body, img) {
+      this.$store.commit('modal/setModalData', {
+        header: header,
+        body: body,
+        img: img
+      })
+      this.$store.commit('achievement/setShowModal', true)
+    },
     changeSprint(n) {
       this.curStep = n
       this.day = 0
@@ -135,7 +143,7 @@ export default {
     async joinRoom() {
       let count = await countByUserIdAndModelId(this.$session.get('account').id , this.roomId);
       if(count.data > 0) {
-        window.alert("이미 진행중인 스프린트입니다.");
+        this.modalOn('알림' ,'이미 진행중인 스프린트입니다.');
         return;
       }
 
@@ -157,17 +165,17 @@ export default {
         await plusModelRoomUserCount(this.roomId);
       } catch (err) {
         console.error(err)
-        window.alert('오류 : 참가 실패')
+        this.modalOn('에러' , '참가 실패');
       }
-      window.alert('방에 참가했습니다.');
+      this.modalOn('알림' , '방에 참가했습니다.');
       this.$router.push('/MemberInfoPage')
     },
     deleteRoom() {
       if (this.checkUser) {
         if (deleteRoomById(this.roomId) == 'err') {
-          window.alert('오류 : 삭제 실패')
+          this.modalOn('에러' , '삭제 실패');
         } else {
-          window.alert('삭제 성공')
+          this.modalOn('에러' , '삭제 성공');
           this.$router.push('/MainPage')
         }
       }
