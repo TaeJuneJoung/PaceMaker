@@ -3,7 +3,7 @@
     <v-row align="center">
       <v-col sm="8" cols="12" class="pa-0">
         <v-card outlined>
-          <v-stepper non-linear v-model="getCurrentDay.sprint">
+          <v-stepper non-linear v-model="date.sprint">
             <v-stepper-header>
               <template v-for="n in room.steps">
                 <v-stepper-step editable :step="n" :key="n" @click="changeSprint(n)">{{n}} 주차</v-stepper-step>
@@ -158,7 +158,7 @@ export default {
       this.sprint = this.sprints[this.room.currentDay];
       this.date = this.getCurrentDay();
       this.changeSprint(this.getCurrentDay().sprint);
-      this.day = this.getCurrentDay1.day;
+      this.day = this.getCurrentDay().day;
     } catch (err) {
 
     }
@@ -250,24 +250,7 @@ export default {
         })
       })
       return (done / cnt) * 100
-    },
-    getCurrentDay() {
-      let cur = {
-        day: 0,
-        sprint: 0
-      }
-      // 날짜 계산
-      let date = new Date();
-      let sdate = new Date(this.room.roomCreateDate);
-      let dif = parseInt((date - sdate)/(24*60*60*1000));
-      let week = Math.floor(dif/7);
-
-      if(week <= this.room.steps) {
-        cur.sprint = week
-        cur.day = dif%7;
-      }
-      return cur;
-    },
+    }
   }
 }
 </script>
