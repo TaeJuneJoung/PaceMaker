@@ -160,24 +160,22 @@ export default {
         completeFlag: false,
         sprints: JSON.stringify(this.room.roomData.sprint)
       }
-
+      let achieveData = {}
       try {
         await createRoom(data)
         await plusModelRoomUserCount(this.roomId);
-
-        let achieveData = {}
         await getAchieve(this.$session.get('account').id).then(({ data }) => {
           achieveData = data
         })
         achieveData.room += 1
         await putAchieve(achieveData)
-
+        this.modalOn('알림' , '방에 참가했습니다.');
       } catch (err) {
         console.error(err)
         this.modalOn('에러' , '참가 실패');
         return;
       }
-      this.modalOn('알림' , '방에 참가했습니다.');
+      
       const achieveModal = this.$store.state.achievement.roomAchieve;
         achieveModal.forEach((element) => {
           if (element.number == achieveData.room) {
