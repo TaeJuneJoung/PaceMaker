@@ -110,7 +110,6 @@ export default {
           .catch((error) => {
             console.error(error)
           })
-      alert('메일이 발송되었습니다.');
       }
     },
     focusField() {

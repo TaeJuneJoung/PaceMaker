@@ -172,6 +172,7 @@ export default {
             .then(({ data }) => {
               createAchieve(data.id)
                 .then(({ data }) => {
+                  alert('가입이 완료되었습니다.')
                   this.$router.push('/')
                 })
                 .catch((error) => {
