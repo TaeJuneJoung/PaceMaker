@@ -2,7 +2,7 @@
   <v-container fluid class="pb-0 mt-10">
     <v-row align="center">
       <v-col cols="12" class="pa-0">
-        <v-card outlined class="heightsm">
+        <v-card outlined class="heightsm mainTitle">
           <v-card-title>{{title}}</v-card-title>
         </v-card>
       </v-col>
@@ -42,19 +42,24 @@
     <v-col cols="12" class="pa-0">
       <v-row justify="center" class="vh65 scroll">
         <v-col cols="12" class="h-100">
-          <v-card outlined>
-            <v-window v-model="day" class="elevation-1" vertical>
+          <v-card outlined class="h-100">
+            <v-window v-model="day" class="h-100 elevation-1" vertical>
               <v-window-item v-for="n in length" :key="n">
-                <v-card-text>
+                <v-card-text class="cardTitle">
                   <strong class="title ml-5">Day {{ n }}</strong>
                   <v-divider></v-divider>
                 </v-card-text>
-                <v-list shaped>
+                <v-list>
                   <v-col>
                     <v-list-item-group multiple>
                       <template v-for="(item, i) in sprint[n-1]">
-                        <v-list-item :key="`item-${i}`" active-class="primary--text text--accent-4">
-                          <v-list-item-content>
+                        <v-list-item
+                          :key="`item-${i}`"
+                          active-class="primary--text text--accent-4"
+                          class="dayTitle"
+                          color="#fff"
+                        >
+                          <v-list-item-content class="colorWhite">
                             <v-list-item-title v-text="item.todo"></v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -175,10 +180,40 @@ export default {
 }
 </script>
 <style scoped>
+.colorWhite {
+  color: #fff;
+}
+
+.mainTitle {
+  background-color: #9e9e9e;
+  color: #fff;
+  font-weight: bold;
+}
+
+.cardTitle {
+  background-color: #7fc6df;
+  color: #fff;
+}
+.dayTitle {
+  background-color: #424242;
+  border-radius: 6px;
+  text-indent: 5px;
+  min-height: 43px;
+  margin-bottom: 5px;
+}
 .h-100 {
   height: 100%;
   padding-top: 0;
   padding-bottom: 0;
+}
+.theme--light.v-list-item--active:hover::before,
+.theme--light.v-list-item--active::before,
+.theme--light.v-list-item:hover::before {
+  opacity: 0;
+}
+
+.v-application--is-ltr .v-list--shaped {
+  padding-right: 0;
 }
 
 @media screen and (min-width: 769px) {
@@ -194,6 +229,9 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .vh65 {
+    height: 50vh;
+  }
 }
 
 .scroll {
