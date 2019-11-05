@@ -172,14 +172,14 @@ export default {
         await getAchieve(this.$session.get('account').id).then(({ data }) => {
           achieveData = data
         })
-        achieveData.coin += 10
+        achieveData.coin -= 10
         await putAchieve(achieveData)
         this.sprint[day][idx].flag = !this.sprint[day][idx].flag
       } else {
         await getAchieve(this.$session.get('account').id).then(({ data }) => {
           achieveData = data
         })
-        achieveData.coin -= 10
+        achieveData.coin += 10
         await putAchieve(achieveData)
         this.sprint[day][idx].flag = !this.sprint[day][idx].flag
       }
