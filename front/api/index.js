@@ -21,7 +21,6 @@ function findUserEmail(email) {
  * return boolean
  */
 function getCheckEmail(email) {
-  //MemberJoin
   return axios.get(`${config.baseUrl}users/check/email/${email}`)
 }
 
@@ -35,8 +34,11 @@ function getCheckNickname(nickname) {
   return axios.get(`${config.baseUrl}users/check/nick/${nickname}`)
 }
 
+/**
+ * 유저 생성시,
+ * param {} userData
+ */
 function createUser(userData) {
-  //사용중
   return axios.post(`${config.baseUrl}users`, userData)
 }
 
@@ -48,23 +50,36 @@ function sendUserMail(email) {
   return axios.get(`${config.baseUrl}send/${email}`)
 }
 
+/**
+ * 회원 수정시,
+ * param {} userData 
+ */
 function putUser(userData) {
-  //사용중
   return axios.put(`${config.baseUrl}users`, userData)
 }
 
+/**
+ * 회원 탈퇴시
+ * param {} userId
+ */
 function deleteUser(userId) {
   return axios.delete(`${config.baseUrl}users/${userId}`)
 }
 
+/**
+ * 로그인시,
+ * param {} loginData 
+ */
 function loginUser(loginData) {
-  //사용중
   return axios.post(`${config.baseUrl}users/login`, loginData)
 }
 
-function updatePass(userPass) {
-  //사용중
-  return axios.put(`${config.baseUrl}users/pass`, userPass)
+/**
+ * 비밀번호 수정시,
+ * param {} {email, password}
+ */
+function updatePass(user) {
+  return axios.put(`${config.baseUrl}users/pass`, user)
 }
 
 export {

@@ -1,5 +1,5 @@
 <template>
-  <v-container justify-center align-center fill-height="true">
+  <v-container>
     <v-row justify="center" align="center">
       <v-col sm="6" xs="10">
         <v-card class="pa-2 text-center translate">
@@ -15,16 +15,21 @@
                 label="Nickname"
                 required
                 @blur="nicknameCheck"
+                :readonly="nicknameReadOnly"
               >
-                <template v-if="isOnlyNickname" v-slot:append>
-                  <v-flex class="ml-1" @click="nicknameCancle">취소</v-flex>
+                <template v-slot:append>
+                  <v-btn text color="grey" class="text-cursor" v-if="isOnlyNickname==0">결과</v-btn>
+                  <v-row class="pr-1" v-else-if="isOnlyNickname==1">
+                    <v-icon class="check-btn" color="success">mdi-check</v-icon>
+                    <v-icon color="grey" @click="nicknameCheckCancel">mdi-close-circle-outline</v-icon>
+                  </v-row>
+                  <v-btn text color="warning" class="text-cursor" v-else>사용불가</v-btn>
                 </template>
               </v-text-field>
               <v-flex class="ivory text-left">Password</v-flex>
               <v-text-field
                 v-model="password"
                 :counter="20"
-                :rules="[rules.password, rules.minLength(8), rules.maxLength(20)]"
                 solo
                 label="Password"
                 required
@@ -36,7 +41,6 @@
               <v-text-field
                 v-model="rePassword"
                 :counter="20"
-                :rules="[rules.password, rules.minLength(8), rules.maxLength(20)]"
                 solo
                 label="Confirm Password"
                 required
@@ -74,7 +78,7 @@
 </template>
 
 <script>
-import { putUser, updatePass } from '../api/index.js'
+import { putUser, updatePass, getCheckNickname } from '../api/index.js'
 import FormData from 'form-data'
 import { addImg } from '../api/roomAdd.js'
 
@@ -94,6 +98,8 @@ export default {
     this.email = this.$session.get('account').email
     this.nickname = this.$session.get('account').nickname
     this.checkboxAlarm = this.$session.get('account').alarmFlag
+    this.point = this.$session.get('account').point
+    this.id = this.$session.get('account').id
   },
   data() {
     return {
@@ -109,10 +115,9 @@ export default {
       isOnlyNickname: false,
       nicknameReadOnly: false,
       img: '',
+      point: 0,
+      id: 0,
       rules: {
-        password: (v) =>
-          /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(v || '') ||
-          '비밀번호를 작성하여주세요. 비밀번호는 영문, 숫자, 특수문자를 포함하여야 합니다.',
         minLength: (len) => (v) =>
           (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
         maxLength: (len) => (v) =>
@@ -125,6 +130,14 @@ export default {
     }
   },
   methods: {
+    modalOn(header, body, img) {
+      this.$store.commit('modal/setModalData', {
+        header: header,
+        body: body,
+        img: img
+      })
+      this.$store.commit('achievement/setShowModal', true)
+    },
     setImg(e) {
       this.img = e
     },
@@ -140,53 +153,75 @@ export default {
         }
         const userData = {
           email: this.email,
-          alarmFlag: this.checkboxAlarm,
           nickname: this.nickname,
-          img: imgName
+          img: imgName,
+          alarmFlag: this.checkboxAlarm,
+          point: this.point,
+          id: this.id
         }
         putUser(userData)
           .then((res) => {
-            this.$store.commit('modal/setModalData', {
-              header: '회원 수정',
-              body: '회원정보가 수정되었습니다.',
-              img: ''
-            })
-            this.$store.commit('achievement/setShowModal', true)
-            userData['point'] = this.$session.get('account')['point']
+            console.log(res)
+            this.modalOn('회원 수정', '회원정보가 수정되었습니다.', '')
             this.$session.set('account', userData)
             this.$router.push('/MemberInfoPage')
           })
           .catch((err) => {
-            this.$store.commit('modal/setModalData', {
-              header: '회원 수정',
-              body: '회원정보가 수정이 실패하였습니다.',
-              img: ''
-            })
-            this.$store.commit('achievement/setShowModal', true)
+            this.modalOn('회원 수정', '회원정보가 수정이 실패하였습니다.', '')
             this.$router.push('/')
           })
 
+        // 현 로직은 윗부분 putUser부분에 넣어야함 - 수정 필요
         if (this.password != '' && this.rePassword != '') {
-          updatePass(this.password)
+          if (
+            this.password === this.rePassword &&
+            this.password.length >= 8 &&
+            /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(this.password)
+          ) {
+            const user = { email: this.email, password: this.password }
+            updatePass(user)
+              .then((res) => {
+                this.modalOn('회원 수정', '회원정보가 수정되었습니다.', '')
+              })
+              .catch((error) => {
+                this.modalOn(
+                  '회원 수정',
+                  '회원정보가 수정이 실패하였습니다.',
+                  ''
+                )
+              })
+          } else {
+            this.modalOn(
+              '회원 수정',
+              '비밀번호는 영문, 숫자, 특수문자를 포함하여야 합니다.',
+              ''
+            )
+          }
         }
       }
     },
     nicknameCheck() {
-      // emailCheck와 로직 동일
+      let nickname = this.nickname
+      if (nickname.length > 0) {
+        getCheckNickname(nickname)
+          .then(({ data }) => {
+            if (data) {
+              this.isOnlyNickname = 1
+              this.nicknameReadOnly = data
+            } else {
+              this.isOnlyNickname = 2
+            }
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      }
     },
-    nicknameCancle() {
+    nicknameCheckCancel() {
       this.nickname = ''
-      this.isOnlyNickname = false
+      this.isOnlyNickname = 0
       this.nicknameReadOnly = false
     }
   }
 }
 </script>
-
-<style scoped>
-/* .bgimg{
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../static/bgimg2.jpg");
-  background-size: cover;
-} */
-</style>
-
