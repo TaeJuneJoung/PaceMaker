@@ -65,6 +65,7 @@
                 placeholder="Pick an avatar"
                 prepend-icon="mdi-camera"
                 label="Avatar"
+                dark
               ></v-file-input>
             </v-form>
           </v-card-text>
@@ -91,16 +92,6 @@ export default {
       titleTemplate: '회원수정 | %s'
     }
   },
-  created() {
-    this.memberUpdate
-  },
-  mounted() {
-    this.email = this.$session.get('account').email
-    this.nickname = this.$session.get('account').nickname
-    this.checkboxAlarm = this.$session.get('account').alarmFlag
-    this.point = this.$session.get('account').point
-    this.id = this.$session.get('account').id
-  },
   data() {
     return {
       valid: true,
@@ -115,6 +106,7 @@ export default {
       isOnlyNickname: false,
       nicknameReadOnly: false,
       img: '',
+      beforeImg: '',
       point: 0,
       id: 0,
       rules: {
@@ -129,6 +121,18 @@ export default {
       }
     }
   },
+  created() {
+    this.memberUpdate
+  },
+  mounted() {
+    this.email = this.$session.get('account').email
+    this.nickname = this.$session.get('account').nickname
+    this.checkboxAlarm = this.$session.get('account').alarmFlag
+    this.point = this.$session.get('account').point
+    this.id = this.$session.get('account').id
+    this.img = this.$session.get('account').img
+    this.beforeImg = this.$session.get('account').img
+  },
   methods: {
     modalOn(header, body, img) {
       this.$store.commit('modal/setModalData', {
@@ -139,13 +143,21 @@ export default {
       this.$store.commit('achievement/setShowModal', true)
     },
     setImg(e) {
-      this.img = e
+      this.beforeImg = this.img
+      if (e) {
+        this.img = e
+      } else {
+        this.img = this.beforeImg
+      }
     },
     async memberUpdate() {
       if (this.$refs.updateform) {
         let img = new FormData()
         let imgName = null
-        if (this.img !== '') {
+        if (this.img === this.beforeImg) {
+          console.log(this.img)
+          imgName = this.img
+        } else if (this.img !== '') {
           img.append('file', this.img, this.img.fileName)
           await addImg(img).then(({ data }) => {
             imgName = '/images/' + data.fileName
@@ -161,43 +173,50 @@ export default {
         }
         putUser(userData)
           .then((res) => {
-            console.log(res)
-            this.modalOn('회원 수정', '회원정보가 수정되었습니다.', '')
-            this.$session.set('account', userData)
-            this.$router.push('/MemberInfoPage')
+            let isUpdatePass = false
+            if (this.password != '' && this.rePassword != '') {
+              if (
+                this.password === this.rePassword &&
+                this.password.length >= 8 &&
+                /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(this.password)
+              ) {
+                const user = { email: this.email, password: this.password }
+                updatePass(user)
+                  .then((res) => {
+                    this.modalOn('회원 수정', '회원정보가 수정되었습니다.', '')
+                    this.$session.set('account', userData)
+                    this.$router.push('/MemberInfoPage')
+                  })
+                  .catch((error) => {
+                    this.modalOn(
+                      '회원 수정',
+                      '회원정보가 수정이 실패하였습니다.',
+                      ''
+                    )
+                  })
+              } else {
+                this.modalOn(
+                  '회원 수정',
+                  '비밀번호는 영문, 숫자, \n특수문자를 포함하여야 합니다.',
+                  ''
+                )
+              }
+            } else if (this.password != '') {
+              this.modalOn('주의', '비밀번호 확인도 작성하여주세요', '')
+            } else if (this.rePassword != '') {
+              this.modalOn('주의', '비밀번호를 작성하여주세요', '')
+            } else {
+              isUpdatePass = true
+              this.modalOn('회원 수정', '회원정보가 수정되었습니다.', '')
+            }
+            if (isUpdatePass) {
+              this.$session.set('account', userData)
+              this.$router.push('/MemberInfoPage')
+            }
           })
           .catch((err) => {
             this.modalOn('회원 수정', '회원정보가 수정이 실패하였습니다.', '')
-            this.$router.push('/')
           })
-
-        // 현 로직은 윗부분 putUser부분에 넣어야함 - 수정 필요
-        if (this.password != '' && this.rePassword != '') {
-          if (
-            this.password === this.rePassword &&
-            this.password.length >= 8 &&
-            /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(this.password)
-          ) {
-            const user = { email: this.email, password: this.password }
-            updatePass(user)
-              .then((res) => {
-                this.modalOn('회원 수정', '회원정보가 수정되었습니다.', '')
-              })
-              .catch((error) => {
-                this.modalOn(
-                  '회원 수정',
-                  '회원정보가 수정이 실패하였습니다.',
-                  ''
-                )
-              })
-          } else {
-            this.modalOn(
-              '회원 수정',
-              '비밀번호는 영문, 숫자, 특수문자를 포함하여야 합니다.',
-              ''
-            )
-          }
-        }
       }
     },
     nicknameCheck() {
