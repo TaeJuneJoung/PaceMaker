@@ -157,7 +157,7 @@ export default {
     }
   },
   methods: {
-    joinValidate() {
+    async joinValidate() {
       if (this.$refs.joinform.validate()) {
         let data = {
           email: this.email,
@@ -166,24 +166,18 @@ export default {
           authenticationFlag: this.checkboxAgree,
           alarmFlag: this.checkboxAlarm
         }
-        let email = this.email
+				let email = this.email
         email = email.replace('@', '%40')
-        sendUserMail(email).then(() => {
-          createUser(data)
-            .then(({ data }) => {
-              createAchieve(data.id)
-                .then(({ data }) => {
-                  alert('가입이 완료되었습니다.')
-                  this.$router.push('/')
-                })
-                .catch((error) => {
-                  console.error(error)
-                })
-            })
-            .catch((error) => {
-              console.error(error)
-            })
-        })
+        await sendUserMail(email)
+        let user = await createUser(data)
+        await createAchieve(user.data.id)
+          .then(({ data }) => {
+            alert('가입이 완료되었습니다.')
+            this.$router.push('/')
+          })
+          .catch((error) => {
+            console.error(error)
+          })
       }
     },
     emailCheck() {

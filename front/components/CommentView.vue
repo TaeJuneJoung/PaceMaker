@@ -5,7 +5,8 @@
         <v-col cols="12">
           <v-row v-for="(comment, index) in getCommentList" :key="index">
             <v-col cols="12" :class="comment.nickname == nickname ? 'blue--text' : 'black--text'">
-              <b>{{comment.nickname}}</b>: {{comment.context}}
+              <b>{{comment.nickname}}</b>
+              : {{comment.context}}
               <v-flex class="text-right">
                 <small>{{ getCommentDate[index] }}</small>
               </v-flex>
@@ -27,9 +28,9 @@ export default {
       nickname: ''
     }
   },
-  created() {
+  async created() {
     const roomId = this.$route.params.id
-    findRoomById(roomId)
+    await findRoomById(roomId)
       .then(({ data }) => {
         this.$store.dispatch('comment/setCommentList', data.modelId)
       })
@@ -39,6 +40,8 @@ export default {
   },
   mounted() {
     this.nickname = this.$session.get('account').nickname
+    let container = document.getElementById('scroll-target')
+    container.scrollTop = container.scrollHeight
   },
   computed: {
     ...mapGetters({ getCommentList: 'comment/getCommentList' }),
@@ -69,5 +72,4 @@ export default {
 .scroll {
   overflow-y: auto;
 }
-
 </style>
