@@ -89,7 +89,7 @@
 <script>
 import { findModelRoomById, deleteRoomById, plusModelRoomUserCount } from '~/api/modelRoom.js'
 import { createRoom, countByUserIdAndModelId } from '~/api/rooms.js'
-import { getAchieve, putAchieve } from '../api/achieve.js'
+import { getAchieve, putAchieve } from '~/api/achieve.js'
 
 export default {
   layout: 'default',
