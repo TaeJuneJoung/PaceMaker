@@ -172,7 +172,13 @@ export default {
         achieveData.room += 1
         await putAchieve(achieveData)
 
-        const achieveModal = this.$store.state.achievement.roomAchieve;
+      } catch (err) {
+        console.error(err)
+        this.modalOn('에러' , '참가 실패');
+        return;
+      }
+      this.modalOn('알림' , '방에 참가했습니다.');
+      const achieveModal = this.$store.state.achievement.roomAchieve;
         achieveModal.forEach((element) => {
           if (element.number == achieveData.room) {
             this.$store.commit('modal/setModalData', {
@@ -183,11 +189,6 @@ export default {
             this.$store.commit('achievement/setShowModal', true)
           }
         })
-      } catch (err) {
-        console.error(err)
-        this.modalOn('에러' , '참가 실패');
-      }
-      this.modalOn('알림' , '방에 참가했습니다.');
       this.$router.push('/MemberInfoPage')
     },
     deleteRoom() {
