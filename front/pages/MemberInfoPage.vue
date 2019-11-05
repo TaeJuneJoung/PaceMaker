@@ -5,7 +5,7 @@
         <v-card class="pa-2">
           <v-row class="justify-sm-end justify-center pr-sm-4">
             <v-btn class="mr-2" color="secondary" nuxt to="/MemberUpdatePage">회원 수정</v-btn>
-            <v-btn class="ml-2" color="error" nuxt to="/*">회원 탈퇴</v-btn>
+            <v-btn class="ml-2" color="error" @click="closeAccount">회원 탈퇴</v-btn>
           </v-row>
           <v-list-item class="grow">
             <v-row>
@@ -55,6 +55,7 @@
 import MyRoomList from '../components/MyRoomList.vue'
 import { mapGetters } from 'vuex'
 import { getAchieve } from '../api/achieve.js'
+import { deleteUser } from '../api/index.js'
 
 export default {
   layout: 'default',
@@ -79,6 +80,7 @@ export default {
   },
   mounted() {
     this.userId = this.$session.get('account').id
+    this.email = this.$session.get('account').email
     this.nickname = this.$session.get('account').nickname
     this.getUserAchieve()
     this.userImg = this.$session.get('account').img
@@ -119,13 +121,33 @@ export default {
           console.error(error)
         })
     },
-    modalAchieve(name, img) {
+    modalOn(header, body, img) {
       this.$store.commit('modal/setModalData', {
-        header: name,
-        body: '업적을 취득하였습니다.',
-        img: img
-      })
+          header: header,
+          body: body,
+          img: img
+        })
       this.$store.commit('achievement/setShowModal', true)
+    },
+    modalAchieve(name, img) {
+      this.modalOn(name, '업적을 취득하였습니다.', img)
+    },
+    closeAccount() {
+      let checkEmail = prompt("삭제하시려면 이메일을 작성하여주세요.")
+      if(this.email === checkEmail) {
+        deleteUser(this.userId)
+          .then(({data}) => {
+            this.modalOn('PaceMaker', '회원탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.', '')
+            this.$session.remove('account')
+            this.$storage.setUniversal('isAuth', false)
+            this.$router.push('/')
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      } else {
+        this.modalOn('PaceMaker', '이메일이 틀렸습니다.', '')
+      }
     }
   }
 }
