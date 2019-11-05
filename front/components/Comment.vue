@@ -17,6 +17,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { createComment } from '../api/comment.js'
+import { getAchieve, putAchieve } from '../api/achieve.js'
 
 export default {
   data: () => ({

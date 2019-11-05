@@ -111,6 +111,7 @@ import {
   createUser
 } from '../api/index.js'
 import { createAchieve } from '../api/achieve.js'
+import { getAchieve, putAchieve } from '../api/achieve.js'
 
 export default {
   layout: 'login',
