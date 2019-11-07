@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 @RestController
 @RequestMapping("/api/v1")
 public class MailCtroller {
@@ -26,10 +25,11 @@ public class MailCtroller {
 
     private final AuthMailRepository authMailRep;
 
-    private  final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep,UserRepository userRepository) {
+    public MailCtroller(AuthMailSender mailSender, HashEncoder hashEncoder, AuthMailRepository authMailRep,
+            UserRepository userRepository) {
         this.mailSender = mailSender;
         this.hashEncoder = hashEncoder;
         this.authMailRep = authMailRep;
@@ -82,7 +82,7 @@ public class MailCtroller {
             User user = userRepository.findByEmail(userEmail);
             user.setAuthenticationFlag(true);
             userRepository.save(user);
-            return "<script>location.href = '"+url+"'</script>";
+            return "<script>location.href = '" + url + "'</script>";
         }
         return "<script>alert('인증에 실패하였습니다.');</script>";
     }
