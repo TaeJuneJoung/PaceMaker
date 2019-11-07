@@ -1,3 +1,3 @@
 # pacemaker
 
-![db](./docs/db.JPG)
+![db](./docs/erd.JPG)
