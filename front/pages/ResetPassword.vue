@@ -63,6 +63,12 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'login',
+  head() {
+    return {
+      title: 'PaceMaker',
+      titleTemplate: '비밀번호 재설정 | %s'
+    }
+  },
   components: {
     Authentication
   },
@@ -88,41 +94,33 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'isAuthCompleted'
-    ]),
+    ...mapGetters(['isAuthCompleted']),
     isValidPassword() {
-      if(this.password === '')
-        return false;
+      if (this.password === '') return false
 
       return this.password === this.rePassword
     },
     showResetCard() {
-      if(this.isAuthCompleted == true && this.resultCard == false)
-        return true;
+      if (this.isAuthCompleted == true && this.resultCard == false) return true
 
-      return false;
+      return false
     },
     showResultCard() {
-      if(this.isAuthCompleted == true && this.resultCard == true)
-        return true;
-      
-      return false;
+      if (this.isAuthCompleted == true && this.resultCard == true) return true
+
+      return false
     }
   },
-  methods:{
-    ...mapActions([
-      'authInit'
-    ]),
+  methods: {
+    ...mapActions(['authInit']),
     updatePassword() {
       // 비밀번호 유효성 검사 완료
       // 비밀번호 재설정 진행
-      console.log("OK" + this.isAuthCompleted);
-      this.resultCard = true;
+      this.resultCard = true
     }
   },
   created() {
-    this.authInit();
+    this.authInit()
   }
 }
 </script>

@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-
+!pacemaker.jar
 ### STS ###
 .apt_generated
 .classpath

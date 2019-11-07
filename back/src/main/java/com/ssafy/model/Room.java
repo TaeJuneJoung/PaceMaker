@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@TypeDef(
-        name = "jsonb",
-        typeClass = JsonBinaryType.class
-)
-
 @Entity
 @Table(name = "ROOMS")
 public @Data
@@ -28,15 +23,23 @@ class Room {
     @Column(name = "ROOM_TITLE", nullable = false)
     private String title;
 
-    @Column(name = "ROOM_DESCRIPT")
-    private String descript;
+    @Column(name = "STEPS")
+    private Long steps;
+
+    @Column(name = "USER_ID")
+    private Long userId;
+
+    @Column(name = "USER_NAME")
+    private String userName;
+
+    @Column(name = "MODEL_ROOM_ID")
+    private Long modelId;
+
+    @Column(name = "CURRENT_DAY")
+    private Long currentDay;
 
     @Column(name = "ROOM_CREATED_DATE", nullable = false)
     private Date createDate;
-
-    @Type(type = "jsonb")
-    @Column(name = "SUMMARY", columnDefinition = "jsonb")
-    private String summary;
 
     @Column(name = "ROOM_FLAG", nullable = false)
     private Boolean roomFlag;
@@ -44,16 +47,7 @@ class Room {
     @Column(name = "COMPLETE_FLAG", nullable = false)
     private Boolean completeFlag;
 
-    @Column(name = "USER_COUNT", nullable = false)
-    private Short userCount;
-
-    @OneToMany(mappedBy = "room")
-    private List<Sprint> sprints = new ArrayList<Sprint>();
-
-    public void addSprint(Sprint sprint) {
-        this.sprints.add(sprint);
-        if (sprint.getRoom() != this) {
-            sprint.setRoom(this);
-        }
-    }
+    @Column(name = "SPRINTS" , nullable = false)
+    private String sprints;
+    
 }

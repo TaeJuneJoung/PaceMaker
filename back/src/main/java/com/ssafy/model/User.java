@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -48,4 +50,12 @@ class User {
 
     @Column(name = "USER_IMG")
     private String img;
+
+    @OneToMany
+    @JoinColumn(name = "USER_ID")
+    private List<ModelRoom> modelRooms = new ArrayList<ModelRoom>();
+
+    public void addModelRoom(ModelRoom modelRoom) {
+        this.modelRooms.add(modelRoom);
+    }
 }

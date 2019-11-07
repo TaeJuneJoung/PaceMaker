@@ -3,6 +3,7 @@ package com.ssafy.controller;
 import com.ssafy.exception.ResourceNotFoundException;
 import com.ssafy.model.User;
 import com.ssafy.model.UserEmailandPass;
+import com.ssafy.model.UserUpdate;
 import com.ssafy.repository.UserRepository;
 import com.ssafy.utility.HashEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,22 @@ public class UserCtroller {
         return userRepository.findAll();
     }
 
+    @GetMapping("/users/check/email/{userEmail:.+}")
+    public Boolean getEmailCheck(@PathVariable @Valid String userEmail) {
+        User user = userRepository.findByEmail(userEmail);
+        if (user == null)
+            return true;
+        return false;
+    }
+
+    @GetMapping("/users/check/nick/{nickname}")
+    public Boolean getNicknameCheck(@PathVariable(value = "nickname") String nickname) {
+        User user = userRepository.findByNickname(nickname);
+        if (user == null)
+            return true;
+        return false;
+    }
+
     /**
      * email로 User 찾기
      * 
@@ -46,7 +63,8 @@ public class UserCtroller {
      * @return User
      * @throws ResourceNotFoundException
      */
-    @GetMapping("/users/{userEmail:.+}")
+
+    @GetMapping("/users/email/{userEmail:.+}")
     public User getEmailUser(@PathVariable @Valid String userEmail) throws ResourceNotFoundException {
         User user = userRepository.findByEmail(userEmail);
         return user;
@@ -58,7 +76,7 @@ public class UserCtroller {
      * @return userId와 일치하는 User
      * @throws ResourceNotFoundException
      */
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/id/{id}")
     public User getUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
@@ -103,13 +121,11 @@ public class UserCtroller {
      * 
      * @param userDetails
      * @return
-     * @throws ResourceNotFoundException
      */
     @PutMapping("/users") // 사진, 닉네임, 알람설정
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
-        Long userId = userDetails.getId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+    public ResponseEntity<User> updateUser(@Valid @RequestBody UserUpdate userDetails) {
+        String email = userDetails.getEmail();
+        User user = userRepository.findByEmail(email);
         user.setNickname(userDetails.getNickname());
         user.setImg(userDetails.getImg());
         user.setAlarmFlag(userDetails.getAlarmFlag());
@@ -122,14 +138,14 @@ public class UserCtroller {
      * 
      * @param userDetails
      * @return
-     * @throws ResourceNotFoundException
+     * @throws NoSuchAlgorithmException
      */
     @PutMapping("/users/pass")
-    public ResponseEntity<User> updatePass(@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
-        Long userId = userDetails.getId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
-        user.setPassword(userDetails.getPassword());
+    public ResponseEntity<User> updatePass(@Valid @RequestBody UserEmailandPass userDetails)
+            throws NoSuchAlgorithmException {
+        String email = userDetails.getEmail();
+        User user = userRepository.findByEmail(email);
+        user.setPassword(hashEncoder.sha256(userDetails.getPassword()));
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
     }

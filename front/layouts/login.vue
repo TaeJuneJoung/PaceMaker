@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-img src="./pacemaker1.png" class="backimg">
+    <v-img src="./pacemaker.jpg" class="backimg">
       <nuxt />
     </v-img>
   </v-app>
@@ -17,7 +17,7 @@ export default {
 <style src="~/assets/color.css"></style>
 <style scoped>
 @media (min-width: 1000px) {
-  .backimg{
+  .backimg {
     height: 100vh;
   }
 }
