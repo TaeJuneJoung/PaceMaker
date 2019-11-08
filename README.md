@@ -27,6 +27,8 @@ https://www.youtube.com/watch?v=7eANC6L_FkU&t=3s
 - **JPA**를 이용한 **ORM**형식의 DB 연결
 
   - 개발자가 비지니스 로직에 집중할 수 있게 사용
+  
+  - DB ERD
 
   ![db](./docs/erd.JPG)
 
