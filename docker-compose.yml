@@ -1,0 +1,56 @@
+version: "3.6"
+
+services:
+  db:
+    image: postgres:11
+    container_name: db
+    restart: always
+    tty: true
+    stdin_open: true
+    networks:
+      - ssafy-network
+    ports:
+      - 3333:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=pacemaker
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+
+  front:
+    image: node
+    container_name: front
+    restart: always
+    ports:
+      - 3000:3000
+    working_dir: /usr/src/app
+    command: >
+      bash -c "yarn upgrade && yarn dev"
+    volumes:
+      - ./front:/usr/src/app
+    environment:
+      - LC_ALL=C.UTF-8
+    tty: true
+    networks:
+      - ssafy-network
+
+  back:
+    image: openjdk:8u212-jdk
+    container_name: back
+    restart: always
+    ports:
+      - 8080:8080
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    command: java -jar pacemaker.jar
+    environment:
+      - LC_ALL=C.UTF-8
+    tty: true
+    networks:
+      - ssafy-network
+
+networks:
+  ssafy-network:
+    name: ssafy-network
