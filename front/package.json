@@ -25,7 +25,7 @@
     "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/universal-storage": "^0.4.0",
     "cross-env": "^5.2.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "form-data": "^2.5.1",
     "nuxt": "^2.0.0",
     "vue-session": "^1.0.0"
